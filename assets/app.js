@@ -1,4 +1,18 @@
-async function load(path){ const r = await fetch(path); if(!r.ok) throw new Error(path); return r.json(); }
+const DASH_BASE = (() => {
+  const p = window.location.pathname || '/';
+  return p.includes('/BERKENBOT_DASHBOARD') ? '/BERKENBOT_DASHBOARD/' : '/';
+})();
+
+function resolvePath(path){
+  return new URL(path, `${window.location.origin}${DASH_BASE}`).toString();
+}
+
+async function load(path){
+  const url = resolvePath(path);
+  const r = await fetch(url, { cache: 'no-store' });
+  if(!r.ok) throw new Error(`${path} (HTTP ${r.status})`);
+  return r.json();
+}
 const badge=(s)=>`<span class="status ${s}">${s}</span>`;
 const bar=(pct)=>`<div class="progress"><span style="width:${Math.max(0,Math.min(100,pct))}%"></span></div>`;
 
