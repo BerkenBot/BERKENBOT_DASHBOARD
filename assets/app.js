@@ -7,8 +7,11 @@ function resolvePath(path){
   return new URL(path, `${window.location.origin}${DASH_BASE}`).toString();
 }
 
+const CACHE_BUST = `${Date.now()}`;
+
 async function load(path){
-  const url = resolvePath(path);
+  const baseUrl = resolvePath(path);
+  const url = `${baseUrl}${baseUrl.includes('?') ? '&' : '?'}v=${CACHE_BUST}`;
   const r = await fetch(url, { cache: 'no-store' });
   if(!r.ok) throw new Error(`${path} (HTTP ${r.status})`);
   return r.json();
