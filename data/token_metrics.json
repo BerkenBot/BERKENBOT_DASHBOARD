@@ -4,8 +4,9 @@
       "ts": "2026-02-11T08:42:26-06:00",
       "local_in_tokens": 38,
       "local_out_tokens": 256,
-      "oauth_in_tokens": 721415,
-      "oauth_out_tokens": 57300
+      "oauth_in_tokens": 0,
+      "oauth_out_tokens": 0,
+      "bootstrap_reset": true
     },
     {
       "ts": "2026-02-11T08:42:26-06:00",
@@ -1670,8 +1671,25 @@
       "ts": "2026-02-11T13:01:07-06:00",
       "local_in_tokens": 38,
       "local_out_tokens": 256,
-      "oauth_in_tokens": 2318943,
-      "oauth_out_tokens": 103420
+      "oauth_in_tokens": 0,
+      "oauth_out_tokens": 0,
+      "bootstrap_reset": true
+    },
+    {
+      "ts": "2026-02-11T13:06:48-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 38709,
+      "oauth_out_tokens": 1718,
+      "bootstrap_reset": false
+    },
+    {
+      "ts": "2026-02-11T13:06:48-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 0,
+      "oauth_out_tokens": 0,
+      "bootstrap_reset": false
     }
   ]
 }

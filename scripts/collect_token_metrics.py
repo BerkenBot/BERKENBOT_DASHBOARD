@@ -74,8 +74,17 @@ def main():
     state = load_json(STATE, {'oauth_last_in': 0, 'oauth_last_out': 0, 'local_offsets': {}})
 
     o_in_total, o_out_total = oauth_totals()
-    o_in_delta = max(0, o_in_total - int(state.get('oauth_last_in', 0)))
-    o_out_delta = max(0, o_out_total - int(state.get('oauth_last_out', 0)))
+    prev_in = int(state.get('oauth_last_in', 0))
+    prev_out = int(state.get('oauth_last_out', 0))
+
+    # Bootstrap guard: first run (or lost state) should not emit a giant synthetic spike.
+    bootstrap_reset = (prev_in == 0 and prev_out == 0 and (o_in_total > 0 or o_out_total > 0))
+    if bootstrap_reset:
+        o_in_delta = 0
+        o_out_delta = 0
+    else:
+        o_in_delta = max(0, o_in_total - prev_in)
+        o_out_delta = max(0, o_out_total - prev_out)
 
     l_in_delta, l_out_delta, offsets = local_deltas(state)
 
@@ -85,6 +94,7 @@ def main():
         'local_out_tokens': l_out_delta,
         'oauth_in_tokens': o_in_delta,
         'oauth_out_tokens': o_out_delta,
+        'bootstrap_reset': bootstrap_reset,
     }
 
     data.setdefault('samples', []).append(sample)
