@@ -2,16 +2,20 @@
   "lastUpdated": "2026-02-11T20:29:35+00:00",
   "metrics": [
     {
-      "key": "Active Projects",
-      "value": 2
+      "key": "Tracked Projects",
+      "value": 7
+    },
+    {
+      "key": "Green / Yellow / Red",
+      "value": "2 / 4 / 1"
     },
     {
       "key": "Open Queue Items",
-      "value": 1
+      "value": 5
     },
     {
       "key": "Completed Pipelines (24h)",
-      "value": 3
+      "value": 4
     },
     {
       "key": "Benchmark Jobs Running",
@@ -23,7 +27,7 @@
     },
     {
       "key": "Overall Portfolio Progress",
-      "value": "54%"
+      "value": "38%"
     }
   ]
 }

@@ -3,29 +3,99 @@
     {
       "name": "GH_INTELLIGENCE_V2",
       "status": "green",
-      "progress": 62,
-      "lastUpdate": "2026-02-11 06:21",
+      "progress": 64,
+      "lastUpdate": "2026-02-11 13:15",
       "owner": "BeekerBot/BerkenBot",
       "nextAction": "Expand Python codegen handlers + LM Studio A/B",
       "subprocesses": [
-        {"name": "Issue queue orchestration", "status": "green", "progress": 88, "note": "EXPORT->DONE loop stable"},
-        {"name": "Deterministic export schema", "status": "green", "progress": 80, "note": "v0.1 live; persistent-data fidelity improving"},
-        {"name": "IR + Python codegen", "status": "yellow", "progress": 55, "note": "core path works; many handlers still stubbed"},
-        {"name": "DeepSeek benchmark integration", "status": "yellow", "progress": 68, "note": "think:false fix validated; full matrix pending"}
+        {"name": "Issue queue orchestration", "status": "green", "progress": 90, "note": "EXPORT->DONE loop stable"},
+        {"name": "Deterministic export schema", "status": "green", "progress": 82, "note": "v0.1 live; persistent-data fidelity improving"},
+        {"name": "IR + Python codegen", "status": "yellow", "progress": 58, "note": "core path works; handlers still expanding"},
+        {"name": "Benchmark integration", "status": "yellow", "progress": 70, "note": "DeepSeek stability fixed; full matrix pending"}
       ]
     },
     {
-      "name": "BOT_DASHBOARD",
-      "status": "yellow",
-      "progress": 46,
-      "lastUpdate": "2026-02-11 08:38",
+      "name": "BERKENBOT_DASHBOARD",
+      "status": "green",
+      "progress": 63,
+      "lastUpdate": "2026-02-11 13:06",
       "owner": "BerkenBot",
-      "nextAction": "Wire live GitHub ingestion + charts",
+      "nextAction": "Auto-ingest multi-repo status and trend charts",
       "subprocesses": [
-        {"name": "UI scaffold", "status": "green", "progress": 90, "note": "static dashboard complete"},
-        {"name": "Data schema", "status": "green", "progress": 85, "note": "v1 schema with history + subprocess metrics"},
-        {"name": "Automated data pipeline", "status": "yellow", "progress": 35, "note": "build script exists; source integrations pending"},
-        {"name": "Pages deployment", "status": "yellow", "progress": 40, "note": "workflows prepared; waiting for repo URL"}
+        {"name": "UI scaffold", "status": "green", "progress": 95, "note": "live pages + charts running"},
+        {"name": "Data schema", "status": "green", "progress": 90, "note": "projects/history/system/token metrics"},
+        {"name": "Auto data pipeline", "status": "yellow", "progress": 55, "note": "collectors active; repo ingestion next"},
+        {"name": "Pages deployment", "status": "green", "progress": 75, "note": "workflow deployed"}
+      ]
+    },
+    {
+      "name": "scalara",
+      "status": "yellow",
+      "progress": 28,
+      "lastUpdate": "2026-02-11 13:15",
+      "owner": "BerkenBot",
+      "nextAction": "Create execution issue backlog for Phase 0-2",
+      "subprocesses": [
+        {"name": "Codebase familiarization", "status": "green", "progress": 100, "note": "Reviewed docs + repo structure"},
+        {"name": "Master development plan", "status": "green", "progress": 80, "note": "phased roadmap drafted"},
+        {"name": "API/backend implementation", "status": "red", "progress": 15, "note": "mostly TODO stubs"},
+        {"name": "Mobile app implementation", "status": "red", "progress": 5, "note": "mobile app not yet present"}
+      ]
+    },
+    {
+      "name": "family_stylizer",
+      "status": "yellow",
+      "progress": 36,
+      "lastUpdate": "2026-02-11 13:46",
+      "owner": "BerkenBot",
+      "nextAction": "Replace local stub with real ComfyUI workflow execution",
+      "subprocesses": [
+        {"name": "Local migration architecture", "status": "green", "progress": 70, "note": "service modules + app refactor committed"},
+        {"name": "Identity pack pipeline", "status": "yellow", "progress": 45, "note": "local packs created; quality gates pending"},
+        {"name": "ComfyUI integration", "status": "yellow", "progress": 30, "note": "client stub in place, real API next"},
+        {"name": "Quality scoring", "status": "red", "progress": 10, "note": "not implemented yet"}
+      ]
+    },
+    {
+      "name": "DATA_AUDIT",
+      "status": "yellow",
+      "progress": 32,
+      "lastUpdate": "2026-02-11 14:08",
+      "owner": "BerkenBot",
+      "nextAction": "Refactor clunky control panel into real app workflow",
+      "subprocesses": [
+        {"name": "Repository assessment", "status": "green", "progress": 100, "note": "architecture + issues analyzed"},
+        {"name": "Runtime consistency", "status": "yellow", "progress": 45, "note": "dev works; dist/runtime hardening needed"},
+        {"name": "UI modernization", "status": "red", "progress": 20, "note": "backend-served HTML panel is clunky"},
+        {"name": "Performance pipeline", "status": "yellow", "progress": 25, "note": "scan/duplicate ops need queue hardening"}
+      ]
+    },
+    {
+      "name": "los_tts",
+      "status": "yellow",
+      "progress": 34,
+      "lastUpdate": "2026-02-11 14:29",
+      "owner": "BerkenBot/BeekerBot",
+      "nextAction": "Implement real ONNX inference in TTSEngine",
+      "subprocesses": [
+        {"name": "Architecture review", "status": "green", "progress": 100, "note": "VoxCraft plan + code reviewed"},
+        {"name": "ONNX runtime integration", "status": "red", "progress": 15, "note": "core generation still placeholder"},
+        {"name": "Voice cloning quality", "status": "yellow", "progress": 30, "note": "manager and UI present; inference pending"},
+        {"name": "iOS perf tuning", "status": "red", "progress": 10, "note": "post-integration task"}
+      ]
+    },
+    {
+      "name": "TV_PHOTO_GALLERY",
+      "status": "red",
+      "progress": 6,
+      "lastUpdate": "2026-02-11 14:31",
+      "owner": "BerkenBot",
+      "nextAction": "Bootstrap project scaffold and MVP scope",
+      "subprocesses": [
+        {"name": "Repository assessment", "status": "green", "progress": 100, "note": "repo currently near-empty"},
+        {"name": "MVP definition", "status": "yellow", "progress": 20, "note": "requirements to be locked"},
+        {"name": "Implementation scaffold", "status": "red", "progress": 5, "note": "no app files yet"},
+        {"name": "Deployment plan", "status": "red", "progress": 0, "note": "pending architecture decision"}
       ]
     }
   ]
