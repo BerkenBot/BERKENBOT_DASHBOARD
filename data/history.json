@@ -51,7 +51,7 @@
     },
     {
       "when": "2026-02-11 14:29",
-      "project": "los_tts",
+      "project": "LOCAL_TTS",
       "event": "VoxCraft review complete; ONNX inference flagged as core blocker",
       "status": "yellow",
       "progress": 34
@@ -100,8 +100,8 @@
     },
     {
       "when": "2026-02-11 14:36",
-      "project": "los_tts",
-      "event": "GitHub ingest (local-fallback): justinberken/los_tts last commit 2026-02-11 11:33, open issues unknown",
+      "project": "LOCAL_TTS",
+      "event": "GitHub ingest (local-fallback): justinberken/LOCAL_TTS last commit 2026-02-11 11:33, open issues unknown",
       "status": "yellow",
       "progress": 34
     }

@@ -5,7 +5,7 @@
     { "project": "scalara", "repo": "justinberken/scalara", "localPath": "../scalara" },
     { "project": "family_stylizer", "repo": "justinberken/family_stylizer", "localPath": "../family_stylizer" },
     { "project": "DATA_AUDIT", "repo": "justinberken/DATA_AUDIT", "localPath": "../DATA_AUDIT" },
-    { "project": "los_tts", "repo": "justinberken/los_tts", "localPath": "../los_tts" },
+    { "project": "LOCAL_TTS", "repo": "justinberken/LOCAL_TTS", "localPath": "../los_tts" },
     { "project": "TV_PHOTO_GALLERY", "repo": "justinberken/TV_PHOTO_GALLERY", "localPath": "../TV_PHOTO_GALLERY" }
   ]
 }
