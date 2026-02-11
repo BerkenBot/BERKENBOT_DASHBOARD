@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "name": "BeekerBot",
+      "status": "yellow",
+      "summary": "Mac exporter worker expected online; status inferred via issue comments.",
+      "lastHeartbeat": "pending live hookup"
+    },
+    {
+      "name": "BerkenBot",
+      "status": "green",
+      "summary": "WSL compute timer active (1-min cadence), processing issue-driven workloads.",
+      "lastHeartbeat": "2026-02-11 06:21"
+    }
+  ]
+}

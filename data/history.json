@@ -1,0 +1,10 @@
+{
+  "items": [
+    {"when": "2026-02-10 17:00", "project": "GH_INTELLIGENCE_V2", "event": "Export package created for TEST_1", "status": "green", "progress": 35},
+    {"when": "2026-02-10 17:17", "project": "GH_INTELLIGENCE_V2", "event": "Compute results posted (DONE: results/...)", "status": "green", "progress": 48},
+    {"when": "2026-02-10 20:57", "project": "GH_INTELLIGENCE_V2", "event": "DeepSeek blank-output fix validated (think:false)", "status": "green", "progress": 58},
+    {"when": "2026-02-11 06:40", "project": "GH_INTELLIGENCE_V2", "event": "2-hour max-throughput run started", "status": "yellow", "progress": 62},
+    {"when": "2026-02-11 07:50", "project": "BOT_DASHBOARD", "event": "Initial local scaffold complete", "status": "green", "progress": 35},
+    {"when": "2026-02-11 08:38", "project": "BOT_DASHBOARD", "event": "Progress bars + history log implemented", "status": "green", "progress": 46}
+  ]
+}

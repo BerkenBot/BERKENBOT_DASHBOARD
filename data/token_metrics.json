@@ -1,0 +1,1670 @@
+{
+  "samples": [
+    {
+      "ts": "2026-02-11T08:42:26-06:00",
+      "local_in_tokens": 38,
+      "local_out_tokens": 256,
+      "oauth_in_tokens": 721415,
+      "oauth_out_tokens": 57300
+    },
+    {
+      "ts": "2026-02-11T08:42:26-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 0,
+      "oauth_out_tokens": 0
+    },
+    {
+      "ts": "2026-02-11T08:43:08-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 0,
+      "oauth_out_tokens": 0
+    },
+    {
+      "ts": "2026-02-11T08:44:06-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 11757,
+      "oauth_out_tokens": 291
+    },
+    {
+      "ts": "2026-02-11T08:45:09-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 11509,
+      "oauth_out_tokens": 183
+    },
+    {
+      "ts": "2026-02-11T08:46:09-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 505,
+      "oauth_out_tokens": 186
+    },
+    {
+      "ts": "2026-02-11T08:47:06-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 11513,
+      "oauth_out_tokens": 185
+    },
+    {
+      "ts": "2026-02-11T08:48:12-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 5880,
+      "oauth_out_tokens": 216
+    },
+    {
+      "ts": "2026-02-11T08:49:08-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 5873,
+      "oauth_out_tokens": 177
+    },
+    {
+      "ts": "2026-02-11T08:50:09-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 5953,
+      "oauth_out_tokens": 146
+    },
+    {
+      "ts": "2026-02-11T08:51:07-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 5969,
+      "oauth_out_tokens": 188
+    },
+    {
+      "ts": "2026-02-11T08:52:09-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 5853,
+      "oauth_out_tokens": 161
+    },
+    {
+      "ts": "2026-02-11T08:53:10-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 5860,
+      "oauth_out_tokens": 164
+    },
+    {
+      "ts": "2026-02-11T08:54:05-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 5861,
+      "oauth_out_tokens": 166
+    },
+    {
+      "ts": "2026-02-11T08:55:06-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 5940,
+      "oauth_out_tokens": 140
+    },
+    {
+      "ts": "2026-02-11T08:56:08-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 5960,
+      "oauth_out_tokens": 136
+    },
+    {
+      "ts": "2026-02-11T08:57:13-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 11485,
+      "oauth_out_tokens": 157
+    },
+    {
+      "ts": "2026-02-11T08:58:06-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 11486,
+      "oauth_out_tokens": 221
+    },
+    {
+      "ts": "2026-02-11T08:59:09-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 161893,
+      "oauth_out_tokens": 0
+    },
+    {
+      "ts": "2026-02-11T09:00:07-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 5857,
+      "oauth_out_tokens": 180
+    },
+    {
+      "ts": "2026-02-11T09:01:08-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 11474,
+      "oauth_out_tokens": 146
+    },
+    {
+      "ts": "2026-02-11T09:02:08-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 11445,
+      "oauth_out_tokens": 128
+    },
+    {
+      "ts": "2026-02-11T09:03:10-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6045,
+      "oauth_out_tokens": 221
+    },
+    {
+      "ts": "2026-02-11T09:04:08-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 5877,
+      "oauth_out_tokens": 249
+    },
+    {
+      "ts": "2026-02-11T09:05:10-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 359,
+      "oauth_out_tokens": 202
+    },
+    {
+      "ts": "2026-02-11T09:06:06-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6059,
+      "oauth_out_tokens": 235
+    },
+    {
+      "ts": "2026-02-11T09:07:09-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 5849,
+      "oauth_out_tokens": 179
+    },
+    {
+      "ts": "2026-02-11T09:08:08-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6054,
+      "oauth_out_tokens": 230
+    },
+    {
+      "ts": "2026-02-11T09:09:10-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 5855,
+      "oauth_out_tokens": 195
+    },
+    {
+      "ts": "2026-02-11T09:10:07-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6208,
+      "oauth_out_tokens": 375
+    },
+    {
+      "ts": "2026-02-11T09:11:07-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 11490,
+      "oauth_out_tokens": 189
+    },
+    {
+      "ts": "2026-02-11T09:12:09-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 5957,
+      "oauth_out_tokens": 158
+    },
+    {
+      "ts": "2026-02-11T09:13:06-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 5863,
+      "oauth_out_tokens": 170
+    },
+    {
+      "ts": "2026-02-11T09:14:08-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 5984,
+      "oauth_out_tokens": 179
+    },
+    {
+      "ts": "2026-02-11T09:15:08-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 5865,
+      "oauth_out_tokens": 169
+    },
+    {
+      "ts": "2026-02-11T09:17:06-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 64933,
+      "oauth_out_tokens": 1537
+    },
+    {
+      "ts": "2026-02-11T09:18:08-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6065,
+      "oauth_out_tokens": 163
+    },
+    {
+      "ts": "2026-02-11T09:19:08-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 7592,
+      "oauth_out_tokens": 154
+    },
+    {
+      "ts": "2026-02-11T09:20:08-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6050,
+      "oauth_out_tokens": 175
+    },
+    {
+      "ts": "2026-02-11T09:21:06-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 11716,
+      "oauth_out_tokens": 183
+    },
+    {
+      "ts": "2026-02-11T09:22:08-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 5963,
+      "oauth_out_tokens": 191
+    },
+    {
+      "ts": "2026-02-11T09:23:09-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 330,
+      "oauth_out_tokens": 218
+    },
+    {
+      "ts": "2026-02-11T09:24:09-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6069,
+      "oauth_out_tokens": 167
+    },
+    {
+      "ts": "2026-02-11T09:25:06-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 5956,
+      "oauth_out_tokens": 184
+    },
+    {
+      "ts": "2026-02-11T09:26:10-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 1864,
+      "oauth_out_tokens": 186
+    },
+    {
+      "ts": "2026-02-11T09:27:11-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6005,
+      "oauth_out_tokens": 236
+    },
+    {
+      "ts": "2026-02-11T09:28:05-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 5953,
+      "oauth_out_tokens": 307
+    },
+    {
+      "ts": "2026-02-11T09:29:08-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 398,
+      "oauth_out_tokens": 147
+    },
+    {
+      "ts": "2026-02-11T09:30:11-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 537,
+      "oauth_out_tokens": 266
+    },
+    {
+      "ts": "2026-02-11T09:31:08-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 11771,
+      "oauth_out_tokens": 261
+    },
+    {
+      "ts": "2026-02-11T09:32:06-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6064,
+      "oauth_out_tokens": 149
+    },
+    {
+      "ts": "2026-02-11T09:33:09-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 7057,
+      "oauth_out_tokens": 139
+    },
+    {
+      "ts": "2026-02-11T09:34:09-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 5959,
+      "oauth_out_tokens": 186
+    },
+    {
+      "ts": "2026-02-11T09:35:07-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 11685,
+      "oauth_out_tokens": 154
+    },
+    {
+      "ts": "2026-02-11T09:36:06-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 11667,
+      "oauth_out_tokens": 152
+    },
+    {
+      "ts": "2026-02-11T09:37:08-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6026,
+      "oauth_out_tokens": 143
+    },
+    {
+      "ts": "2026-02-11T09:38:10-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 11672,
+      "oauth_out_tokens": 148
+    },
+    {
+      "ts": "2026-02-11T09:39:09-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 329,
+      "oauth_out_tokens": 202
+    },
+    {
+      "ts": "2026-02-11T09:40:06-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 5948,
+      "oauth_out_tokens": 178
+    },
+    {
+      "ts": "2026-02-11T09:41:11-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 5948,
+      "oauth_out_tokens": 184
+    },
+    {
+      "ts": "2026-02-11T09:42:10-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 5990,
+      "oauth_out_tokens": 216
+    },
+    {
+      "ts": "2026-02-11T09:43:08-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 5994,
+      "oauth_out_tokens": 258
+    },
+    {
+      "ts": "2026-02-11T09:44:06-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 357,
+      "oauth_out_tokens": 202
+    },
+    {
+      "ts": "2026-02-11T09:45:09-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6041,
+      "oauth_out_tokens": 151
+    },
+    {
+      "ts": "2026-02-11T09:46:08-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 5964,
+      "oauth_out_tokens": 190
+    },
+    {
+      "ts": "2026-02-11T09:47:05-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6036,
+      "oauth_out_tokens": 166
+    },
+    {
+      "ts": "2026-02-11T09:48:09-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6053,
+      "oauth_out_tokens": 224
+    },
+    {
+      "ts": "2026-02-11T09:49:08-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6065,
+      "oauth_out_tokens": 174
+    },
+    {
+      "ts": "2026-02-11T09:50:06-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6038,
+      "oauth_out_tokens": 137
+    },
+    {
+      "ts": "2026-02-11T09:51:11-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 424,
+      "oauth_out_tokens": 167
+    },
+    {
+      "ts": "2026-02-11T09:52:10-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 536,
+      "oauth_out_tokens": 267
+    },
+    {
+      "ts": "2026-02-11T09:53:09-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 5966,
+      "oauth_out_tokens": 192
+    },
+    {
+      "ts": "2026-02-11T09:54:05-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 435,
+      "oauth_out_tokens": 167
+    },
+    {
+      "ts": "2026-02-11T09:55:14-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6026,
+      "oauth_out_tokens": 158
+    },
+    {
+      "ts": "2026-02-11T09:56:09-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6011,
+      "oauth_out_tokens": 237
+    },
+    {
+      "ts": "2026-02-11T09:57:05-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6057,
+      "oauth_out_tokens": 155
+    },
+    {
+      "ts": "2026-02-11T09:58:08-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6016,
+      "oauth_out_tokens": 126
+    },
+    {
+      "ts": "2026-02-11T09:59:03-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6036,
+      "oauth_out_tokens": 142
+    },
+    {
+      "ts": "2026-02-11T10:00:26-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 21691,
+      "oauth_out_tokens": 621
+    },
+    {
+      "ts": "2026-02-11T10:01:07-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 8259,
+      "oauth_out_tokens": 128
+    },
+    {
+      "ts": "2026-02-11T10:02:05-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 5977,
+      "oauth_out_tokens": 217
+    },
+    {
+      "ts": "2026-02-11T10:03:07-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6043,
+      "oauth_out_tokens": 141
+    },
+    {
+      "ts": "2026-02-11T10:04:09-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6042,
+      "oauth_out_tokens": 175
+    },
+    {
+      "ts": "2026-02-11T10:05:25-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 0,
+      "oauth_out_tokens": 916
+    },
+    {
+      "ts": "2026-02-11T10:06:07-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 290,
+      "oauth_out_tokens": 145
+    },
+    {
+      "ts": "2026-02-11T10:07:08-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6026,
+      "oauth_out_tokens": 252
+    },
+    {
+      "ts": "2026-02-11T10:08:08-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 411,
+      "oauth_out_tokens": 155
+    },
+    {
+      "ts": "2026-02-11T10:09:06-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 5953,
+      "oauth_out_tokens": 179
+    },
+    {
+      "ts": "2026-02-11T10:10:06-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6030,
+      "oauth_out_tokens": 152
+    },
+    {
+      "ts": "2026-02-11T10:11:07-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 5956,
+      "oauth_out_tokens": 184
+    },
+    {
+      "ts": "2026-02-11T10:12:08-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 326,
+      "oauth_out_tokens": 184
+    },
+    {
+      "ts": "2026-02-11T10:13:05-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6050,
+      "oauth_out_tokens": 152
+    },
+    {
+      "ts": "2026-02-11T10:14:07-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 7045,
+      "oauth_out_tokens": 134
+    },
+    {
+      "ts": "2026-02-11T10:15:08-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 11665,
+      "oauth_out_tokens": 131
+    },
+    {
+      "ts": "2026-02-11T10:17:05-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 9653,
+      "oauth_out_tokens": 632
+    },
+    {
+      "ts": "2026-02-11T10:18:08-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6030,
+      "oauth_out_tokens": 135
+    },
+    {
+      "ts": "2026-02-11T10:19:08-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6057,
+      "oauth_out_tokens": 155
+    },
+    {
+      "ts": "2026-02-11T10:20:10-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 321,
+      "oauth_out_tokens": 181
+    },
+    {
+      "ts": "2026-02-11T10:21:06-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6012,
+      "oauth_out_tokens": 238
+    },
+    {
+      "ts": "2026-02-11T10:22:09-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6054,
+      "oauth_out_tokens": 176
+    },
+    {
+      "ts": "2026-02-11T10:23:06-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 5961,
+      "oauth_out_tokens": 187
+    },
+    {
+      "ts": "2026-02-11T10:24:07-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 344,
+      "oauth_out_tokens": 212
+    },
+    {
+      "ts": "2026-02-11T10:25:07-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6037,
+      "oauth_out_tokens": 154
+    },
+    {
+      "ts": "2026-02-11T10:26:09-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 11648,
+      "oauth_out_tokens": 142
+    },
+    {
+      "ts": "2026-02-11T10:27:06-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 412,
+      "oauth_out_tokens": 142
+    },
+    {
+      "ts": "2026-02-11T10:28:06-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6018,
+      "oauth_out_tokens": 143
+    },
+    {
+      "ts": "2026-02-11T10:29:05-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6565,
+      "oauth_out_tokens": 669
+    },
+    {
+      "ts": "2026-02-11T10:30:08-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6063,
+      "oauth_out_tokens": 208
+    },
+    {
+      "ts": "2026-02-11T10:31:06-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6044,
+      "oauth_out_tokens": 166
+    },
+    {
+      "ts": "2026-02-11T10:32:09-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 551,
+      "oauth_out_tokens": 158
+    },
+    {
+      "ts": "2026-02-11T10:33:07-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6655,
+      "oauth_out_tokens": 475
+    },
+    {
+      "ts": "2026-02-11T10:34:08-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6011,
+      "oauth_out_tokens": 116
+    },
+    {
+      "ts": "2026-02-11T10:35:05-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6045,
+      "oauth_out_tokens": 147
+    },
+    {
+      "ts": "2026-02-11T10:36:07-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 11687,
+      "oauth_out_tokens": 161
+    },
+    {
+      "ts": "2026-02-11T10:37:07-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6052,
+      "oauth_out_tokens": 165
+    },
+    {
+      "ts": "2026-02-11T10:38:09-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6025,
+      "oauth_out_tokens": 144
+    },
+    {
+      "ts": "2026-02-11T10:39:06-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6011,
+      "oauth_out_tokens": 240
+    },
+    {
+      "ts": "2026-02-11T10:40:08-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 11675,
+      "oauth_out_tokens": 164
+    },
+    {
+      "ts": "2026-02-11T10:41:09-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 11652,
+      "oauth_out_tokens": 140
+    },
+    {
+      "ts": "2026-02-11T10:42:05-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6067,
+      "oauth_out_tokens": 167
+    },
+    {
+      "ts": "2026-02-11T10:43:08-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6027,
+      "oauth_out_tokens": 139
+    },
+    {
+      "ts": "2026-02-11T10:44:10-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6031,
+      "oauth_out_tokens": 153
+    },
+    {
+      "ts": "2026-02-11T10:45:06-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 5989,
+      "oauth_out_tokens": 262
+    },
+    {
+      "ts": "2026-02-11T10:46:08-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 11671,
+      "oauth_out_tokens": 164
+    },
+    {
+      "ts": "2026-02-11T10:47:08-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6065,
+      "oauth_out_tokens": 179
+    },
+    {
+      "ts": "2026-02-11T10:48:05-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6992,
+      "oauth_out_tokens": 181
+    },
+    {
+      "ts": "2026-02-11T10:49:09-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 11671,
+      "oauth_out_tokens": 178
+    },
+    {
+      "ts": "2026-02-11T10:50:05-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 11706,
+      "oauth_out_tokens": 172
+    },
+    {
+      "ts": "2026-02-11T10:51:10-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 5952,
+      "oauth_out_tokens": 178
+    },
+    {
+      "ts": "2026-02-11T10:52:05-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 181001,
+      "oauth_out_tokens": 373
+    },
+    {
+      "ts": "2026-02-11T10:53:07-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 0,
+      "oauth_out_tokens": 134
+    },
+    {
+      "ts": "2026-02-11T10:54:06-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 336,
+      "oauth_out_tokens": 194
+    },
+    {
+      "ts": "2026-02-11T10:55:07-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6061,
+      "oauth_out_tokens": 167
+    },
+    {
+      "ts": "2026-02-11T10:56:07-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6051,
+      "oauth_out_tokens": 152
+    },
+    {
+      "ts": "2026-02-11T10:57:09-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 2366,
+      "oauth_out_tokens": 0
+    },
+    {
+      "ts": "2026-02-11T10:58:06-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 5982,
+      "oauth_out_tokens": 217
+    },
+    {
+      "ts": "2026-02-11T10:59:07-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 332,
+      "oauth_out_tokens": 190
+    },
+    {
+      "ts": "2026-02-11T11:00:06-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 11626,
+      "oauth_out_tokens": 333
+    },
+    {
+      "ts": "2026-02-11T11:01:05-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6047,
+      "oauth_out_tokens": 173
+    },
+    {
+      "ts": "2026-02-11T11:02:08-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6153,
+      "oauth_out_tokens": 85
+    },
+    {
+      "ts": "2026-02-11T11:03:08-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 141,
+      "oauth_out_tokens": 106
+    },
+    {
+      "ts": "2026-02-11T11:04:05-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 317,
+      "oauth_out_tokens": 183
+    },
+    {
+      "ts": "2026-02-11T11:05:09-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 432,
+      "oauth_out_tokens": 162
+    },
+    {
+      "ts": "2026-02-11T11:06:07-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 413,
+      "oauth_out_tokens": 162
+    },
+    {
+      "ts": "2026-02-11T11:07:07-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 399,
+      "oauth_out_tokens": 138
+    },
+    {
+      "ts": "2026-02-11T11:08:08-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6031,
+      "oauth_out_tokens": 133
+    },
+    {
+      "ts": "2026-02-11T11:09:07-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6174,
+      "oauth_out_tokens": 272
+    },
+    {
+      "ts": "2026-02-11T11:10:12-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 412,
+      "oauth_out_tokens": 143
+    },
+    {
+      "ts": "2026-02-11T11:11:09-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 5968,
+      "oauth_out_tokens": 322
+    },
+    {
+      "ts": "2026-02-11T11:12:05-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6060,
+      "oauth_out_tokens": 162
+    },
+    {
+      "ts": "2026-02-11T11:13:08-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6048,
+      "oauth_out_tokens": 155
+    },
+    {
+      "ts": "2026-02-11T11:14:11-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 5946,
+      "oauth_out_tokens": 172
+    },
+    {
+      "ts": "2026-02-11T11:15:06-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6071,
+      "oauth_out_tokens": 171
+    },
+    {
+      "ts": "2026-02-11T11:17:06-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 96468,
+      "oauth_out_tokens": 1355
+    },
+    {
+      "ts": "2026-02-11T11:18:08-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6057,
+      "oauth_out_tokens": 155
+    },
+    {
+      "ts": "2026-02-11T11:19:05-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 5926,
+      "oauth_out_tokens": 180
+    },
+    {
+      "ts": "2026-02-11T11:20:07-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6031,
+      "oauth_out_tokens": 163
+    },
+    {
+      "ts": "2026-02-11T11:21:06-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 411,
+      "oauth_out_tokens": 148
+    },
+    {
+      "ts": "2026-02-11T11:22:07-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6048,
+      "oauth_out_tokens": 170
+    },
+    {
+      "ts": "2026-02-11T11:23:07-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6062,
+      "oauth_out_tokens": 175
+    },
+    {
+      "ts": "2026-02-11T11:24:07-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 5971,
+      "oauth_out_tokens": 199
+    },
+    {
+      "ts": "2026-02-11T11:25:08-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 390,
+      "oauth_out_tokens": 150
+    },
+    {
+      "ts": "2026-02-11T11:26:10-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 5949,
+      "oauth_out_tokens": 201
+    },
+    {
+      "ts": "2026-02-11T11:27:05-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6065,
+      "oauth_out_tokens": 163
+    },
+    {
+      "ts": "2026-02-11T11:28:09-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 426,
+      "oauth_out_tokens": 177
+    },
+    {
+      "ts": "2026-02-11T11:29:08-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6035,
+      "oauth_out_tokens": 134
+    },
+    {
+      "ts": "2026-02-11T11:30:04-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6051,
+      "oauth_out_tokens": 151
+    },
+    {
+      "ts": "2026-02-11T11:31:06-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 11647,
+      "oauth_out_tokens": 135
+    },
+    {
+      "ts": "2026-02-11T11:32:13-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 439,
+      "oauth_out_tokens": 244
+    },
+    {
+      "ts": "2026-02-11T11:33:09-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6069,
+      "oauth_out_tokens": 167
+    },
+    {
+      "ts": "2026-02-11T11:34:08-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6973,
+      "oauth_out_tokens": 179
+    },
+    {
+      "ts": "2026-02-11T11:35:05-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6045,
+      "oauth_out_tokens": 165
+    },
+    {
+      "ts": "2026-02-11T11:36:11-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6066,
+      "oauth_out_tokens": 214
+    },
+    {
+      "ts": "2026-02-11T11:37:10-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6158,
+      "oauth_out_tokens": 256
+    },
+    {
+      "ts": "2026-02-11T11:38:12-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6573,
+      "oauth_out_tokens": 417
+    },
+    {
+      "ts": "2026-02-11T11:39:06-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 521,
+      "oauth_out_tokens": 252
+    },
+    {
+      "ts": "2026-02-11T11:40:09-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 284,
+      "oauth_out_tokens": 148
+    },
+    {
+      "ts": "2026-02-11T11:41:07-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6010,
+      "oauth_out_tokens": 236
+    },
+    {
+      "ts": "2026-02-11T11:42:09-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 440,
+      "oauth_out_tokens": 186
+    },
+    {
+      "ts": "2026-02-11T11:43:07-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 5955,
+      "oauth_out_tokens": 250
+    },
+    {
+      "ts": "2026-02-11T11:44:08-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6026,
+      "oauth_out_tokens": 255
+    },
+    {
+      "ts": "2026-02-11T11:45:07-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 5962,
+      "oauth_out_tokens": 227
+    },
+    {
+      "ts": "2026-02-11T11:46:05-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 427,
+      "oauth_out_tokens": 168
+    },
+    {
+      "ts": "2026-02-11T11:47:05-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 407,
+      "oauth_out_tokens": 149
+    },
+    {
+      "ts": "2026-02-11T11:48:07-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 11676,
+      "oauth_out_tokens": 142
+    },
+    {
+      "ts": "2026-02-11T11:49:07-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 7075,
+      "oauth_out_tokens": 148
+    },
+    {
+      "ts": "2026-02-11T11:50:05-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6051,
+      "oauth_out_tokens": 182
+    },
+    {
+      "ts": "2026-02-11T11:51:06-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6023,
+      "oauth_out_tokens": 206
+    },
+    {
+      "ts": "2026-02-11T11:52:08-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6043,
+      "oauth_out_tokens": 153
+    },
+    {
+      "ts": "2026-02-11T11:53:09-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 401,
+      "oauth_out_tokens": 155
+    },
+    {
+      "ts": "2026-02-11T11:54:06-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 16064,
+      "oauth_out_tokens": 178
+    },
+    {
+      "ts": "2026-02-11T11:55:09-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6035,
+      "oauth_out_tokens": 148
+    },
+    {
+      "ts": "2026-02-11T11:56:06-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6047,
+      "oauth_out_tokens": 145
+    },
+    {
+      "ts": "2026-02-11T11:57:07-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 11700,
+      "oauth_out_tokens": 153
+    },
+    {
+      "ts": "2026-02-11T11:58:08-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6066,
+      "oauth_out_tokens": 165
+    },
+    {
+      "ts": "2026-02-11T11:59:05-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6054,
+      "oauth_out_tokens": 181
+    },
+    {
+      "ts": "2026-02-11T12:00:05-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6038,
+      "oauth_out_tokens": 144
+    },
+    {
+      "ts": "2026-02-11T12:01:07-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 436,
+      "oauth_out_tokens": 166
+    },
+    {
+      "ts": "2026-02-11T12:02:08-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 11685,
+      "oauth_out_tokens": 181
+    },
+    {
+      "ts": "2026-02-11T12:03:07-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6069,
+      "oauth_out_tokens": 168
+    },
+    {
+      "ts": "2026-02-11T12:04:05-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 11678,
+      "oauth_out_tokens": 144
+    },
+    {
+      "ts": "2026-02-11T12:05:07-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6044,
+      "oauth_out_tokens": 144
+    },
+    {
+      "ts": "2026-02-11T12:06:08-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6050,
+      "oauth_out_tokens": 199
+    },
+    {
+      "ts": "2026-02-11T12:07:07-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6053,
+      "oauth_out_tokens": 151
+    },
+    {
+      "ts": "2026-02-11T12:08:05-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 735,
+      "oauth_out_tokens": 337
+    },
+    {
+      "ts": "2026-02-11T12:09:08-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 5915,
+      "oauth_out_tokens": 126
+    },
+    {
+      "ts": "2026-02-11T12:10:08-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 5847,
+      "oauth_out_tokens": 131
+    },
+    {
+      "ts": "2026-02-11T12:11:07-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 429,
+      "oauth_out_tokens": 199
+    },
+    {
+      "ts": "2026-02-11T12:12:05-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6250,
+      "oauth_out_tokens": 157
+    },
+    {
+      "ts": "2026-02-11T12:13:08-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 5931,
+      "oauth_out_tokens": 0
+    },
+    {
+      "ts": "2026-02-11T12:14:08-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 5963,
+      "oauth_out_tokens": 57
+    },
+    {
+      "ts": "2026-02-11T12:15:07-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 11723,
+      "oauth_out_tokens": 210
+    },
+    {
+      "ts": "2026-02-11T12:17:05-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 0,
+      "oauth_out_tokens": 1367
+    },
+    {
+      "ts": "2026-02-11T12:18:07-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6062,
+      "oauth_out_tokens": 203
+    },
+    {
+      "ts": "2026-02-11T12:19:08-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6585,
+      "oauth_out_tokens": 432
+    },
+    {
+      "ts": "2026-02-11T12:20:06-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 406,
+      "oauth_out_tokens": 136
+    },
+    {
+      "ts": "2026-02-11T12:21:09-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 11664,
+      "oauth_out_tokens": 169
+    },
+    {
+      "ts": "2026-02-11T12:22:05-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6095,
+      "oauth_out_tokens": 907
+    },
+    {
+      "ts": "2026-02-11T12:23:08-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 477,
+      "oauth_out_tokens": 0
+    },
+    {
+      "ts": "2026-02-11T12:24:15-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 5942,
+      "oauth_out_tokens": 0
+    },
+    {
+      "ts": "2026-02-11T12:25:09-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 11678,
+      "oauth_out_tokens": 163
+    },
+    {
+      "ts": "2026-02-11T12:26:07-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 321,
+      "oauth_out_tokens": 280
+    },
+    {
+      "ts": "2026-02-11T12:27:09-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 413,
+      "oauth_out_tokens": 159
+    },
+    {
+      "ts": "2026-02-11T12:28:07-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 5960,
+      "oauth_out_tokens": 186
+    },
+    {
+      "ts": "2026-02-11T12:29:07-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 411,
+      "oauth_out_tokens": 147
+    },
+    {
+      "ts": "2026-02-11T12:30:05-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6055,
+      "oauth_out_tokens": 161
+    },
+    {
+      "ts": "2026-02-11T12:31:07-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6032,
+      "oauth_out_tokens": 137
+    },
+    {
+      "ts": "2026-02-11T12:32:08-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 411,
+      "oauth_out_tokens": 162
+    },
+    {
+      "ts": "2026-02-11T12:33:09-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 423,
+      "oauth_out_tokens": 154
+    },
+    {
+      "ts": "2026-02-11T12:34:07-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 5976,
+      "oauth_out_tokens": 208
+    },
+    {
+      "ts": "2026-02-11T12:35:07-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6071,
+      "oauth_out_tokens": 169
+    },
+    {
+      "ts": "2026-02-11T12:36:06-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 11687,
+      "oauth_out_tokens": 182
+    },
+    {
+      "ts": "2026-02-11T12:37:09-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 385,
+      "oauth_out_tokens": 245
+    },
+    {
+      "ts": "2026-02-11T12:38:07-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 434,
+      "oauth_out_tokens": 201
+    },
+    {
+      "ts": "2026-02-11T12:39:09-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6049,
+      "oauth_out_tokens": 148
+    },
+    {
+      "ts": "2026-02-11T12:40:05-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 11666,
+      "oauth_out_tokens": 136
+    },
+    {
+      "ts": "2026-02-11T12:41:05-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 6039,
+      "oauth_out_tokens": 160
+    },
+    {
+      "ts": "2026-02-11T12:42:07-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 12416,
+      "oauth_out_tokens": 225
+    }
+  ]
+}

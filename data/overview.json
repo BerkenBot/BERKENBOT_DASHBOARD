@@ -1,0 +1,29 @@
+{
+  "lastUpdated": "2026-02-11T12:42:07-06:00",
+  "metrics": [
+    {
+      "key": "Active Projects",
+      "value": 2
+    },
+    {
+      "key": "Open Queue Items",
+      "value": 1
+    },
+    {
+      "key": "Completed Pipelines (24h)",
+      "value": 3
+    },
+    {
+      "key": "Benchmark Jobs Running",
+      "value": 1
+    },
+    {
+      "key": "Security Alerts",
+      "value": 0
+    },
+    {
+      "key": "Overall Portfolio Progress",
+      "value": "54%"
+    }
+  ]
+}

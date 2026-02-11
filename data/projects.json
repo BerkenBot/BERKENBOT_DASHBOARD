@@ -1,0 +1,32 @@
+{
+  "items": [
+    {
+      "name": "GH_INTELLIGENCE_V2",
+      "status": "green",
+      "progress": 62,
+      "lastUpdate": "2026-02-11 06:21",
+      "owner": "BeekerBot/BerkenBot",
+      "nextAction": "Expand Python codegen handlers + LM Studio A/B",
+      "subprocesses": [
+        {"name": "Issue queue orchestration", "status": "green", "progress": 88, "note": "EXPORT->DONE loop stable"},
+        {"name": "Deterministic export schema", "status": "green", "progress": 80, "note": "v0.1 live; persistent-data fidelity improving"},
+        {"name": "IR + Python codegen", "status": "yellow", "progress": 55, "note": "core path works; many handlers still stubbed"},
+        {"name": "DeepSeek benchmark integration", "status": "yellow", "progress": 68, "note": "think:false fix validated; full matrix pending"}
+      ]
+    },
+    {
+      "name": "BOT_DASHBOARD",
+      "status": "yellow",
+      "progress": 46,
+      "lastUpdate": "2026-02-11 08:38",
+      "owner": "BerkenBot",
+      "nextAction": "Wire live GitHub ingestion + charts",
+      "subprocesses": [
+        {"name": "UI scaffold", "status": "green", "progress": 90, "note": "static dashboard complete"},
+        {"name": "Data schema", "status": "green", "progress": 85, "note": "v1 schema with history + subprocess metrics"},
+        {"name": "Automated data pipeline", "status": "yellow", "progress": 35, "note": "build script exists; source integrations pending"},
+        {"name": "Pages deployment", "status": "yellow", "progress": 40, "note": "workflows prepared; waiting for repo URL"}
+      ]
+    }
+  ]
+}

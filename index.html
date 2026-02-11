@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BOT_DASHBOARD</title>
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+  <header>
+    <h1>BOT_DASHBOARD</h1>
+    <p id="subtitle">Project + bot + pipeline status</p>
+    <div id="lastUpdated"></div>
+  </header>
+
+  <main>
+    <section class="cards" id="overviewCards"></section>
+
+    <section>
+      <h2>Projects (with completion + subprocess progress)</h2>
+      <div id="projectCards" class="project-grid"></div>
+    </section>
+
+    <section>
+      <h2>Bots</h2>
+      <div id="botGrid" class="bot-grid"></div>
+    </section>
+
+    <section>
+      <h2>Recent Activity</h2>
+      <ul id="eventsList"></ul>
+    </section>
+
+    <section>
+      <h2>System Usage Over Time (WSL)</h2>
+      <div class="chart-wrap">
+        <canvas id="usageChart" width="1200" height="320"></canvas>
+      </div>
+      <div class="chart-legend" id="usageLegend"></div>
+    </section>
+
+    <section>
+      <h2>Token Usage Over Time (Local + OAuth)</h2>
+      <div class="chart-wrap">
+        <canvas id="tokenChart" width="1200" height="320"></canvas>
+      </div>
+      <div class="chart-legend" id="tokenLegend"></div>
+    </section>
+
+    <section>
+      <h2>History Log</h2>
+      <table id="historyTable">
+        <thead>
+          <tr><th>When</th><th>Project</th><th>Event</th><th>Status</th><th>Progress</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Security</h2>
+      <ul id="securityList"></ul>
+    </section>
+  </main>
+
+  <script src="assets/app.js"></script>
+</body>
+</html>

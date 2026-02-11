@@ -1,0 +1,7 @@
+{
+  "items": [
+    {"level": "green", "text": "OpenClaw audit: 0 critical."},
+    {"level": "yellow", "text": "trustedProxies warning (acceptable while loopback-only)."},
+    {"level": "green", "text": "No unexpected public listeners detected in latest check."}
+  ]
+}
