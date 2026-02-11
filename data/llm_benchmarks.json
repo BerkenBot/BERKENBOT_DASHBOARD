@@ -1,0 +1,286 @@
+{
+  "lastUpdated": "2026-02-11T16:53:49-06:00",
+  "leaderboard": [
+    {
+      "model": "qwen2.5-coder:14b",
+      "score": 96.58,
+      "avg_tok_s": 138.95,
+      "correctness": 1.0,
+      "cold_wall_s": 2.66
+    },
+    {
+      "model": "codestral:22b",
+      "score": 71.9,
+      "avg_tok_s": 75.49,
+      "correctness": 1.0,
+      "cold_wall_s": 5.33
+    },
+    {
+      "model": "qwen2.5-coder:32b",
+      "score": 43.36,
+      "avg_tok_s": 50.97,
+      "correctness": 1.0,
+      "cold_wall_s": 15.63
+    }
+  ],
+  "liveRun": {
+    "file": "max_throughput_2h_20260211_164302.jsonl",
+    "rows": 29,
+    "startedAt": "2026-02-11T16:43:10.659352",
+    "endedAt": "2026-02-11T16:53:38.110489"
+  },
+  "liveSummary": [
+    {
+      "model": "codestral:22b",
+      "samples": 10,
+      "ok_rate": 1.0,
+      "avg_tok_s": 6.19
+    },
+    {
+      "model": "qwen2.5-coder:14b",
+      "samples": 10,
+      "ok_rate": 1.0,
+      "avg_tok_s": 4.17
+    },
+    {
+      "model": "deepseek-r1:14b",
+      "samples": 9,
+      "ok_rate": 1.0,
+      "avg_tok_s": 1.71
+    }
+  ],
+  "samples": [
+    {
+      "ts": "2026-02-11T16:43:10.659352",
+      "model": "codestral:22b",
+      "eval_count": 256,
+      "elapsed_s": 7.191,
+      "tok_s": 35.6,
+      "ok": true
+    },
+    {
+      "ts": "2026-02-11T16:43:24.239309",
+      "model": "qwen2.5-coder:14b",
+      "eval_count": 256,
+      "elapsed_s": 20.77,
+      "tok_s": 12.33,
+      "ok": true
+    },
+    {
+      "ts": "2026-02-11T16:44:07.755737",
+      "model": "deepseek-r1:14b",
+      "eval_count": 126,
+      "elapsed_s": 64.287,
+      "tok_s": 1.96,
+      "ok": true
+    },
+    {
+      "ts": "2026-02-11T16:44:13.171573",
+      "model": "qwen2.5-coder:14b",
+      "eval_count": 256,
+      "elapsed_s": 69.703,
+      "tok_s": 3.67,
+      "ok": true
+    },
+    {
+      "ts": "2026-02-11T16:44:20.826645",
+      "model": "codestral:22b",
+      "eval_count": 256,
+      "elapsed_s": 70.167,
+      "tok_s": 3.65,
+      "ok": true
+    },
+    {
+      "ts": "2026-02-11T16:45:21.494010",
+      "model": "deepseek-r1:14b",
+      "eval_count": 217,
+      "elapsed_s": 117.255,
+      "tok_s": 1.85,
+      "ok": true
+    },
+    {
+      "ts": "2026-02-11T16:45:25.791883",
+      "model": "qwen2.5-coder:14b",
+      "eval_count": 169,
+      "elapsed_s": 78.036,
+      "tok_s": 2.17,
+      "ok": true
+    },
+    {
+      "ts": "2026-02-11T16:45:33.559136",
+      "model": "codestral:22b",
+      "eval_count": 256,
+      "elapsed_s": 80.387,
+      "tok_s": 3.18,
+      "ok": true
+    },
+    {
+      "ts": "2026-02-11T16:46:37.862069",
+      "model": "deepseek-r1:14b",
+      "eval_count": 256,
+      "elapsed_s": 137.035,
+      "tok_s": 1.87,
+      "ok": true
+    },
+    {
+      "ts": "2026-02-11T16:46:42.707124",
+      "model": "qwen2.5-coder:14b",
+      "eval_count": 256,
+      "elapsed_s": 81.213,
+      "tok_s": 3.15,
+      "ok": true
+    },
+    {
+      "ts": "2026-02-11T16:46:49.210464",
+      "model": "codestral:22b",
+      "eval_count": 84,
+      "elapsed_s": 83.418,
+      "tok_s": 1.01,
+      "ok": true
+    },
+    {
+      "ts": "2026-02-11T16:47:55.375652",
+      "model": "deepseek-r1:14b",
+      "eval_count": 256,
+      "elapsed_s": 141.816,
+      "tok_s": 1.81,
+      "ok": true
+    },
+    {
+      "ts": "2026-02-11T16:47:59.991725",
+      "model": "qwen2.5-coder:14b",
+      "eval_count": 256,
+      "elapsed_s": 82.13,
+      "tok_s": 3.12,
+      "ok": true
+    },
+    {
+      "ts": "2026-02-11T16:48:10.429714",
+      "model": "codestral:22b",
+      "eval_count": 256,
+      "elapsed_s": 87.723,
+      "tok_s": 2.92,
+      "ok": true
+    },
+    {
+      "ts": "2026-02-11T16:48:52.289681",
+      "model": "deepseek-r1:14b",
+      "eval_count": 126,
+      "elapsed_s": 123.079,
+      "tok_s": 1.02,
+      "ok": true
+    },
+    {
+      "ts": "2026-02-11T16:48:56.842814",
+      "model": "qwen2.5-coder:14b",
+      "eval_count": 256,
+      "elapsed_s": 61.467,
+      "tok_s": 4.16,
+      "ok": true
+    },
+    {
+      "ts": "2026-02-11T16:49:04.278714",
+      "model": "codestral:22b",
+      "eval_count": 256,
+      "elapsed_s": 64.287,
+      "tok_s": 3.98,
+      "ok": true
+    },
+    {
+      "ts": "2026-02-11T16:50:01.348544",
+      "model": "deepseek-r1:14b",
+      "eval_count": 217,
+      "elapsed_s": 110.919,
+      "tok_s": 1.96,
+      "ok": true
+    },
+    {
+      "ts": "2026-02-11T16:50:05.399790",
+      "model": "qwen2.5-coder:14b",
+      "eval_count": 169,
+      "elapsed_s": 73.11,
+      "tok_s": 2.31,
+      "ok": true
+    },
+    {
+      "ts": "2026-02-11T16:50:12.938430",
+      "model": "codestral:22b",
+      "eval_count": 256,
+      "elapsed_s": 76.096,
+      "tok_s": 3.36,
+      "ok": true
+    },
+    {
+      "ts": "2026-02-11T16:51:16.017199",
+      "model": "deepseek-r1:14b",
+      "eval_count": 256,
+      "elapsed_s": 131.738,
+      "tok_s": 1.94,
+      "ok": true
+    },
+    {
+      "ts": "2026-02-11T16:51:20.594340",
+      "model": "qwen2.5-coder:14b",
+      "eval_count": 256,
+      "elapsed_s": 79.246,
+      "tok_s": 3.23,
+      "ok": true
+    },
+    {
+      "ts": "2026-02-11T16:51:25.856580",
+      "model": "codestral:22b",
+      "eval_count": 84,
+      "elapsed_s": 80.457,
+      "tok_s": 1.04,
+      "ok": true
+    },
+    {
+      "ts": "2026-02-11T16:52:28.698929",
+      "model": "deepseek-r1:14b",
+      "eval_count": 256,
+      "elapsed_s": 135.76,
+      "tok_s": 1.89,
+      "ok": true
+    },
+    {
+      "ts": "2026-02-11T16:52:33.934336",
+      "model": "qwen2.5-coder:14b",
+      "eval_count": 256,
+      "elapsed_s": 77.917,
+      "tok_s": 3.29,
+      "ok": true
+    },
+    {
+      "ts": "2026-02-11T16:52:42.564960",
+      "model": "codestral:22b",
+      "eval_count": 256,
+      "elapsed_s": 81.971,
+      "tok_s": 3.12,
+      "ok": true
+    },
+    {
+      "ts": "2026-02-11T16:53:20.835192",
+      "model": "deepseek-r1:14b",
+      "eval_count": 126,
+      "elapsed_s": 114.978,
+      "tok_s": 1.1,
+      "ok": true
+    },
+    {
+      "ts": "2026-02-11T16:53:29.169848",
+      "model": "qwen2.5-coder:14b",
+      "eval_count": 256,
+      "elapsed_s": 60.471,
+      "tok_s": 4.23,
+      "ok": true
+    },
+    {
+      "ts": "2026-02-11T16:53:38.110489",
+      "model": "codestral:22b",
+      "eval_count": 256,
+      "elapsed_s": 64.176,
+      "tok_s": 3.99,
+      "ok": true
+    }
+  ]
+}

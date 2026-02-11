@@ -58,6 +58,21 @@
     </section>
 
     <section>
+      <h2>Local LLM Compute Benchmarks</h2>
+      <div class="muted" id="llmBenchMeta"></div>
+      <table id="llmBenchTable" style="margin-top:8px">
+        <thead>
+          <tr><th>Model</th><th>Score</th><th>Avg tok/s</th><th>Correctness</th><th>Cold start (s)</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <div class="chart-wrap" style="margin-top:10px">
+        <canvas id="llmTokChart" width="1200" height="320"></canvas>
+      </div>
+      <div class="chart-legend" id="llmTokLegend"></div>
+    </section>
+
+    <section>
       <h2>Security</h2>
       <ul id="securityList"></ul>
     </section>

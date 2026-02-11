@@ -1698,6 +1698,14 @@
       "oauth_in_tokens": 500014,
       "oauth_out_tokens": 16668,
       "bootstrap_reset": false
+    },
+    {
+      "ts": "2026-02-11T16:53:49-06:00",
+      "local_in_tokens": 1062,
+      "local_out_tokens": 6694,
+      "oauth_in_tokens": 920514,
+      "oauth_out_tokens": 43181,
+      "bootstrap_reset": false
     }
   ]
 }

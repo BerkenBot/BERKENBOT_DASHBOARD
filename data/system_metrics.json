@@ -6641,6 +6641,33 @@
           "power_w": 6.18
         }
       ]
+    },
+    {
+      "ts": "2026-02-11T16:53:49-06:00",
+      "cpu_pct": 4.33,
+      "ram_pct": 35.54,
+      "ram_used_gib": 33.51,
+      "swap_used_gib": 0.0,
+      "gpu": [
+        {
+          "index": 0,
+          "name": "NVIDIA GeForce RTX 5090",
+          "util_pct": 3.0,
+          "mem_used_mib": 4216.0,
+          "mem_total_mib": 32607.0,
+          "mem_pct": 12.93,
+          "power_w": 68.47
+        },
+        {
+          "index": 1,
+          "name": "NVIDIA GeForce RTX 3090",
+          "util_pct": 0.0,
+          "mem_used_mib": 256.0,
+          "mem_total_mib": 24576.0,
+          "mem_pct": 1.04,
+          "power_w": 66.58
+        }
+      ]
     }
   ]
 }

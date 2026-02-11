@@ -72,7 +72,7 @@ function drawLineChart({canvasId, legendId, samples, series, yMax=100, yLabel='%
 
 (async()=>{
   try{
-    const [overview, projects, bots, events, security, history, sysm, tokens] = await Promise.all([
+    const [overview, projects, bots, events, security, history, sysm, tokens, llmBench] = await Promise.all([
       load('data/overview.json'),
       load('data/projects.json'),
       load('data/bots.json'),
@@ -81,6 +81,7 @@ function drawLineChart({canvasId, legendId, samples, series, yMax=100, yLabel='%
       load('data/history.json'),
       load('data/system_metrics.json'),
       load('data/token_metrics.json'),
+      load('data/llm_benchmarks.json'),
     ]);
 
     document.getElementById('lastUpdated').textContent = `Last updated: ${overview.lastUpdated}`;
@@ -158,6 +159,36 @@ function drawLineChart({canvasId, legendId, samples, series, yMax=100, yLabel='%
         {name:'OAuth input tokens', color:'#ffae6b', get:s=>s.oauth_in_tokens ?? null},
         {name:'OAuth output tokens', color:'#ff6f91', get:s=>s.oauth_out_tokens ?? null}
       ]
+    });
+
+    const benchMeta = document.getElementById('llmBenchMeta');
+    if (benchMeta && llmBench?.liveRun) {
+      benchMeta.textContent = `Live run: ${llmBench.liveRun.file || 'n/a'} • rows: ${llmBench.liveRun.rows || 0} • window: ${llmBench.liveRun.startedAt || 'n/a'} → ${llmBench.liveRun.endedAt || 'n/a'}`;
+    }
+
+    const benchBody = document.querySelector('#llmBenchTable tbody');
+    (llmBench?.leaderboard || []).forEach(r => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${r.model}</td><td>${r.score ?? ''}</td><td>${r.avg_tok_s ?? ''}</td><td>${r.correctness ?? ''}</td><td>${r.cold_wall_s ?? ''}</td>`;
+      benchBody?.appendChild(tr);
+    });
+
+    const benchSamples = llmBench?.samples || [];
+    const byModel = {};
+    benchSamples.forEach(s => {
+      byModel[s.model] = byModel[s.model] || [];
+      byModel[s.model].push(s);
+    });
+    const palette = ['#63a7ff','#7be3c4','#ffb86b','#ff7d9b','#c9a7ff','#f2d06b'];
+    const benchSeries = Object.keys(byModel).slice(0,6).map((m, i) => ({
+      name: `${m} tok/s`,
+      color: palette[i % palette.length],
+      get: s => (s.model === m ? s.tok_s : null)
+    }));
+    const maxBenchTok = Math.max(100, ...benchSamples.map(s => s.tok_s || 0));
+    drawLineChart({
+      canvasId:'llmTokChart', legendId:'llmTokLegend', samples: benchSamples, yMax:maxBenchTok, yLabel:' tok/s',
+      series: benchSeries
     });
 
   } catch(e){
