@@ -1,13 +1,109 @@
 {
   "items": [
-    {"when": "2026-02-10 17:00", "project": "GH_INTELLIGENCE_V2", "event": "Export package created for TEST_1", "status": "green", "progress": 35},
-    {"when": "2026-02-10 17:17", "project": "GH_INTELLIGENCE_V2", "event": "Compute results posted (DONE: results/...)", "status": "green", "progress": 48},
-    {"when": "2026-02-10 20:57", "project": "GH_INTELLIGENCE_V2", "event": "DeepSeek blank-output fix validated", "status": "green", "progress": 58},
-    {"when": "2026-02-11 06:40", "project": "GH_INTELLIGENCE_V2", "event": "2-hour max-throughput run started", "status": "yellow", "progress": 62},
-    {"when": "2026-02-11 13:15", "project": "scalara", "event": "Repo reviewed and full phased master plan drafted", "status": "green", "progress": 28},
-    {"when": "2026-02-11 13:46", "project": "family_stylizer", "event": "Local migration architecture + service refactor committed", "status": "green", "progress": 36},
-    {"when": "2026-02-11 14:08", "project": "DATA_AUDIT", "event": "Clunky areas identified, refactor path defined", "status": "yellow", "progress": 32},
-    {"when": "2026-02-11 14:29", "project": "los_tts", "event": "VoxCraft review complete; ONNX inference flagged as core blocker", "status": "yellow", "progress": 34},
-    {"when": "2026-02-11 14:31", "project": "TV_PHOTO_GALLERY", "event": "Repo inspected; currently near-empty scaffold", "status": "red", "progress": 6}
+    {
+      "when": "2026-02-10 17:00",
+      "project": "GH_INTELLIGENCE_V2",
+      "event": "Export package created for TEST_1",
+      "status": "green",
+      "progress": 35
+    },
+    {
+      "when": "2026-02-10 17:17",
+      "project": "GH_INTELLIGENCE_V2",
+      "event": "Compute results posted (DONE: results/...)",
+      "status": "green",
+      "progress": 48
+    },
+    {
+      "when": "2026-02-10 20:57",
+      "project": "GH_INTELLIGENCE_V2",
+      "event": "DeepSeek blank-output fix validated",
+      "status": "green",
+      "progress": 58
+    },
+    {
+      "when": "2026-02-11 06:40",
+      "project": "GH_INTELLIGENCE_V2",
+      "event": "2-hour max-throughput run started",
+      "status": "yellow",
+      "progress": 62
+    },
+    {
+      "when": "2026-02-11 13:15",
+      "project": "scalara",
+      "event": "Repo reviewed and full phased master plan drafted",
+      "status": "green",
+      "progress": 28
+    },
+    {
+      "when": "2026-02-11 13:46",
+      "project": "family_stylizer",
+      "event": "Local migration architecture + service refactor committed",
+      "status": "green",
+      "progress": 36
+    },
+    {
+      "when": "2026-02-11 14:08",
+      "project": "DATA_AUDIT",
+      "event": "Clunky areas identified, refactor path defined",
+      "status": "yellow",
+      "progress": 32
+    },
+    {
+      "when": "2026-02-11 14:29",
+      "project": "los_tts",
+      "event": "VoxCraft review complete; ONNX inference flagged as core blocker",
+      "status": "yellow",
+      "progress": 34
+    },
+    {
+      "when": "2026-02-11 14:31",
+      "project": "TV_PHOTO_GALLERY",
+      "event": "Repo inspected; currently near-empty scaffold",
+      "status": "red",
+      "progress": 6
+    },
+    {
+      "when": "2026-02-11 14:36",
+      "project": "GH_INTELLIGENCE_V2",
+      "event": "GitHub ingest (local-fallback): justinberken/_GH_INTELLIGENCE_V2 last commit 2026-02-10 18:03, open issues unknown",
+      "status": "green",
+      "progress": 64
+    },
+    {
+      "when": "2026-02-11 14:36",
+      "project": "BERKENBOT_DASHBOARD",
+      "event": "GitHub ingest (local-fallback): justinberken/BERKENBOT_DASHBOARD last commit 2026-02-11 14:33, open issues unknown",
+      "status": "green",
+      "progress": 63
+    },
+    {
+      "when": "2026-02-11 14:36",
+      "project": "scalara",
+      "event": "GitHub ingest (local-fallback): justinberken/scalara last commit 2026-02-11 14:35, open issues unknown",
+      "status": "yellow",
+      "progress": 28
+    },
+    {
+      "when": "2026-02-11 14:36",
+      "project": "family_stylizer",
+      "event": "GitHub ingest (local-fallback): justinberken/family_stylizer last commit 2026-02-11 14:35, open issues unknown",
+      "status": "yellow",
+      "progress": 36
+    },
+    {
+      "when": "2026-02-11 14:36",
+      "project": "DATA_AUDIT",
+      "event": "GitHub ingest (local-fallback): justinberken/DATA_AUDIT last commit 2026-02-11 13:41, open issues unknown",
+      "status": "yellow",
+      "progress": 32
+    },
+    {
+      "when": "2026-02-11 14:36",
+      "project": "los_tts",
+      "event": "GitHub ingest (local-fallback): justinberken/los_tts last commit 2026-02-11 11:33, open issues unknown",
+      "status": "yellow",
+      "progress": 34
+    }
   ]
 }

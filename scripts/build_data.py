@@ -24,6 +24,7 @@ def main():
     try:
       subprocess.run(["python3", str(ROOT / "scripts" / "collect_system_metrics.py")], check=False)
       subprocess.run(["python3", str(ROOT / "scripts" / "collect_token_metrics.py")], check=False)
+      subprocess.run(["python3", str(ROOT / "scripts" / "ingest_github_activity.py")], check=False)
     except Exception:
       pass
 
