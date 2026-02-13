@@ -4,7 +4,7 @@
       "name": "GH_INTELLIGENCE_V2",
       "status": "green",
       "progress": 64,
-      "lastUpdate": "2026-02-11 16:45",
+      "lastUpdate": "2026-02-13 06:28",
       "owner": "BeekerBot/BerkenBot",
       "nextAction": "Expand Python codegen handlers + LM Studio A/B",
       "subprocesses": [
@@ -38,7 +38,7 @@
       "name": "BERKENBOT_DASHBOARD",
       "status": "green",
       "progress": 63,
-      "lastUpdate": "2026-02-11 14:55",
+      "lastUpdate": "2026-02-13 13:18",
       "owner": "BerkenBot",
       "nextAction": "Auto-ingest multi-repo status and trend charts",
       "subprocesses": [
@@ -58,7 +58,7 @@
           "name": "Auto data pipeline",
           "status": "yellow",
           "progress": 55,
-          "note": "repo=justinberken/BERKENBOT_DASHBOARD | last_commit=2026-02-11 14:55 | open_issues=unknown(auth required)"
+          "note": "repo=justinberken/BERKENBOT_DASHBOARD | last_commit=2026-02-13 13:18 | open_issues=unknown(auth required)"
         },
         {
           "name": "Pages deployment",
@@ -72,7 +72,7 @@
       "name": "scalara",
       "status": "yellow",
       "progress": 28,
-      "lastUpdate": "2026-02-11 14:35",
+      "lastUpdate": "2026-02-13 06:31",
       "owner": "BerkenBot",
       "nextAction": "Create execution issue backlog for Phase 0-2",
       "subprocesses": [
@@ -106,7 +106,7 @@
       "name": "family_stylizer",
       "status": "yellow",
       "progress": 36,
-      "lastUpdate": "2026-02-11 14:35",
+      "lastUpdate": "2026-02-12 20:06",
       "owner": "BerkenBot",
       "nextAction": "Replace local stub with real ComfyUI workflow execution",
       "subprocesses": [
@@ -140,7 +140,7 @@
       "name": "DATA_AUDIT",
       "status": "yellow",
       "progress": 32,
-      "lastUpdate": "2026-02-11 14:37",
+      "lastUpdate": "2026-02-13 06:25",
       "owner": "BerkenBot",
       "nextAction": "Refactor clunky control panel into real app workflow",
       "subprocesses": [
@@ -174,7 +174,7 @@
       "name": "LOCAL_TTS",
       "status": "yellow",
       "progress": 34,
-      "lastUpdate": "2026-02-11 16:45",
+      "lastUpdate": "2026-02-13 10:42",
       "owner": "BerkenBot/BeekerBot",
       "nextAction": "Implement real ONNX inference in TTSEngine",
       "subprocesses": [
@@ -208,7 +208,7 @@
       "name": "TV_PHOTO_GALLERY",
       "status": "red",
       "progress": 6,
-      "lastUpdate": "2026-02-11 14:31",
+      "lastUpdate": "2026-02-12 20:04",
       "owner": "BerkenBot",
       "nextAction": "Bootstrap project scaffold and MVP scope",
       "subprocesses": [
