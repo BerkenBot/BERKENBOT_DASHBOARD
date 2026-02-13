@@ -82,6 +82,13 @@
   </main>
 
   <script>
+    // Register service worker for network-first freshness
+    if('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').then(reg => {
+        // Force SW update check on every page load
+        reg.update();
+      });
+    }
     // Cache-bust all static assets
     const _v = Date.now();
     document.getElementById('mainCSS').href = 'assets/styles.css?v=' + _v;
