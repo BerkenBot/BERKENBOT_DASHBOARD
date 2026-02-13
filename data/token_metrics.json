@@ -1730,6 +1730,14 @@
       "oauth_in_tokens": 0,
       "oauth_out_tokens": 0,
       "bootstrap_reset": false
+    },
+    {
+      "ts": "2026-02-13T13:49:03-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 28,
+      "oauth_out_tokens": 2244,
+      "bootstrap_reset": false
     }
   ]
 }
