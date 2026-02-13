@@ -251,21 +251,25 @@ function drawSVGLineChart({containerId, legendId, samples, series, yMax=100, yLa
     crosshairGroup.style.display = 'none';
   });
 
-  // Zoom with mouse wheel — smooth steps, anchored to pointer, ONLY over chart area
-  svg.addEventListener('wheel', (e) => {
+  // Helper: is the mouse over the green (data grid) area?
+  function isOverPlotArea(e) {
     const rect = svg.getBoundingClientRect();
     const svgW = rect.width, svgH = rect.height;
-    const mouseXsvg = (e.clientX - rect.left) / svgW * w;
-    const mouseYsvg = (e.clientY - rect.top) / svgH * h;
+    // Convert client coords to original SVG viewBox coords
+    const mx = (e.clientX - rect.left) / svgW * w;
+    const my = (e.clientY - rect.top) / svgH * h;
+    return mx >= pad.l && mx <= w - pad.r && my >= pad.t && my <= h - pad.b;
+  }
 
-    // Only zoom when pointer is inside the plot area
-    const plotMouseX = (mouseXsvg - translateX) / scale;
-    const plotMouseY = (mouseYsvg - translateY) / scale;
-    if(plotMouseX < pad.l || plotMouseX > w - pad.r || plotMouseY < pad.t || plotMouseY > h - pad.b) {
-      return; // let the page scroll normally
-    }
+  // Zoom with mouse wheel — smooth steps, anchored to pointer, ONLY over plot grid
+  svg.addEventListener('wheel', (e) => {
+    if(!isOverPlotArea(e)) return; // red zone → normal page scroll
 
     e.preventDefault();
+    const rect = svg.getBoundingClientRect();
+    const mouseXsvg = (e.clientX - rect.left) / rect.width * w;
+    const mouseYsvg = (e.clientY - rect.top) / rect.height * h;
+
     const factor = 1 + Math.min(Math.abs(e.deltaY), 100) * 0.001;
     const delta = e.deltaY > 0 ? 1 / factor : factor;
     const newScale = Math.max(1, Math.min(20, scale * delta));
@@ -279,9 +283,9 @@ function drawSVGLineChart({containerId, legendId, samples, series, yMax=100, yLa
     }
   }, { passive: false });
 
-  // Pan with drag
+  // Pan with drag — only from inside plot area
   svg.addEventListener('mousedown', (e) => {
-    if(scale > 1) {
+    if(scale > 1 && isOverPlotArea(e)) {
       isDragging = true;
       dragStartX = e.clientX - translateX;
       dragStartY = e.clientY - translateY;
