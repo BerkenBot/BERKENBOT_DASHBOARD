@@ -392,7 +392,16 @@ function drawSVGLineChart({containerId, legendId, samples, series, yMax=100, yLa
       load('data/llm_benchmarks.json'),
     ]);
 
-    document.getElementById('lastUpdated').textContent = `Last updated: ${overview.lastUpdated}`;
+    const updatedAt = new Date(overview.lastUpdated);
+    function updateAgo() {
+      const diff = Math.max(0, Math.floor((Date.now() - updatedAt) / 1000));
+      const hh = String(Math.floor(diff / 3600)).padStart(2, '0');
+      const mm = String(Math.floor((diff % 3600) / 60)).padStart(2, '0');
+      const ss = String(diff % 60).padStart(2, '0');
+      document.getElementById('lastUpdated').textContent = `Last updated: ${overview.lastUpdated}  (${hh}h ${mm}m ${ss}s ago)`;
+    }
+    updateAgo();
+    setInterval(updateAgo, 1000);
 
     const cards = document.getElementById('overviewCards');
     overview.metrics.forEach(m=>{
