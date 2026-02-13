@@ -251,28 +251,30 @@ function drawSVGLineChart({containerId, legendId, samples, series, yMax=100, yLa
     crosshairGroup.style.display = 'none';
   });
 
-  // Zoom with mouse wheel — smooth steps, anchored to pointer
+  // Zoom with mouse wheel — smooth steps, anchored to pointer, ONLY over chart area
   svg.addEventListener('wheel', (e) => {
+    const rect = svg.getBoundingClientRect();
+    const svgW = rect.width, svgH = rect.height;
+    const mouseXsvg = (e.clientX - rect.left) / svgW * w;
+    const mouseYsvg = (e.clientY - rect.top) / svgH * h;
+
+    // Only zoom when pointer is inside the plot area
+    const plotMouseX = (mouseXsvg - translateX) / scale;
+    const plotMouseY = (mouseYsvg - translateY) / scale;
+    if(plotMouseX < pad.l || plotMouseX > w - pad.r || plotMouseY < pad.t || plotMouseY > h - pad.b) {
+      return; // let the page scroll normally
+    }
+
     e.preventDefault();
-    // Smaller multiplier = smoother steps (was 0.9/1.1)
     const factor = 1 + Math.min(Math.abs(e.deltaY), 100) * 0.001;
     const delta = e.deltaY > 0 ? 1 / factor : factor;
     const newScale = Math.max(1, Math.min(20, scale * delta));
 
     if(newScale !== scale) {
-      const rect = svg.getBoundingClientRect();
-      const svgW = rect.width;
-      const svgH = rect.height;
-      // Mouse position in SVG viewport units
-      const mouseX = (e.clientX - rect.left) / svgW * w;
-      const mouseY = (e.clientY - rect.top) / svgH * h;
-
-      // Keep the point under the cursor fixed
       const scaleRatio = newScale / scale;
-      translateX = mouseX - (mouseX - translateX) * scaleRatio;
-      translateY = mouseY - (mouseY - translateY) * scaleRatio;
+      translateX = mouseXsvg - (mouseXsvg - translateX) * scaleRatio;
+      translateY = mouseYsvg - (mouseYsvg - translateY) * scaleRatio;
       scale = newScale;
-
       updateTransform();
     }
   }, { passive: false });
@@ -497,3 +499,29 @@ function drawSVGLineChart({containerId, legendId, samples, series, yMax=100, yLa
     document.body.innerHTML = `<pre style="padding:20px">Dashboard load error: ${e.message}</pre>`;
   }
 })();
+
+// --- Resizable panels ---
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('main > section').forEach(sec => {
+    const handle = document.createElement('div');
+    handle.className = 'resize-handle';
+    sec.appendChild(handle);
+
+    let startX, startY, startW, startH;
+    function onMouseMove(e) {
+      sec.style.width  = Math.max(200, startW + e.clientX - startX) + 'px';
+      sec.style.height = Math.max(80,  startH + e.clientY - startY) + 'px';
+    }
+    function onMouseUp() {
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+    }
+    handle.addEventListener('mousedown', (e) => {
+      e.preventDefault();
+      startX = e.clientX; startY = e.clientY;
+      startW = sec.offsetWidth; startH = sec.offsetHeight;
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+    });
+  });
+});
