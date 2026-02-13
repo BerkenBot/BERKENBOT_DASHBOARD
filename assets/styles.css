@@ -8,7 +8,7 @@ main { padding: 18px; display: grid; gap: 18px; }
 .card { background: #151f3d; border: 1px solid #2a3864; border-radius: 10px; padding: 12px; }
 .card .k { color: #9ab0e8; font-size: 12px; }
 .card .v { font-size: 22px; font-weight: 700; }
-section { background: #121a33; border: 1px solid #243052; border-radius: 10px; padding: 12px; }
+section { background: #121a33; border: 1px solid #243052; border-radius: 10px; padding: 12px; overflow: auto; resize: both; min-height: 80px; min-width: 200px; }
 .project-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(320px,1fr)); gap: 12px; }
 .project { background: #162246; border: 1px solid #2b3c72; border-radius: 10px; padding: 12px; }
 .project h3 { margin: 0 0 6px; display:flex; align-items:center; gap:8px; }

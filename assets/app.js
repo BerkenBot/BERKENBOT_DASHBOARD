@@ -251,18 +251,23 @@ function drawSVGLineChart({containerId, legendId, samples, series, yMax=100, yLa
     crosshairGroup.style.display = 'none';
   });
 
-  // Zoom with mouse wheel
+  // Zoom with mouse wheel — smooth steps, anchored to pointer
   svg.addEventListener('wheel', (e) => {
     e.preventDefault();
-    const delta = e.deltaY > 0 ? 0.9 : 1.1;
-    const newScale = Math.max(1, Math.min(10, scale * delta));
+    // Smaller multiplier = smoother steps (was 0.9/1.1)
+    const factor = 1 + Math.min(Math.abs(e.deltaY), 100) * 0.001;
+    const delta = e.deltaY > 0 ? 1 / factor : factor;
+    const newScale = Math.max(1, Math.min(20, scale * delta));
 
     if(newScale !== scale) {
       const rect = svg.getBoundingClientRect();
-      const mouseX = e.clientX - rect.left;
-      const mouseY = e.clientY - rect.top;
+      const svgW = rect.width;
+      const svgH = rect.height;
+      // Mouse position in SVG viewport units
+      const mouseX = (e.clientX - rect.left) / svgW * w;
+      const mouseY = (e.clientY - rect.top) / svgH * h;
 
-      // Zoom towards mouse position
+      // Keep the point under the cursor fixed
       const scaleRatio = newScale / scale;
       translateX = mouseX - (mouseX - translateX) * scaleRatio;
       translateY = mouseY - (mouseY - translateY) * scaleRatio;
