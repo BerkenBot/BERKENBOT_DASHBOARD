@@ -21,8 +21,8 @@ section .resize-handle::after { content:''; position:absolute; bottom:3px; right
 .progress { width:100%; height:10px; background:#202c52; border-radius:999px; overflow:hidden; border:1px solid #33467d; }
 .progress > span { display:block; height:100%; background:linear-gradient(90deg,#5fa8ff,#7ce8c6); }
 .subproc { margin:8px 0; padding:8px; background:#121d3e; border:1px solid #2a3e73; border-radius:8px; }
-.chart-wrap { width: 100%; overflow-x: auto; background:#0f1834; border:1px solid #2a3e73; border-radius:8px; padding:8px; position:relative; }
-#usageChart, #tokenChart, #llmTokChart { width: 100%; min-height: 320px; display:block; }
+.chart-wrap { width: fit-content; max-width: 100%; overflow-x: auto; background:#0f1834; border:1px solid #2a3e73; border-radius:8px; padding:8px; position:relative; }
+#usageChart, #tokenChart, #llmTokChart { width: 860px; min-height: 320px; display:block; }
 svg { user-select: none; -webkit-user-select: none; -moz-user-select: none; }
 .chart-legend { margin-top:8px; display:flex; flex-wrap:wrap; gap:10px; font-size:12px; color:#b8c6ef; }
 .legend-item { display:flex; align-items:center; gap:6px; }
