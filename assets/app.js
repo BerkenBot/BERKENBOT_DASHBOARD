@@ -53,8 +53,14 @@ function drawSVGLineChart({containerId, legendId, samples, series, yMax=100, yLa
   const chartGroup = document.createElementNS(svgNS, 'g');
   svg.appendChild(chartGroup);
 
+  // Track all data paths so we can adjust stroke-width on zoom
+  const dataPaths = [];
+
   function updateTransform() {
     chartGroup.setAttribute('transform', `translate(${translateX}, ${translateY}) scale(${scale})`);
+    // Shrink line thickness inversely with zoom so lines don't blob together
+    const sw = Math.max(0.3, 2 / scale);
+    dataPaths.forEach(p => p.setAttribute('stroke-width', String(sw)));
   }
 
   // Draw grid lines and Y-axis labels
@@ -116,32 +122,39 @@ function drawSVGLineChart({containerId, legendId, samples, series, yMax=100, yLa
       path.setAttribute('stroke-width', '2');
       path.setAttribute('fill', 'none');
       chartGroup.appendChild(path);
+      dataPaths.push(path);
     }
   });
 
-  // Draw X-axis labels
-  const start = samples[0]?.ts || '';
-  const end = samples[samples.length - 1]?.ts || '';
+  // Draw X-axis labels with high time resolution
+  function fmtTs(ts) {
+    if(!ts) return '';
+    // Show MM-DD HH:MM
+    const d = new Date(ts);
+    if(isNaN(d)) return ts.replace('T', ' ').slice(5, 16);
+    const mo = String(d.getMonth()+1).padStart(2,'0');
+    const dd = String(d.getDate()).padStart(2,'0');
+    const hh = String(d.getHours()).padStart(2,'0');
+    const mm = String(d.getMinutes()).padStart(2,'0');
+    return `${mo}-${dd} ${hh}:${mm}`;
+  }
 
-  const startLabel = document.createElementNS(svgNS, 'text');
-  startLabel.setAttribute('x', pad.l);
-  startLabel.setAttribute('y', h - 8);
-  startLabel.setAttribute('fill', '#94a7de');
-  startLabel.setAttribute('font-size', '11px');
-  startLabel.setAttribute('font-family', 'sans-serif');
-  startLabel.textContent = start.replace('T', ' ').slice(5, 16);
-  chartGroup.appendChild(startLabel);
-
-  const endText = end.replace('T', ' ').slice(5, 16);
-  const endLabel = document.createElementNS(svgNS, 'text');
-  endLabel.setAttribute('x', w - pad.r);
-  endLabel.setAttribute('y', h - 8);
-  endLabel.setAttribute('fill', '#94a7de');
-  endLabel.setAttribute('font-size', '11px');
-  endLabel.setAttribute('font-family', 'sans-serif');
-  endLabel.setAttribute('text-anchor', 'end');
-  endLabel.textContent = endText;
-  chartGroup.appendChild(endLabel);
+  // Place ~8 evenly spaced time labels
+  const tickCount = Math.min(8, samples.length);
+  for(let t = 0; t < tickCount; t++) {
+    const idx = tickCount <= 1 ? 0 : Math.round(t * (samples.length - 1) / (tickCount - 1));
+    const sample = samples[idx];
+    const px = xPos(idx, samples.length);
+    const label = document.createElementNS(svgNS, 'text');
+    label.setAttribute('x', px);
+    label.setAttribute('y', h - 8);
+    label.setAttribute('fill', '#94a7de');
+    label.setAttribute('font-size', '10px');
+    label.setAttribute('font-family', 'sans-serif');
+    label.setAttribute('text-anchor', t === 0 ? 'start' : t === tickCount - 1 ? 'end' : 'middle');
+    label.textContent = fmtTs(sample?.ts);
+    chartGroup.appendChild(label);
+  }
 
   // Crosshair and tooltip elements (outside chartGroup so they don't scale)
   const crosshairGroup = document.createElementNS(svgNS, 'g');
