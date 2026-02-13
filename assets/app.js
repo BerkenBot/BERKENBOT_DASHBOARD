@@ -19,54 +19,351 @@ async function load(path){
 const badge=(s)=>`<span class="status ${s}">${s}</span>`;
 const bar=(pct)=>`<div class="progress"><span style="width:${Math.max(0,Math.min(100,pct))}%"></span></div>`;
 
-function drawLineChart({canvasId, legendId, samples, series, yMax=100, yLabel='%'}){
-  const canvas = document.getElementById(canvasId);
-  if(!canvas || !samples?.length) return;
-  const ctx = canvas.getContext('2d');
-  const w = canvas.width, h = canvas.height;
-  const pad = {l:56,r:12,t:18,b:28};
-  const cw = w-pad.l-pad.r, ch = h-pad.t-pad.b;
+function drawSVGLineChart({containerId, legendId, samples, series, yMax=100, yLabel='%'}){
+  const container = document.getElementById(containerId);
+  if(!container || !samples?.length) return;
 
-  ctx.clearRect(0,0,w,h);
-  ctx.fillStyle = '#0f1834'; ctx.fillRect(0,0,w,h);
+  // Clear existing content
+  container.innerHTML = '';
 
-  // grid
-  ctx.strokeStyle = '#2b3f74'; ctx.lineWidth = 1;
-  for(let i=0;i<=5;i++){
-    const y = pad.t + (ch*i/5);
-    ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(w-pad.r,y); ctx.stroke();
-    const v = Math.round(yMax - i*(yMax/5));
-    ctx.fillStyle = '#94a7de'; ctx.font='11px sans-serif';
-    ctx.fillText(v + yLabel, 8, y+4);
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const w = 1200, h = 320;
+  const pad = {l:56, r:12, t:18, b:28};
+  const cw = w - pad.l - pad.r;
+  const ch = h - pad.t - pad.b;
+
+  // Create SVG element
+  const svg = document.createElementNS(svgNS, 'svg');
+  svg.setAttribute('width', '100%');
+  svg.setAttribute('height', '320');
+  svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+  svg.style.display = 'block';
+  svg.style.background = '#0f1834';
+
+  // Zoom/pan state
+  let scale = 1;
+  let translateX = 0;
+  let translateY = 0;
+  let isDragging = false;
+  let dragStartX = 0;
+  let dragStartY = 0;
+  let lastTouchDistance = 0;
+
+  // Create main group for zoom/pan transforms
+  const chartGroup = document.createElementNS(svgNS, 'g');
+  svg.appendChild(chartGroup);
+
+  function updateTransform() {
+    chartGroup.setAttribute('transform', `translate(${translateX}, ${translateY}) scale(${scale})`);
   }
 
-  function x(i,n){ return pad.l + (n<=1?0:(i*(cw/(n-1)))); }
-  function y(v){ return pad.t + (yMax-v)*(ch/yMax); }
+  // Draw grid lines and Y-axis labels
+  for(let i = 0; i <= 5; i++) {
+    const y = pad.t + (ch * i / 5);
+    const gridLine = document.createElementNS(svgNS, 'line');
+    gridLine.setAttribute('x1', pad.l);
+    gridLine.setAttribute('y1', y);
+    gridLine.setAttribute('x2', w - pad.r);
+    gridLine.setAttribute('y2', y);
+    gridLine.setAttribute('stroke', '#2b3f74');
+    gridLine.setAttribute('stroke-width', '1');
+    chartGroup.appendChild(gridLine);
 
-  series.forEach(sr=>{
-    ctx.strokeStyle = sr.color; ctx.lineWidth = 2; ctx.beginPath();
-    let moved=false;
-    samples.forEach((s,i)=>{
+    const v = Math.round(yMax - i * (yMax / 5));
+    const label = document.createElementNS(svgNS, 'text');
+    label.setAttribute('x', '8');
+    label.setAttribute('y', y + 4);
+    label.setAttribute('fill', '#94a7de');
+    label.setAttribute('font-size', '11px');
+    label.setAttribute('font-family', 'sans-serif');
+    label.textContent = v + yLabel;
+    chartGroup.appendChild(label);
+  }
+
+  // Helper functions for positioning
+  function xPos(i, n) {
+    return pad.l + (n <= 1 ? 0 : (i * (cw / (n - 1))));
+  }
+
+  function yPos(v) {
+    return pad.t + ((yMax - v) * (ch / yMax));
+  }
+
+  // Draw data series
+  series.forEach(sr => {
+    const path = document.createElementNS(svgNS, 'path');
+    let pathData = '';
+    let started = false;
+
+    samples.forEach((s, i) => {
       const raw = sr.get(s);
-      if(raw===null || raw===undefined || Number.isNaN(raw)) return;
+      if(raw === null || raw === undefined || Number.isNaN(raw)) return;
       const v = Math.max(0, Math.min(yMax, raw));
-      const px=x(i,samples.length), py=y(v);
-      if(!moved){ ctx.moveTo(px,py); moved=true; } else { ctx.lineTo(px,py); }
+      const px = xPos(i, samples.length);
+      const py = yPos(v);
+
+      if(!started) {
+        pathData += `M ${px} ${py}`;
+        started = true;
+      } else {
+        pathData += ` L ${px} ${py}`;
+      }
     });
-    ctx.stroke();
+
+    if(pathData) {
+      path.setAttribute('d', pathData);
+      path.setAttribute('stroke', sr.color);
+      path.setAttribute('stroke-width', '2');
+      path.setAttribute('fill', 'none');
+      chartGroup.appendChild(path);
+    }
   });
 
-  // x labels
+  // Draw X-axis labels
   const start = samples[0]?.ts || '';
-  const end = samples[samples.length-1]?.ts || '';
-  ctx.fillStyle='#94a7de'; ctx.font='11px sans-serif';
-  ctx.fillText(start.replace('T',' ').slice(5,16), pad.l, h-8);
-  const txt=end.replace('T',' ').slice(5,16);
-  ctx.fillText(txt, w-pad.r-ctx.measureText(txt).width, h-8);
+  const end = samples[samples.length - 1]?.ts || '';
 
+  const startLabel = document.createElementNS(svgNS, 'text');
+  startLabel.setAttribute('x', pad.l);
+  startLabel.setAttribute('y', h - 8);
+  startLabel.setAttribute('fill', '#94a7de');
+  startLabel.setAttribute('font-size', '11px');
+  startLabel.setAttribute('font-family', 'sans-serif');
+  startLabel.textContent = start.replace('T', ' ').slice(5, 16);
+  chartGroup.appendChild(startLabel);
+
+  const endText = end.replace('T', ' ').slice(5, 16);
+  const endLabel = document.createElementNS(svgNS, 'text');
+  endLabel.setAttribute('x', w - pad.r);
+  endLabel.setAttribute('y', h - 8);
+  endLabel.setAttribute('fill', '#94a7de');
+  endLabel.setAttribute('font-size', '11px');
+  endLabel.setAttribute('font-family', 'sans-serif');
+  endLabel.setAttribute('text-anchor', 'end');
+  endLabel.textContent = endText;
+  chartGroup.appendChild(endLabel);
+
+  // Crosshair and tooltip elements (outside chartGroup so they don't scale)
+  const crosshairGroup = document.createElementNS(svgNS, 'g');
+  crosshairGroup.style.display = 'none';
+  crosshairGroup.style.pointerEvents = 'none';
+  svg.appendChild(crosshairGroup);
+
+  const crosshairLine = document.createElementNS(svgNS, 'line');
+  crosshairLine.setAttribute('stroke', '#94a7de');
+  crosshairLine.setAttribute('stroke-width', '1');
+  crosshairLine.setAttribute('stroke-dasharray', '4,4');
+  crosshairLine.setAttribute('opacity', '0.6');
+  crosshairGroup.appendChild(crosshairLine);
+
+  const tooltipRect = document.createElementNS(svgNS, 'rect');
+  tooltipRect.setAttribute('fill', '#1a2545');
+  tooltipRect.setAttribute('stroke', '#3a5080');
+  tooltipRect.setAttribute('stroke-width', '1');
+  tooltipRect.setAttribute('rx', '4');
+  tooltipRect.setAttribute('opacity', '0.95');
+  crosshairGroup.appendChild(tooltipRect);
+
+  const tooltipTextGroup = document.createElementNS(svgNS, 'g');
+  crosshairGroup.appendChild(tooltipTextGroup);
+
+  // Mouse move handler for crosshair and tooltip
+  function handleMouseMove(e) {
+    const rect = svg.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+
+    // Convert mouse position to chart coordinates (accounting for scale/translate)
+    const scaledMouseX = (mouseX - translateX) / scale;
+
+    if(scaledMouseX < pad.l || scaledMouseX > w - pad.r || mouseY < pad.t || mouseY > h - pad.b) {
+      crosshairGroup.style.display = 'none';
+      return;
+    }
+
+    crosshairGroup.style.display = 'block';
+    crosshairLine.setAttribute('x1', mouseX);
+    crosshairLine.setAttribute('y1', pad.t);
+    crosshairLine.setAttribute('x2', mouseX);
+    crosshairLine.setAttribute('y2', h - pad.b);
+
+    // Find closest sample index
+    const sampleIndex = Math.round(((scaledMouseX - pad.l) / cw) * (samples.length - 1));
+    if(sampleIndex < 0 || sampleIndex >= samples.length) {
+      crosshairGroup.style.display = 'none';
+      return;
+    }
+
+    const sample = samples[sampleIndex];
+    const tooltipLines = [];
+    tooltipLines.push(sample.ts?.replace('T', ' ').slice(5, 16) || '');
+
+    series.forEach(sr => {
+      const raw = sr.get(sample);
+      if(raw !== null && raw !== undefined && !Number.isNaN(raw)) {
+        tooltipLines.push(`${sr.name}: ${raw.toFixed(1)}${yLabel}`);
+      }
+    });
+
+    // Clear previous tooltip text
+    tooltipTextGroup.innerHTML = '';
+
+    const lineHeight = 14;
+    const padding = 6;
+    let maxWidth = 0;
+
+    tooltipLines.forEach((line, i) => {
+      const text = document.createElementNS(svgNS, 'text');
+      text.setAttribute('x', 0);
+      text.setAttribute('y', i * lineHeight);
+      text.setAttribute('fill', '#eaf0ff');
+      text.setAttribute('font-size', i === 0 ? '10px' : '11px');
+      text.setAttribute('font-family', 'sans-serif');
+      text.setAttribute('font-weight', i === 0 ? 'bold' : 'normal');
+      text.textContent = line;
+      tooltipTextGroup.appendChild(text);
+
+      // Estimate text width (rough approximation)
+      const estimatedWidth = line.length * (i === 0 ? 5 : 6);
+      if(estimatedWidth > maxWidth) maxWidth = estimatedWidth;
+    });
+
+    const tooltipWidth = maxWidth + padding * 2;
+    const tooltipHeight = tooltipLines.length * lineHeight + padding * 2;
+
+    let tooltipX = mouseX + 10;
+    let tooltipY = mouseY - tooltipHeight - 10;
+
+    // Keep tooltip within bounds
+    if(tooltipX + tooltipWidth > w) tooltipX = mouseX - tooltipWidth - 10;
+    if(tooltipY < 0) tooltipY = mouseY + 10;
+
+    tooltipRect.setAttribute('x', tooltipX);
+    tooltipRect.setAttribute('y', tooltipY);
+    tooltipRect.setAttribute('width', tooltipWidth);
+    tooltipRect.setAttribute('height', tooltipHeight);
+
+    tooltipTextGroup.setAttribute('transform', `translate(${tooltipX + padding}, ${tooltipY + padding + 10})`);
+  }
+
+  svg.addEventListener('mousemove', handleMouseMove);
+  svg.addEventListener('mouseleave', () => {
+    crosshairGroup.style.display = 'none';
+  });
+
+  // Zoom with mouse wheel
+  svg.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? 0.9 : 1.1;
+    const newScale = Math.max(1, Math.min(10, scale * delta));
+
+    if(newScale !== scale) {
+      const rect = svg.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
+
+      // Zoom towards mouse position
+      const scaleRatio = newScale / scale;
+      translateX = mouseX - (mouseX - translateX) * scaleRatio;
+      translateY = mouseY - (mouseY - translateY) * scaleRatio;
+      scale = newScale;
+
+      updateTransform();
+    }
+  }, { passive: false });
+
+  // Pan with drag
+  svg.addEventListener('mousedown', (e) => {
+    if(scale > 1) {
+      isDragging = true;
+      dragStartX = e.clientX - translateX;
+      dragStartY = e.clientY - translateY;
+      svg.style.cursor = 'grabbing';
+    }
+  });
+
+  svg.addEventListener('mousemove', (e) => {
+    if(isDragging) {
+      translateX = e.clientX - dragStartX;
+      translateY = e.clientY - dragStartY;
+      updateTransform();
+    }
+  });
+
+  svg.addEventListener('mouseup', () => {
+    isDragging = false;
+    svg.style.cursor = scale > 1 ? 'grab' : 'default';
+  });
+
+  svg.addEventListener('mouseleave', () => {
+    isDragging = false;
+    svg.style.cursor = 'default';
+  });
+
+  // Double-click to reset zoom
+  svg.addEventListener('dblclick', () => {
+    scale = 1;
+    translateX = 0;
+    translateY = 0;
+    updateTransform();
+    svg.style.cursor = 'default';
+  });
+
+  // Touch support for pinch-to-zoom
+  svg.addEventListener('touchstart', (e) => {
+    if(e.touches.length === 2) {
+      const dx = e.touches[0].clientX - e.touches[1].clientX;
+      const dy = e.touches[0].clientY - e.touches[1].clientY;
+      lastTouchDistance = Math.sqrt(dx * dx + dy * dy);
+    } else if(e.touches.length === 1 && scale > 1) {
+      isDragging = true;
+      dragStartX = e.touches[0].clientX - translateX;
+      dragStartY = e.touches[0].clientY - translateY;
+    }
+  }, { passive: true });
+
+  svg.addEventListener('touchmove', (e) => {
+    if(e.touches.length === 2 && lastTouchDistance > 0) {
+      e.preventDefault();
+      const dx = e.touches[0].clientX - e.touches[1].clientX;
+      const dy = e.touches[0].clientY - e.touches[1].clientY;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      const delta = distance / lastTouchDistance;
+      const newScale = Math.max(1, Math.min(10, scale * delta));
+
+      if(newScale !== scale) {
+        const rect = svg.getBoundingClientRect();
+        const centerX = (e.touches[0].clientX + e.touches[1].clientX) / 2 - rect.left;
+        const centerY = (e.touches[0].clientY + e.touches[1].clientY) / 2 - rect.top;
+
+        const scaleRatio = newScale / scale;
+        translateX = centerX - (centerX - translateX) * scaleRatio;
+        translateY = centerY - (centerY - translateY) * scaleRatio;
+        scale = newScale;
+
+        updateTransform();
+      }
+      lastTouchDistance = distance;
+    } else if(e.touches.length === 1 && isDragging) {
+      translateX = e.touches[0].clientX - dragStartX;
+      translateY = e.touches[0].clientY - dragStartY;
+      updateTransform();
+    }
+  }, { passive: false });
+
+  svg.addEventListener('touchend', () => {
+    isDragging = false;
+    lastTouchDistance = 0;
+  });
+
+  container.appendChild(svg);
+
+  // Update legend
   const lg = document.getElementById(legendId);
-  if(lg){
-    lg.innerHTML = series.map(s=>`<span class="legend-item"><span class="legend-swatch" style="background:${s.color}"></span>${s.name}</span>`).join('');
+  if(lg) {
+    lg.innerHTML = series.map(s => 
+      `<span class="legend-item"><span class="legend-swatch" style="background:${s.color}"></span>${s.name}</span>`
+    ).join('');
   }
 }
 
@@ -137,8 +434,8 @@ function drawLineChart({canvasId, legendId, samples, series, yMax=100, yLabel='%
     const securityList=document.getElementById('securityList');
     security.items.forEach(s=>{ const li=document.createElement('li'); li.innerHTML=`${badge(s.level)} ${s.text}`; securityList.appendChild(li); });
 
-    drawLineChart({
-      canvasId:'usageChart', legendId:'usageLegend', samples: sysm.samples || [], yMax:100, yLabel:'%',
+    drawSVGLineChart({
+      containerId:'usageChart', legendId:'usageLegend', samples: sysm.samples || [], yMax:100, yLabel:'%',
       series:[
         {name:'CPU %', color:'#63a7ff', get:s=>s.cpu_pct ?? null},
         {name:'RAM %', color:'#7be3c4', get:s=>s.ram_pct ?? null},
@@ -151,8 +448,8 @@ function drawLineChart({canvasId, legendId, samples, series, yMax=100, yLabel='%
 
     const tokenSamples = tokens.samples || [];
     const maxTok = Math.max(100, ...tokenSamples.map(s=>Math.max(s.local_in_tokens||0, s.local_out_tokens||0, s.oauth_in_tokens||0, s.oauth_out_tokens||0)));
-    drawLineChart({
-      canvasId:'tokenChart', legendId:'tokenLegend', samples: tokenSamples, yMax:maxTok, yLabel:' tok',
+    drawSVGLineChart({
+      containerId:'tokenChart', legendId:'tokenLegend', samples: tokenSamples, yMax:maxTok, yLabel:' tok',
       series:[
         {name:'Local input tokens', color:'#5ec2ff', get:s=>s.local_in_tokens ?? null},
         {name:'Local output tokens', color:'#4be39f', get:s=>s.local_out_tokens ?? null},
@@ -186,8 +483,8 @@ function drawLineChart({canvasId, legendId, samples, series, yMax=100, yLabel='%
       get: s => (s.model === m ? s.tok_s : null)
     }));
     const maxBenchTok = Math.max(100, ...benchSamples.map(s => s.tok_s || 0));
-    drawLineChart({
-      canvasId:'llmTokChart', legendId:'llmTokLegend', samples: benchSamples, yMax:maxBenchTok, yLabel:' tok/s',
+    drawSVGLineChart({
+      containerId:'llmTokChart', legendId:'llmTokLegend', samples: benchSamples, yMax:maxBenchTok, yLabel:' tok/s',
       series: benchSeries
     });
 
