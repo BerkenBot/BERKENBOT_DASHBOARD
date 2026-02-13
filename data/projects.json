@@ -38,7 +38,7 @@
       "name": "BERKENBOT_DASHBOARD",
       "status": "green",
       "progress": 63,
-      "lastUpdate": "2026-02-13 14:14",
+      "lastUpdate": "2026-02-13 14:19",
       "owner": "BerkenBot",
       "nextAction": "Auto-ingest multi-repo status and trend charts",
       "subprocesses": [
@@ -58,7 +58,7 @@
           "name": "Auto data pipeline",
           "status": "yellow",
           "progress": 55,
-          "note": "repo=justinberken/BERKENBOT_DASHBOARD | last_commit=2026-02-13 14:14 | open_issues=unknown(auth required)"
+          "note": "repo=justinberken/BERKENBOT_DASHBOARD | last_commit=2026-02-13 14:19 | open_issues=unknown(auth required)"
         },
         {
           "name": "Pages deployment",
@@ -106,7 +106,7 @@
       "name": "family_stylizer",
       "status": "yellow",
       "progress": 36,
-      "lastUpdate": "2026-02-13 13:44",
+      "lastUpdate": "2026-02-13 14:20",
       "owner": "BerkenBot",
       "nextAction": "Replace local stub with real ComfyUI workflow execution",
       "subprocesses": [
