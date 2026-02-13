@@ -2106,6 +2106,14 @@
       "oauth_in_tokens": 0,
       "oauth_out_tokens": 0,
       "bootstrap_reset": false
+    },
+    {
+      "ts": "2026-02-13T17:09:05-06:00",
+      "local_in_tokens": 0,
+      "local_out_tokens": 0,
+      "oauth_in_tokens": 0,
+      "oauth_out_tokens": 0,
+      "bootstrap_reset": false
     }
   ]
 }
