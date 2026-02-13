@@ -3,8 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <title>BOT_DASHBOARD</title>
-  <link rel="stylesheet" href="assets/styles.css" />
+  <link rel="stylesheet" id="mainCSS" href="assets/styles.css" />
 </head>
 <body>
   <header>
@@ -78,6 +81,13 @@
     </section>
   </main>
 
-  <script src="assets/app.js"></script>
+  <script>
+    // Cache-bust all static assets
+    const _v = Date.now();
+    document.getElementById('mainCSS').href = 'assets/styles.css?v=' + _v;
+    const _s = document.createElement('script');
+    _s.src = 'assets/app.js?v=' + _v;
+    document.body.appendChild(_s);
+  </script>
 </body>
 </html>
