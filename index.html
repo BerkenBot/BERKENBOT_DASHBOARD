@@ -79,6 +79,12 @@
       <h2>Security</h2>
       <ul id="securityList"></ul>
     </section>
+
+    <section class="office-section">
+      <h2>🏢 Agent Office</h2>
+      <p class="muted">Real-time view of your agents hard at work</p>
+      <div id="agentOffice" class="agent-office-wrap"></div>
+    </section>
   </main>
 
   <script>
@@ -95,6 +101,9 @@
     const _s = document.createElement('script');
     _s.src = 'assets/app.js?v=' + _v;
     document.body.appendChild(_s);
+    const _o = document.createElement('script');
+    _o.src = 'assets/office.js?v=' + _v;
+    document.body.appendChild(_o);
   </script>
 </body>
 </html>
