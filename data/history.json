@@ -2736,6 +2736,48 @@
       "event": "GitHub ingest (local-fallback): justinberken/TV_PHOTO_GALLERY last commit 2026-02-18 18:40, open issues unknown",
       "status": "red",
       "progress": 6
+    },
+    {
+      "when": "2026-02-20 11:31",
+      "project": "GH_INTELLIGENCE_V2",
+      "event": "GitHub ingest (local-fallback): justinberken/_GH_INTELLIGENCE_V2 last commit 2026-02-20 10:33, open issues unknown",
+      "status": "green",
+      "progress": 64
+    },
+    {
+      "when": "2026-02-20 11:31",
+      "project": "BERKENBOT_DASHBOARD",
+      "event": "GitHub ingest (local-fallback): justinberken/BERKENBOT_DASHBOARD last commit 2026-02-20 11:15, open issues unknown",
+      "status": "green",
+      "progress": 63
+    },
+    {
+      "when": "2026-02-20 11:31",
+      "project": "scalara",
+      "event": "GitHub ingest (local-fallback): justinberken/scalara last commit 2026-02-19 13:12, open issues unknown",
+      "status": "yellow",
+      "progress": 28
+    },
+    {
+      "when": "2026-02-20 11:31",
+      "project": "family_stylizer",
+      "event": "GitHub ingest (local-fallback): justinberken/family_stylizer last commit 2026-02-20 10:55, open issues unknown",
+      "status": "yellow",
+      "progress": 36
+    },
+    {
+      "when": "2026-02-20 11:31",
+      "project": "DATA_AUDIT",
+      "event": "GitHub ingest (local-fallback): justinberken/DATA_AUDIT last commit 2026-02-19 16:07, open issues unknown",
+      "status": "yellow",
+      "progress": 32
+    },
+    {
+      "when": "2026-02-20 11:31",
+      "project": "TV_PHOTO_GALLERY",
+      "event": "GitHub ingest (local-fallback): justinberken/TV_PHOTO_GALLERY last commit 2026-02-18 18:40, open issues unknown",
+      "status": "red",
+      "progress": 6
     }
   ]
 }
