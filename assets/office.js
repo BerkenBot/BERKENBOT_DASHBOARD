@@ -5,47 +5,70 @@
 (function () {
   'use strict';
 
+  /* 16-bit palette — Sega Genesis / SNES richness */
   const C = {
-    skin:'#f8c291', skinShd:'#e58e6a', skinD:'#d4896e',
-    floor:'#1e1e2a', floorL:'#282838', floorTile:'#252535',
-    concrete:'#3d3d4d', concreteL:'#4a4a5a',
-    brick:'#8b4513', brickL:'#a0522d', brickM:'#6b3410',
-    steel:'#9e9e9e', steelD:'#757575', steelL:'#c0c0c0',
-    wood:'#d4a574', woodD:'#b8895a', woodL:'#e8c49a', woodDk:'#8b6914',
-    glass:'#74b9ff', glassFrame:'#b2bec3',
-    monitor:'#1e1e1e', monBezel:'#2d2d2d',
-    led:'#fdcb6e', ledWarm:'#ffeaa7',
-    plant:'#00b894', plantD:'#00a381', plantL:'#55efc4', plantDk:'#006d5b',
-    pot:'#636e72', potL:'#b2bec3', potTerra:'#c0764a',
-    board:'#fefefe', boardFrame:'#636e72',
-    cup:'#fefefe', cupD:'#dfe6e9',
+    skin:'#f4c08a', skinHi:'#fce0b8', skinShd:'#d48e5c', skinD:'#b87040',
+    floor:'#1a1828', floorHi:'#2a283a', floorL:'#222030', floorTile:'#201e2e',
+    concrete:'#3a3a4c', concreteL:'#4e4e62', concreteHi:'#5a5a6e',
+    brick:'#a0522d', brickHi:'#c06030', brickL:'#8b4513', brickM:'#6b3410', brickDk:'#4a2508',
+    steel:'#a8b0b8', steelD:'#6e7880', steelL:'#d0d8e0', steelHi:'#e8eef2',
+    wood:'#d4a574', woodD:'#b08050', woodL:'#e8c89a', woodDk:'#805a28', woodHi:'#f0dab0',
+    glass:'#6ab4f8', glassHi:'#a0d4ff', glassFrame:'#90a0b0',
+    monitor:'#181820', monBezel:'#2a2a34', monHi:'#3a3a48',
+    led:'#f8cc60', ledWarm:'#fff0a0', ledHi:'#fff8d0',
+    plant:'#20b880', plantD:'#109868', plantL:'#60f0c0', plantDk:'#087850', plantHi:'#80ffd8',
+    pot:'#607078', potL:'#a0b0b8', potTerra:'#c87848', potHi:'#d89868',
+    board:'#f8f8f0', boardFrame:'#586068',
+    cup:'#f0f0f0', cupD:'#d0d8e0', cupHi:'#ffffff',
     slack:'#611f69',
-    neon:'#a29bfe', neonPink:'#fd79a8', neonGreen:'#00b894',
-    wall:'#16162a', wallL:'#1e1e36', wallM:'#1a1a30',
-    carpet:'#1a3a5c', carpetL:'#1e4470',
+    neon:'#a8a0ff', neonHi:'#d0c8ff', neonPink:'#ff80b0', neonGreen:'#40f8a0',
+    wall:'#141428', wallHi:'#1e1e38', wallL:'#1a1a32', wallM:'#181830',
+    carpet:'#183858', carpetL:'#204870', carpetHi:'#285880',
     espresso:'#2d1810',
-    server:'#2d3436', serverL:'#636e72', serverLed:'#00b894', serverLedR:'#e74c3c', serverLedY:'#fdcb6e',
-    rug:'#6c5ce7', rugD:'#5b4cc7', rugL:'#7c6cf7',
-    cactus:'#2ecc71', cactusD:'#27ae60',
-    book1:'#e74c3c', book2:'#3498db', book3:'#f1c40f', book4:'#9b59b6', book5:'#1abc9c',
+    server:'#282e32', serverHi:'#383e44', serverL:'#586068', serverLed:'#30e890', serverLedR:'#f04848', serverLedY:'#f8d050',
+    rug:'#6858d8', rugD:'#5040b0', rugL:'#8070f0', rugHi:'#9888ff',
+    cactus:'#30d070', cactusD:'#28a858',
+    book1:'#e84040', book2:'#3898e0', book3:'#f0c830', book4:'#9858c0', book5:'#28c8a0',
+    hair1:'#c04040', hair2:'#282830', hair3:'#e8c050', hair4:'#686870', hair5:'#282830',
+    shirt1:'#e84848', shirt2:'#30d070', shirt3:'#2898e0', shirt4:'#f878a8', shirt5:'#a090f0',
   };
 
+  let _gradId=0;
   function px(x,y,w,h,fill,o){
     return `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${fill}"${o?` opacity="${o}"`:''}shape-rendering="crispEdges"/>`;
   }
+  /* 16-bit shaded rect: top highlight + body + bottom shadow */
+  function px16(x,y,w,h,hi,mid,shd){
+    return px(x,y,w,1,hi)+px(x,y+1,w,Math.max(1,h-2),mid)+px(x,y+h-1,w,1,shd);
+  }
+  /* Dithered blend between two colors (checkerboard pattern) */
+  function dither(x,y,w,h,c1,c2){
+    let s='';
+    for(let dy=0;dy<h;dy++){
+      for(let dx=0;dx<w;dx++){
+        s+=px(x+dx,y+dy,1,1,(dx+dy)%2===0?c1:c2);
+      }
+    }
+    return s;
+  }
   function txt(x,y,text,size,fill,anchor,bold){
-    return `<text x="${x}" y="${y}" fill="${fill||'#b6c4ee'}" font-family="'Press Start 2P',monospace" font-size="${size||3}" text-anchor="${anchor||'middle'}"${bold?' font-weight="bold"':''}>${text}</text>`;
+    return `<text x="${x}" y="${y}" fill="${fill||'#b8c8f0'}" font-family="'Press Start 2P',monospace" font-size="${size||3}" text-anchor="${anchor||'middle'}"${bold?' font-weight="bold"':''}>${text}</text>`;
+  }
+  /* Shadow text (16-bit style drop shadow) */
+  function txt16(x,y,text,size,fill,anchor){
+    return txt(x+0.5,y+0.5,text,size,'#000',anchor)+txt(x,y,text,size,fill,anchor,true);
   }
 
-  /* ---- DETAILED BRICK WALL ---- */
+  /* ---- 16-BIT BRICK WALL ---- */
   function brickWall(totalW, brickEnd){
     let s='';
-    // Dark base wall
+    // Dark base wall with gradient feel
     s+=px(0,0,totalW,80,C.wall);
-    // Wainscoting / dark panel at bottom
+    s+=px(0,0,totalW,2,C.wallHi); // top edge lighter
+    // Wainscoting
     s+=px(0,62,totalW,18,C.wallM);
-    s+=px(0,62,totalW,1,'#2a2a45');
-    // Brick section
+    s+=px(0,62,totalW,1,C.wallHi,0.2);
+    // Brick section with highlight/shadow per brick
     for(let row=0;row<20;row++){
       const y=row*4, off=(row%2)?5:0;
       for(let col=-1;col<Math.ceil(brickEnd/10)+1;col++){
@@ -53,21 +76,28 @@
         if(x+9<0||x>brickEnd)continue;
         const cx=Math.max(0,x), cw=Math.min(9,brickEnd-cx,x+9-cx);
         if(cw<=0)continue;
-        const shade=(col+row)%3===0?C.brickL:(col+row)%3===1?C.brick:C.brickM;
-        s+=px(cx,y,cw,3,shade);
-        // Mortar highlight
-        if((col+row)%5===0) s+=px(cx,y+3,cw,0.5,'#5a3a1a',0.3);
+        const shade=(col+row)%3===0?C.brickHi:(col+row)%3===1?C.brick:C.brickM;
+        // Top highlight, body, bottom shadow — 16-bit shading
+        s+=px(cx,y,cw,1,(col+row)%3===0?C.brickHi:C.brickL);
+        s+=px(cx,y+1,cw,1,shade);
+        s+=px(cx,y+2,cw,1,C.brickDk);
+        // Mortar lines
+        s+=px(cx,y+3,cw,0.5,'#3a2810',0.4);
       }
     }
-    // Concrete section with subtle texture
+    // Concrete section with richer texture
     s+=px(brickEnd,0,totalW-brickEnd,80,C.concreteL);
-    for(let i=0;i<20;i++){
-      const tx=brickEnd+5+i*18;
-      if(tx<totalW)s+=px(tx,5+(i%6)*12,12,1,C.concrete,0.15);
+    s+=px(brickEnd,0,totalW-brickEnd,1,C.concreteHi,0.3);
+    for(let i=0;i<25;i++){
+      const tx=brickEnd+4+i*15;
+      if(tx<totalW){
+        s+=px(tx,4+(i%7)*10,10,1,C.concreteHi,0.12);
+        s+=px(tx+2,6+(i%5)*12,6,1,C.concrete,0.08);
+      }
     }
-    // Exposed pipe along top
-    s+=px(0,2,totalW,1.5,C.steelD,0.5);
-    s+=px(0,1,totalW,0.5,C.steelL,0.2);
+    // Exposed pipe with highlight
+    s+=px(0,3,totalW,2,C.steelD,0.5);
+    s+=px(0,3,totalW,0.5,C.steelHi,0.25);
     return s;
   }
 
@@ -491,16 +521,20 @@
     return s;
   }
 
-  /* ---- NEON SIGN ---- */
+  /* ---- 16-BIT NEON SIGN (double glow) ---- */
   function neonSign(text,color){
     color=color||C.neon;
-    return `<text x="0" y="6" fill="${color}" font-family="'Press Start 2P',monospace" font-size="5" opacity="0.9">${text}</text>`
-      +`<text x="0" y="6" fill="${color}" font-family="'Press Start 2P',monospace" font-size="5" opacity="0.15" filter="url(#neonGlow)">${text}</text>`;
+    const hi=color.replace(/[0-9a-f]{2}$/i,m=>{const v=Math.min(255,parseInt(m,16)+50);return v.toString(16).padStart(2,'0');});
+    return `<text x="0" y="6" fill="${hi}" font-family="'Press Start 2P',monospace" font-size="5.5" opacity="0.95">${text}</text>`
+      +`<text x="0" y="6" fill="${color}" font-family="'Press Start 2P',monospace" font-size="5.5" opacity="0.2" filter="url(#neonGlow)">${text}</text>`
+      +`<text x="0.3" y="6.3" fill="#000" font-family="'Press Start 2P',monospace" font-size="5.5" opacity="0.15">${text}</text>`;
   }
 
-  /* ---- SMALL NEON ---- */
+  /* ---- 16-BIT SMALL NEON ---- */
   function neonSmall(text,color){
-    return `<text x="0" y="4" fill="${color||C.neonPink}" font-family="'Press Start 2P',monospace" font-size="3" opacity="0.85">${text}</text>`;
+    color=color||C.neonPink;
+    return `<text x="0" y="4" fill="${color}" font-family="'Press Start 2P',monospace" font-size="3.2" opacity="0.9">${text}</text>`
+      +`<text x="0" y="4" fill="${color}" font-family="'Press Start 2P',monospace" font-size="3.2" opacity="0.12" filter="url(#neonGlow)">${text}</text>`;
   }
 
   /* ---- PROJECT TAGS ---- */
@@ -606,100 +640,161 @@
     },
   ];
 
-  /* ---- SITTING CHARACTER (merged into chair) ---- */
+  /* ---- 16-BIT SEATED CHARACTER ---- */
   function seatedAgent(ag, i){
     let s='';
-    const hairCol=ag.hair, shirtCol=ag.shirt, pantsCol=ag.pants, status=ag.status, acc=ag.acc;
+    const hair=ag.hair, shirt=ag.shirt, pants=ag.pants, status=ag.status, acc=ag.acc;
+    // Derived 16-bit shading colors
+    const shirtHi=shirt.replace(/[0-9a-f]{2}$/i,m=>{const v=Math.min(255,parseInt(m,16)+40);return v.toString(16).padStart(2,'0');});
+    const shirtShd=shirt.replace(/[0-9a-f]{2}$/i,m=>{const v=Math.max(0,parseInt(m,16)-40);return v.toString(16).padStart(2,'0');});
+    const pantsHi=pants.replace(/[0-9a-f]{2}$/i,m=>{const v=Math.min(255,parseInt(m,16)+30);return v.toString(16).padStart(2,'0');});
 
-    // ---- CHAIR (behind character) ----
-    // Chair back
-    s+=px(3,-8,18,8,shirtCol,0.15); // chair back peek
-    s+=px(1,-6,2,12,C.steelD); // armrest L
-    s+=px(21,-6,2,12,C.steelD); // armrest R
-    s+=px(1,-7,3,2,shirtCol,0.4); // arm pad L
-    s+=px(20,-7,3,2,shirtCol,0.4); // arm pad R
+    // ---- CHAIR BACK (behind character) ----
+    s+=px16(2,-10,20,10,C.steelL,C.steelD,C.steel); // chair back frame
+    // Mesh pattern (16-bit detail)
+    for(let my=-9;my<-2;my+=2) s+=px(4,my,16,1,'#000',0.06);
+    s+=px(1,-8,2,14,C.steelD); // armrest L
+    s+=px(0,-7,1,12,C.steelL,0.3); // armrest highlight
+    s+=px(21,-8,2,14,C.steelD); // armrest R
+    s+=px(1,-9,3,2,shirt,0.5); // arm pad L
+    s+=px(20,-9,3,2,shirt,0.5); // arm pad R
 
-    // ---- CHARACTER UPPER BODY (seated) ----
-    // Hair
-    s+=px(9,-30,10,5,hairCol);
-    s+=px(8,-28,1,2,hairCol);s+=px(19,-28,1,2,hairCol);
-    if(acc.beanie){ s+=px(8,-31,12,4,acc.beanie);s+=px(10,-32,8,2,acc.beanie);s+=px(9,-31,10,1,'#fff',0.1); }
-    if(acc.ponytail){ s+=px(18,-29,2,6,hairCol);s+=px(19,-27,1,4,hairCol); }
-    // Head
-    s+=px(10,-27,8,9,C.skin);
-    s+=px(9,-25,1,4,C.skin);s+=px(18,-25,1,4,C.skin);
-    // Eyebrows
-    s+=px(11,-25,3,1,hairCol,0.6);s+=px(15,-25,3,1,hairCol,0.6);
-    // Eyes
+    // ---- HAIR ----
+    s+=px(9,-32,10,6,hair);
+    s+=px(9,-32,10,1,hair.replace(/[0-9a-f]{2}$/i,m=>{const v=Math.min(255,parseInt(m,16)+30);return v.toString(16).padStart(2,'0');})); // highlight
+    s+=px(8,-30,1,3,hair);s+=px(19,-30,1,3,hair); // sideburns
+    if(acc.beanie){s+=px(8,-33,12,5,acc.beanie);s+=px(10,-34,8,2,acc.beanie);s+=px(9,-33,10,1,'#fff',0.12);}
+    if(acc.ponytail){s+=px(18,-31,2,7,hair);s+=px(19,-28,1,5,hair);}
+
+    // ---- HEAD (16-bit: highlight + base + shadow) ----
+    s+=px(10,-28,8,1,C.skinHi); // forehead highlight
+    s+=px(10,-27,8,8,C.skin);
+    s+=px(10,-20,8,1,C.skinShd); // jaw shadow
+    s+=px(9,-26,1,5,C.skin);s+=px(18,-26,1,5,C.skin); // ears
+    s+=px(9,-26,1,1,C.skinHi); // ear highlight
+
+    // ---- EYEBROWS ----
+    s+=px(11,-26,3,1,hair,0.7);s+=px(15,-26,3,1,hair,0.7);
+
+    // ---- EYES (16-bit: white + iris + pupil + highlight) ----
     if(status==='green'){
-      s+=px(12,-24,2,2,'#2d3436');s+=px(16,-24,2,2,'#2d3436');
-      s+=px(12,-24,1,1,'#fff');s+=px(16,-24,1,1,'#fff');
+      s+=px(11,-25,3,3,'#e8e8f0'); // white L
+      s+=px(12,-24,2,2,'#2848a0'); // iris L
+      s+=px(12,-24,1,1,'#181828'); // pupil L
+      s+=px(13,-25,1,1,'#fff'); // highlight L
+      s+=px(15,-25,3,3,'#e8e8f0'); // white R
+      s+=px(16,-24,2,2,'#2848a0'); // iris R
+      s+=px(16,-24,1,1,'#181828'); // pupil R
+      s+=px(17,-25,1,1,'#fff'); // highlight R
     } else {
-      s+=px(12,-23,2,1,'#636e72');s+=px(16,-23,2,1,'#636e72');
+      s+=px(12,-24,2,1,'#484858');s+=px(16,-24,2,1,'#484858');
     }
-    // Glasses
+
+    // ---- GLASSES ----
     if(acc.glasses){
-      s+=`<rect x="11" y="-24.5" width="4" height="3" fill="none" stroke="${acc.glassCol||'#2d3436'}" stroke-width="0.5" rx="0.5"/>`;
-      s+=`<rect x="15.5" y="-24.5" width="4" height="3" fill="none" stroke="${acc.glassCol||'#2d3436'}" stroke-width="0.5" rx="0.5"/>`;
-      s+=px(15,-23,0.5,1,acc.glassCol||'#2d3436');
+      const gc=acc.glassCol||'#303038';
+      s+=`<rect x="10.5" y="-26" width="4.5" height="4" fill="none" stroke="${gc}" stroke-width="0.6" rx="0.5"/>`;
+      s+=px(11,-25,3,2,'#88c0f0',0.08); // lens glare
+      s+=`<rect x="15" y="-26" width="4.5" height="4" fill="none" stroke="${gc}" stroke-width="0.6" rx="0.5"/>`;
+      s+=px(16,-25,3,2,'#88c0f0',0.08);
+      s+=px(14.5,-25,0.5,1,gc);
     }
-    // Headphones
+
+    // ---- HEADPHONES (16-bit) ----
     if(acc.headphones){
-      s+=px(8,-27,1,6,'#2d3436');s+=px(19,-27,1,6,'#2d3436');
-      s+=`<path d="M8,-27 Q14,-31 19,-27" stroke="#2d3436" stroke-width="1" fill="none"/>`;
-      s+=px(7,-25,2,4,acc.hpColor||'#e74c3c');s+=px(19,-25,2,4,acc.hpColor||'#e74c3c');
-      if(acc.mic){s+=px(6,-23,1,4,'#2d3436');s+=px(5,-19,2,1,'#636e72');}
+      const hc=acc.hpColor||'#e04040';
+      s+=px(8,-29,1,7,'#282830');s+=px(19,-29,1,7,'#282830');
+      s+=`<path d="M8,-29 Q14,-33 19,-29" stroke="#282830" stroke-width="1.2" fill="none"/>`;
+      s+=px(7,-27,2,5,hc);s+=px(7,-27,2,1,hc.replace(/[0-9a-f]{2}$/i,m=>{const v=Math.min(255,parseInt(m,16)+40);return v.toString(16).padStart(2,'0');})); // highlight
+      s+=px(19,-27,2,5,hc);
+      if(acc.mic){s+=px(6,-25,1,5,'#282830');s+=px(5,-20,3,2,'#484858');}
     }
-    // Nose & mouth
-    s+=px(14,-22,1,2,C.skinShd,0.5);
-    s+=px(13,-20,3,1,status==='green'?'#e17055':'#b07050');
-    // Neck
-    s+=px(12,-18,4,2,C.skin);
-    // Torso
-    s+=px(6,-16,16,14,shirtCol);
-    if(acc.hoodie){s+=px(12,-16,4,2,shirtCol);s+=px(13,-16,2,3,'#000',0.06);}
-    if(acc.vest){s+=px(6,-16,4,14,acc.vestCol||'#2d3436');s+=px(18,-16,4,14,acc.vestCol||'#2d3436');}
+
+    // ---- NOSE & MOUTH ----
+    s+=px(14,-23,1,2,C.skinShd,0.4);
+    if(status==='green'){s+=px(13,-20,3,1,'#d06048');s+=px(13,-20,1,1,'#e07058');} // smile
+    else s+=px(13,-21,2,1,'#a06048');
+
+    // ---- NECK ----
+    s+=px(12,-19,4,2,C.skin);s+=px(12,-19,4,1,C.skinShd,0.15);
+
+    // ---- TORSO (16-bit: highlight stripe + body + shadow) ----
+    s+=px(6,-17,16,1,shirtHi); // collar highlight
+    s+=px(6,-16,16,13,shirt);
+    s+=px(6,-4,16,1,shirtShd); // bottom shadow
+    // Shirt wrinkle details
+    s+=px(10,-12,1,4,shirtShd,0.15);s+=px(16,-10,1,3,shirtHi,0.12);
+    if(acc.hoodie){
+      s+=px(12,-17,4,3,shirtHi,0.1); // hood at collar
+      s+=px(10,-9,8,2,shirtShd,0.08); // kangaroo pocket shadow
+      s+=px(10,-8,8,1,shirtHi,0.06);
+    }
+    if(acc.vest){
+      s+=px(6,-17,4,15,acc.vestCol||'#282830');s+=px(6,-17,4,1,'#484858',0.2);
+      s+=px(18,-17,4,15,acc.vestCol||'#282830');
+    }
     // Badge
-    s+=px(17,-14,3,4,'#fff',0.15);s+=px(18,-13,1,1,'#74b9ff',0.5);
-    // Arms reaching to desk
-    s+=px(3,-14,3,12,shirtCol);s+=px(22,-14,3,12,shirtCol);
-    // Hands on keyboard
-    s+=px(2,-2,4,2,C.skin);s+=px(22,-2,4,2,C.skin);
-    if(acc.watch){s+=px(3,-3,3,1,'#2d3436');s+=px(4,-4,1,1,'#74b9ff',0.6);}
-    // Held items (adjusted for seated)
+    s+=px(17,-15,4,5,'#fff',0.12);s+=px(18,-14,2,2,'#60a8f0',0.5);s+=px(18,-14,1,1,'#fff',0.2);
+
+    // ---- ARMS (reaching to desk) ----
+    s+=px(3,-15,3,1,shirtHi); // shoulder highlight L
+    s+=px(3,-14,3,12,shirt);
+    s+=px(22,-15,3,1,shirtHi); // shoulder highlight R
+    s+=px(22,-14,3,12,shirt);
+
+    // ---- HANDS ON KEYBOARD ----
+    s+=px(2,-2,4,2,C.skin);s+=px(2,-2,4,1,C.skinHi); // highlight
+    s+=px(22,-2,4,2,C.skin);s+=px(22,-2,4,1,C.skinHi);
+    if(acc.watch){s+=px(3,-3,3,1,'#282830');s+=px(4,-4,1,1,'#60a8f0',0.7);}
+
+    // ---- HELD ITEMS ----
     if(acc.clipboard){
-      s+=px(23,-8,6,8,'#b8895a');s+=px(24,-7,4,6,'#fefefe');
-      s+=px(24,-6,3,1,'#2ecc71');s+=px(24,-4,3,1,'#e74c3c');s+=px(24,-2,2,1,'#f1c40f');
+      s+=px16(23,-9,7,10,C.woodHi,C.wood,C.woodD);
+      s+=px(24,-8,5,7,'#f0f0e8');
+      s+=px(24,-7,3,1,'#30d070');s+=px(24,-5,4,1,'#f04848');s+=px(24,-3,2,1,'#f0c830');
     }
     if(acc.magnifier){
-      s+=`<circle cx="26" cy="-8" r="3.5" fill="none" stroke="#fdcb6e" stroke-width="0.8"/>`;
-      s+=`<circle cx="26" cy="-8" r="2.5" fill="#74b9ff" opacity="0.12"/>`;
-      s+=px(28,-5,1,4,'#fdcb6e');
+      s+=`<circle cx="26" cy="-9" r="4" fill="none" stroke="#f0c830" stroke-width="1"/>`;
+      s+=`<circle cx="26" cy="-9" r="3" fill="#60a8f0" opacity="0.1"/>`;
+      s+=`<circle cx="26" cy="-9" r="1" fill="#fff" opacity="0.08"/>`;
+      s+=px(29,-6,1,5,'#f0c830');
     }
-    if(acc.wrench){s+=px(23,-8,1,6,C.steelD);s+=px(22,-8,3,2,C.steel);}
-    // Legs (bent, seated)
-    s+=px(8,-2,5,4,pantsCol);s+=px(15,-2,5,4,pantsCol);
+    if(acc.wrench){
+      s+=px16(23,-9,2,7,C.steelHi,C.steelD,C.steel);
+      s+=px(22,-9,4,2,C.steelL);
+    }
+
+    // ---- LEGS (bent, seated — 16-bit) ----
+    s+=px(8,-3,5,1,pantsHi);s+=px(8,-2,5,3,pants);
+    s+=px(15,-3,5,1,pantsHi);s+=px(15,-2,5,3,pants);
     // Legs extending forward
-    s+=px(6,2,6,3,pantsCol);s+=px(16,2,6,3,pantsCol);
-    // Shoes (feet on floor)
-    const sc=acc.shoeCol||'#fff';
-    s+=px(4,5,7,2,sc);s+=px(17,5,7,2,sc);
-    s+=px(4,6,7,1,'#444');s+=px(17,6,7,1,'#444');
+    s+=px(6,1,6,4,pants);s+=px(6,1,6,1,pantsHi);
+    s+=px(16,1,6,4,pants);s+=px(16,1,6,1,pantsHi);
 
-    // Chair base (in front of legs)
-    s+=px(5,7,14,1,C.steel);
-    s+=px(10,7,4,3,C.steel);
-    s+=px(3,10,4,1,C.steelD);s+=px(17,10,4,1,C.steelD);s+=px(10,10,4,1,C.steelD);
-    // Wheels
-    s+=`<circle cx="5" cy="10.5" r="1" fill="#444"/>`;
-    s+=`<circle cx="19" cy="10.5" r="1" fill="#444"/>`;
-    s+=`<circle cx="12" cy="10.5" r="1" fill="#444"/>`;
+    // ---- SHOES (16-bit: highlight + base + sole) ----
+    const sc=acc.shoeCol||'#f0f0f0';
+    s+=px(4,5,8,1,sc);s+=px(4,6,8,1,sc.replace(/f/gi,'d')); // darker
+    s+=px(4,7,8,1,'#383838'); // sole
+    s+=px(16,5,8,1,sc);s+=px(16,6,8,1,sc.replace(/f/gi,'d'));
+    s+=px(16,7,8,1,'#383838');
+    // Lace detail
+    s+=px(6,5,1,1,'#fff',0.3);s+=px(18,5,1,1,'#fff',0.3);
 
-    // Status indicator
-    const lc=status==='green'?'#2ecc71':status==='yellow'?'#f1c40f':'#636e72';
-    s+=`<circle cx="14" cy="-34" r="2" fill="${lc}"/>`;
-    s+=`<circle cx="14" cy="-34" r="3.5" fill="${lc}" opacity="0.15"/>`;
-    if(status==='green') s+=`<circle cx="14" cy="-34" r="5" fill="${lc}" opacity="0.06" class="status-pulse"/>`;
+    // ---- CHAIR BASE (16-bit) ----
+    s+=px16(4,8,16,1,C.steelHi,C.steel,C.steelD);
+    s+=px16(9,9,6,2,C.steelL,C.steel,C.steelD); // cylinder
+    s+=px(2,11,5,1,C.steelD);s+=px(17,11,5,1,C.steelD);s+=px(9,11,6,1,C.steelD); // star base
+    // Wheels (circles with highlight)
+    s+=`<circle cx="4" cy="12" r="1.2" fill="#383838"/><circle cx="4" cy="11.5" r="0.5" fill="#505050"/>`;
+    s+=`<circle cx="20" cy="12" r="1.2" fill="#383838"/><circle cx="20" cy="11.5" r="0.5" fill="#505050"/>`;
+    s+=`<circle cx="12" cy="12" r="1.2" fill="#383838"/><circle cx="12" cy="11.5" r="0.5" fill="#505050"/>`;
+
+    // ---- STATUS INDICATOR (16-bit glow) ----
+    const lc=status==='green'?C.neonGreen:status==='yellow'?'#f0d040':'#585868';
+    s+=`<circle cx="14" cy="-36" r="2.5" fill="${lc}"/>`;
+    s+=`<circle cx="14" cy="-36" r="1" fill="#fff" opacity="0.3"/>`;
+    s+=`<circle cx="14" cy="-36" r="4" fill="${lc}" opacity="0.15"/>`;
+    if(status==='green') s+=`<circle cx="14" cy="-36" r="6" fill="${lc}" opacity="0.05" class="status-pulse"/>`;
 
     return s;
   }
@@ -742,14 +837,26 @@
     // ---- WALLS (taller scene) ----
     s+=brickWall(W, Math.floor(W*0.28));
 
-    // ---- FLOOR (polished concrete) ----
-    s+=px(0,80,W,2,'#4a4a5a');
+    // ---- FLOOR (16-bit polished concrete with reflections) ----
+    s+=px(0,80,W,1,C.steelD,0.4); // baseboard highlight
+    s+=px(0,81,W,1,'#383848');
     s+=px(0,82,W,158,C.floor);
-    for(let i=0;i<W;i+=20)s+=px(i,82,0.5,158,C.floorL,0.08);
-    for(let j=82;j<240;j+=20)s+=px(0,j,W,0.5,C.floorL,0.06);
-    // Rug under lounge
-    s+=px(W-170,145,65,30,C.rug,0.2);
-    s+=px(W-168,147,61,26,C.rugL,0.12);
+    // Subtle gradient bands for depth
+    s+=px(0,82,W,20,C.floorHi,0.06);
+    s+=px(0,160,W,40,'#000',0.04);
+    for(let i=0;i<W;i+=20){s+=px(i,82,0.5,158,C.floorL,0.06);s+=px(i+1,82,0.5,158,'#000',0.02);}
+    for(let j=82;j<240;j+=20){s+=px(0,j,W,0.5,C.floorL,0.05);s+=px(0,j+1,W,0.5,'#000',0.02);}
+    // Floor reflections (16-bit polish effect)
+    s+=px(100,85,80,1,C.floorHi,0.04);s+=px(300,90,60,1,C.floorHi,0.03);
+    // Rug (16-bit: fringe + pattern)
+    s+=px(W-172,145,69,1,C.rugD,0.3); // fringe top
+    s+=px(W-170,146,65,30,C.rug,0.22);
+    s+=px(W-168,148,61,26,C.rugL,0.1);
+    // Rug pattern (diamond)
+    for(let ry=0;ry<4;ry++) for(let rx=0;rx<5;rx++){
+      s+=px(W-165+rx*12,150+ry*6,4,2,C.rugHi,0.08);
+    }
+    s+=px(W-172,175,69,1,C.rugD,0.3); // fringe bottom
 
     // ---- CEILING ----
     s+=px(80,0,250,3,'#2a2a3a');s+=px(80,3,250,0.5,C.steelD,0.3);
@@ -814,12 +921,12 @@
       s+=`<g transform="translate(${bx+7},${by-14})">${dualMon(ag.status==='green',ag.screen)}</g>`;
       // Desk accessories
       s+=`<g transform="translate(${bx+36},${by-3})">${deskStuff(ag.stuff)}</g>`;
-      // Seated character WITH chair (single unit)
-      s+=`<g id="agent-${i}" transform="translate(${bx+10},${by+15})">${seatedAgent(ag, i)}</g>`;
+      // Seated character WITH chair (hands at desk height)
+      s+=`<g id="agent-${i}" transform="translate(${bx+10},${by+2})">${seatedAgent(ag, i)}</g>`;
 
-      // ---- LABELS below workstation ----
-      s+=txt(bx+22,by+32,ag.name,3.5,'#eaf0ff',null,true);
-      s+=txt(bx+22,by+37,ag.role,2.2,'#9e9e9e');
+      // ---- LABELS below workstation (16-bit drop shadow) ----
+      s+=txt16(bx+22,by+32,ag.name,3.5,'#e8f0ff');
+      s+=txt16(bx+22,by+37,ag.role,2.2,'#90a0b0');
       s+=projectTags(ag.projects,bx-2,by+39,50);
     });
 
