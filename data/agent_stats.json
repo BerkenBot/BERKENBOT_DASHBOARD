@@ -1,10 +1,10 @@
 {
-  "date": "2026-02-21",
+  "date": "2026-02-22",
   "agents": {
-    "FORGE": 1014,
-    "ANVIL": 1014,
+    "FORGE": 0,
+    "ANVIL": 0,
     "SCOUT": 0,
-    "RELAY": 2509,
-    "PULSE": 2509
+    "RELAY": 36,
+    "PULSE": 36
   }
 }
