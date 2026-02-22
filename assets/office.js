@@ -773,195 +773,315 @@
     {
       name:'FORGE', role:'Lead Engineer',
       projects:['SCALARA','GH_INTEL','LOCAL_TTS','LORA_GEN','C64'],
-      hair:'#b33939', shirt:'#e74c3c', pants:'#2d3436', status:'green',
-      acc:{headphones:true,hpColor:'#e74c3c',mic:true,hoodie:true,shoeCol:'#e74c3c',watch:true},
-      screen:'code', stuff:'forge',
+      status:'green', screen:'code', stuff:'forge',
+      // Robot: heavy industrial bot, red chassis, visor eyes, welding sparks
+      bot:{body:'#c0392b',bodyHi:'#e74c3c',bodyShd:'#922b21',
+           head:'square',eyeColor:'#f39c12',eyeStyle:'visor',
+           antenna:false,ears:'vents',detail:'sparks',accent:'#e74c3c'},
     },
     {
       name:'ANVIL', role:'QA Lead',
       projects:['SCALARA','GH_INTEL','LOCAL_TTS','LORA_GEN','C64'],
-      hair:'#2d3436', shirt:'#2ecc71', pants:'#636e72', status:'green',
-      acc:{glasses:true,glassCol:'#2d3436',clipboard:true,shoeCol:'#2d3436',watch:true},
-      screen:'review', stuff:'anvil',
+      status:'green', screen:'review', stuff:'anvil',
+      // Robot: precise inspector bot, green chassis, dual-lens eyes, clipboard arm
+      bot:{body:'#27ae60',bodyHi:'#2ecc71',bodyShd:'#1e8449',
+           head:'round',eyeColor:'#2ecc71',eyeStyle:'lenses',
+           antenna:true,ears:'discs',detail:'scanner',accent:'#2ecc71'},
     },
     {
       name:'SCOUT', role:'Research Lead',
       projects:['COMPUTE_BUDGET','LOCAL_TTS','LORA_GEN'],
-      hair:'#fdcb6e', shirt:'#0984e3', pants:'#2d3436', status:'green',
-      acc:{magnifier:true,hoodie:true,shoeCol:'#0984e3',ponytail:true},
-      screen:'research', stuff:'scout',
+      status:'green', screen:'research', stuff:'scout',
+      // Robot: sleek explorer bot, blue chassis, single large eye, radar dish
+      bot:{body:'#2980b9',bodyHi:'#3498db',bodyShd:'#1a5276',
+           head:'dome',eyeColor:'#00d2ff',eyeStyle:'cyclops',
+           antenna:true,ears:'none',detail:'radar',accent:'#3498db'},
     },
     {
       name:'RELAY', role:'DevOps Engineer',
       projects:['DATA_AUDIT','COMPUTE_BUDGET','OPS_INFRA'],
-      hair:'#636e72', shirt:'#fd79a8', pants:'#2d3436', status:'green',
-      acc:{beanie:'#2d3436',headphones:true,hpColor:'#fd79a8',wrench:true,shoeCol:'#636e72',buzzcut:true},
-      screen:'ops', stuff:'relay',
+      status:'green', screen:'ops', stuff:'relay',
+      // Robot: tank-like ops bot, pink/magenta chassis, LED array eyes, cable arms
+      bot:{body:'#c0267e',bodyHi:'#fd79a8',bodyShd:'#8e1d5e',
+           head:'box',eyeColor:'#fd79a8',eyeStyle:'ledbar',
+           antenna:false,ears:'speakers',detail:'cables',accent:'#fd79a8'},
     },
     {
       name:'PULSE', role:'SRE / Monitor',
       projects:['COMPUTE_BUDGET','OPS_INFRA'],
-      hair:'#2d3436', shirt:'#a29bfe', pants:'#636e72', status:'green',
-      acc:{glasses:true,glassCol:'#a29bfe',headphones:true,hpColor:'#a29bfe',shoeCol:'#fff',vest:true,vestCol:'#2d3436'},
-      screen:'monitor', stuff:'pulse',
+      status:'green', screen:'monitor', stuff:'pulse',
+      // Robot: elegant monitor bot, purple chassis, holographic visor, heartbeat chest
+      bot:{body:'#6c5ce7',bodyHi:'#a29bfe',bodyShd:'#4834d4',
+           head:'tall',eyeColor:'#a29bfe',eyeStyle:'holo',
+           antenna:true,ears:'fins',detail:'heartbeat',accent:'#a29bfe'},
     },
   ];
 
-  /* ---- 16-BIT SEATED CHARACTER ---- */
+  /* ---- ROBOT SEATED AGENT ---- */
   function seatedAgent(ag, i){
     let s='';
-    const hair=ag.hair, shirt=ag.shirt, pants=ag.pants, status=ag.status, acc=ag.acc;
-    // Derived 16-bit shading colors
-    const shirtHi=shirt.replace(/[0-9a-f]{2}$/i,m=>{const v=Math.min(255,parseInt(m,16)+40);return v.toString(16).padStart(2,'0');});
-    const shirtShd=shirt.replace(/[0-9a-f]{2}$/i,m=>{const v=Math.max(0,parseInt(m,16)-40);return v.toString(16).padStart(2,'0');});
-    const pantsHi=pants.replace(/[0-9a-f]{2}$/i,m=>{const v=Math.min(255,parseInt(m,16)+30);return v.toString(16).padStart(2,'0');});
+    const b=ag.bot, status=ag.status;
+    const metal='#484858', metalHi='#686878', metalDk='#2a2a3a';
 
-    // ---- CHAIR BACK (behind character) ----
-    s+=px16(2,-10,20,10,C.steelL,C.steelD,C.steel); // chair back frame
-    // Mesh pattern (16-bit detail)
+    // ---- CHAIR BACK (behind robot) ----
+    s+=px16(2,-10,20,10,C.steelL,C.steelD,C.steel);
     for(let my=-9;my<-2;my+=2) s+=px(4,my,16,1,'#000',0.06);
-    s+=px(1,-8,2,14,C.steelD); // armrest L
-    s+=px(0,-7,1,12,C.steelL,0.3); // armrest highlight
-    s+=px(21,-8,2,14,C.steelD); // armrest R
-    s+=px(1,-9,3,2,shirt,0.5); // arm pad L
-    s+=px(20,-9,3,2,shirt,0.5); // arm pad R
+    s+=px(1,-8,2,14,C.steelD);s+=px(0,-7,1,12,C.steelL,0.3);
+    s+=px(21,-8,2,14,C.steelD);
+    s+=px(1,-9,3,2,b.body,0.4);s+=px(20,-9,3,2,b.body,0.4);
 
-    // ---- HAIR ----
-    s+=px(9,-32,10,6,hair);
-    s+=px(9,-32,10,1,hair.replace(/[0-9a-f]{2}$/i,m=>{const v=Math.min(255,parseInt(m,16)+30);return v.toString(16).padStart(2,'0');})); // highlight
-    s+=px(8,-30,1,3,hair);s+=px(19,-30,1,3,hair); // sideburns
-    if(acc.beanie){s+=px(8,-33,12,5,acc.beanie);s+=px(10,-34,8,2,acc.beanie);s+=px(9,-33,10,1,'#fff',0.12);}
-    if(acc.ponytail){s+=px(18,-31,2,7,hair);s+=px(19,-28,1,5,hair);}
-
-    // ---- HEAD (16-bit: highlight + base + shadow) ----
-    s+=px(10,-28,8,1,C.skinHi); // forehead highlight
-    s+=px(10,-27,8,8,C.skin);
-    s+=px(10,-20,8,1,C.skinShd); // jaw shadow
-    s+=px(9,-26,1,5,C.skin);s+=px(18,-26,1,5,C.skin); // ears
-    s+=px(9,-26,1,1,C.skinHi); // ear highlight
-
-    // ---- EYEBROWS ----
-    s+=px(11,-26,3,1,hair,0.7);s+=px(15,-26,3,1,hair,0.7);
-
-    // ---- EYES (16-bit: white + iris + pupil + highlight) ----
-    if(status==='green'){
-      s+=px(11,-25,3,3,'#e8e8f0'); // white L
-      s+=px(12,-24,2,2,'#2848a0'); // iris L
-      s+=px(12,-24,1,1,'#181828'); // pupil L
-      s+=px(13,-25,1,1,'#fff'); // highlight L
-      s+=px(15,-25,3,3,'#e8e8f0'); // white R
-      s+=px(16,-24,2,2,'#2848a0'); // iris R
-      s+=px(16,-24,1,1,'#181828'); // pupil R
-      s+=px(17,-25,1,1,'#fff'); // highlight R
-    } else {
-      s+=px(12,-24,2,1,'#484858');s+=px(16,-24,2,1,'#484858');
+    // ---- ANTENNA (if equipped) ----
+    if(b.antenna){
+      s+=px(13,-38,2,4,metalHi);s+=px(13,-38,2,1,C.steelHi);
+      s+=`<circle cx="14" cy="-39" r="1.5" fill="${b.accent}" class="antenna-pulse"/>`;
+      s+=`<circle cx="14" cy="-39" r="1" fill="#fff" opacity="0.4"/>`;
+      s+=`<circle cx="14" cy="-39" r="3" fill="${b.accent}" opacity="0.08"/>`;
+    }
+    // Radar dish (SCOUT)
+    if(b.detail==='radar'){
+      s+=px(17,-38,1,3,metalHi);
+      s+=`<path d="M16,-39 Q20,-42 24,-39" stroke="${metalHi}" stroke-width="0.8" fill="${b.accent}" fill-opacity="0.15"/>`;
+      s+=`<circle cx="20" cy="-40" r="0.8" fill="${b.accent}" class="antenna-pulse"/>`;
     }
 
-    // ---- GLASSES ----
-    if(acc.glasses){
-      const gc=acc.glassCol||'#303038';
-      s+=`<rect x="10.5" y="-26" width="4.5" height="4" fill="none" stroke="${gc}" stroke-width="0.6" rx="0.5"/>`;
-      s+=px(11,-25,3,2,'#88c0f0',0.08); // lens glare
-      s+=`<rect x="15" y="-26" width="4.5" height="4" fill="none" stroke="${gc}" stroke-width="0.6" rx="0.5"/>`;
-      s+=px(16,-25,3,2,'#88c0f0',0.08);
-      s+=px(14.5,-25,0.5,1,gc);
+    // ---- HEAD ----
+    const hx=8, hy=-32, hw=12, hh=10;
+    // Head shape varies per bot
+    if(b.head==='square'){
+      // Blocky industrial head
+      s+=px16(hx,hy,hw,hh,metalHi,metal,metalDk);
+      s+=px(hx+1,hy+1,hw-2,hh-2,b.body);
+      s+=px(hx+1,hy+1,hw-2,1,b.bodyHi); // top highlight
+      s+=px(hx+1,hy+hh-2,hw-2,1,b.bodyShd); // bottom shadow
+      // Jaw plate
+      s+=px(hx+2,hy+hh-3,hw-4,2,metalDk);s+=px(hx+2,hy+hh-3,hw-4,1,metalHi,0.2);
+    } else if(b.head==='round'){
+      // Rounded smooth head
+      s+=`<rect x="${hx}" y="${hy}" width="${hw}" height="${hh}" rx="3" fill="${metal}"/>`;
+      s+=`<rect x="${hx+1}" y="${hy+1}" width="${hw-2}" height="${hh-2}" rx="2" fill="${b.body}"/>`;
+      s+=px(hx+1,hy+1,hw-2,1,b.bodyHi,0.5);
+    } else if(b.head==='dome'){
+      // Dome/helmet head
+      s+=`<rect x="${hx}" y="${hy+3}" width="${hw}" height="${hh-3}" fill="${metal}"/>`;
+      s+=`<rect x="${hx+1}" y="${hy+4}" width="${hw-2}" height="${hh-5}" fill="${b.body}"/>`;
+      s+=`<ellipse cx="${hx+hw/2}" cy="${hy+3}" rx="${hw/2}" ry="4" fill="${b.body}"/>`;
+      s+=`<ellipse cx="${hx+hw/2}" cy="${hy+3}" rx="${hw/2-1}" ry="3" fill="${b.bodyHi}" opacity="0.3"/>`;
+    } else if(b.head==='box'){
+      // Wide boxy head (tank-like)
+      s+=px16(hx-1,hy+1,hw+2,hh-1,metalHi,metal,metalDk);
+      s+=px(hx,hy+2,hw,hh-3,b.body);
+      s+=px(hx,hy+2,hw,1,b.bodyHi);
+      // Rivets
+      s+=`<circle cx="${hx+1}" cy="${hy+3}" r="0.5" fill="${metalHi}"/>`;
+      s+=`<circle cx="${hx+hw-1}" cy="${hy+3}" r="0.5" fill="${metalHi}"/>`;
+      s+=`<circle cx="${hx+1}" cy="${hy+hh-2}" r="0.5" fill="${metalHi}"/>`;
+      s+=`<circle cx="${hx+hw-1}" cy="${hy+hh-2}" r="0.5" fill="${metalHi}"/>`;
+    } else if(b.head==='tall'){
+      // Tall elegant head
+      s+=px16(hx+1,hy-2,hw-2,hh+2,metalHi,metal,metalDk);
+      s+=px(hx+2,hy-1,hw-4,hh,b.body);
+      s+=px(hx+2,hy-1,hw-4,1,b.bodyHi);
+      // Crown ridge
+      s+=px(hx+3,hy-2,hw-6,1,b.accent);s+=px(hx+3,hy-2,hw-6,1,'#fff',0.2);
     }
 
-    // ---- HEADPHONES (16-bit) ----
-    if(acc.headphones){
-      const hc=acc.hpColor||'#e04040';
-      s+=px(8,-29,1,7,'#282830');s+=px(19,-29,1,7,'#282830');
-      s+=`<path d="M8,-29 Q14,-33 19,-29" stroke="#282830" stroke-width="1.2" fill="none"/>`;
-      s+=px(7,-27,2,5,hc);s+=px(7,-27,2,1,hc.replace(/[0-9a-f]{2}$/i,m=>{const v=Math.min(255,parseInt(m,16)+40);return v.toString(16).padStart(2,'0');})); // highlight
-      s+=px(19,-27,2,5,hc);
-      if(acc.mic){s+=px(6,-25,1,5,'#282830');s+=px(5,-20,3,2,'#484858');}
+    // ---- EARS / SIDE MODULES ----
+    if(b.ears==='vents'){
+      // Industrial vents
+      for(let v=0;v<3;v++){s+=px(hx-2,hy+2+v*2,2,1,metalDk);s+=px(hx-2,hy+2+v*2,1,1,metalHi,0.3);}
+      for(let v=0;v<3;v++){s+=px(hx+hw,hy+2+v*2,2,1,metalDk);s+=px(hx+hw+1,hy+2+v*2,1,1,metalHi,0.3);}
+    } else if(b.ears==='discs'){
+      // Round sensor discs
+      s+=`<circle cx="${hx-1}" cy="${hy+5}" r="2" fill="${metal}"/><circle cx="${hx-1}" cy="${hy+5}" r="1.2" fill="${b.accent}" opacity="0.4"/>`;
+      s+=`<circle cx="${hx+hw+1}" cy="${hy+5}" r="2" fill="${metal}"/><circle cx="${hx+hw+1}" cy="${hy+5}" r="1.2" fill="${b.accent}" opacity="0.4"/>`;
+    } else if(b.ears==='speakers'){
+      // Speaker grilles
+      s+=px(hx-2,hy+2,2,6,metalDk);
+      for(let g=0;g<3;g++) s+=px(hx-2,hy+3+g*2,2,0.5,metalHi,0.3);
+      s+=px(hx+hw,hy+2,2,6,metalDk);
+      for(let g=0;g<3;g++) s+=px(hx+hw,hy+3+g*2,2,0.5,metalHi,0.3);
+    } else if(b.ears==='fins'){
+      // Sleek cooling fins
+      s+=px(hx-1,hy+1,1,3,b.accent,0.6);s+=px(hx-1,hy+5,1,3,b.accent,0.4);
+      s+=px(hx+hw,hy+1,1,3,b.accent,0.6);s+=px(hx+hw,hy+5,1,3,b.accent,0.4);
     }
 
-    // ---- NOSE & MOUTH ----
-    s+=px(14,-23,1,2,C.skinShd,0.4);
-    if(status==='green'){s+=px(13,-20,3,1,'#d06048');s+=px(13,-20,1,1,'#e07058');} // smile
-    else s+=px(13,-21,2,1,'#a06048');
-
-    // ---- NECK ----
-    s+=px(12,-19,4,2,C.skin);s+=px(12,-19,4,1,C.skinShd,0.15);
-
-    // ---- TORSO (16-bit: highlight stripe + body + shadow) ----
-    s+=px(6,-17,16,1,shirtHi); // collar highlight
-    s+=px(6,-16,16,13,shirt);
-    s+=px(6,-4,16,1,shirtShd); // bottom shadow
-    // Shirt wrinkle details
-    s+=px(10,-12,1,4,shirtShd,0.15);s+=px(16,-10,1,3,shirtHi,0.12);
-    if(acc.hoodie){
-      s+=px(12,-17,4,3,shirtHi,0.1); // hood at collar
-      s+=px(10,-9,8,2,shirtShd,0.08); // kangaroo pocket shadow
-      s+=px(10,-8,8,1,shirtHi,0.06);
+    // ---- EYES ----
+    const eyeY=hy+3, eyeActive=status==='green';
+    if(b.eyeStyle==='visor'){
+      // Single horizontal visor bar
+      s+=px(hx+2,eyeY,hw-4,3,metalDk);
+      if(eyeActive){
+        s+=px(hx+3,eyeY+1,hw-6,1,b.eyeColor);
+        s+=px(hx+3,eyeY+1,hw-6,1,'#fff',0.3);
+        s+=`<rect x="${hx+3}" y="${eyeY+0.5}" width="${hw-6}" height="2" fill="${b.eyeColor}" opacity="0.15" filter="url(#ledGlow)"/>`;
+        // Scanning line animation
+        s+=`<rect x="${hx+3}" y="${eyeY+0.5}" width="2" height="2" fill="#fff" opacity="0.25" class="visor-scan-${i}"/>`;
+      } else {
+        s+=px(hx+3,eyeY+1,hw-6,1,'#383848',0.5);
+      }
+    } else if(b.eyeStyle==='lenses'){
+      // Dual circular lenses
+      s+=`<circle cx="${hx+4}" cy="${eyeY+2}" r="2.5" fill="${metalDk}"/>`;
+      s+=`<circle cx="${hx+hw-4}" cy="${eyeY+2}" r="2.5" fill="${metalDk}"/>`;
+      if(eyeActive){
+        s+=`<circle cx="${hx+4}" cy="${eyeY+2}" r="1.8" fill="${b.eyeColor}"/>`;
+        s+=`<circle cx="${hx+4}" cy="${eyeY+1.5}" r="0.8" fill="#fff" opacity="0.5"/>`;
+        s+=`<circle cx="${hx+hw-4}" cy="${eyeY+2}" r="1.8" fill="${b.eyeColor}"/>`;
+        s+=`<circle cx="${hx+hw-4}" cy="${eyeY+1.5}" r="0.8" fill="#fff" opacity="0.5"/>`;
+        s+=`<circle cx="${hx+4}" cy="${eyeY+2}" r="3.5" fill="${b.eyeColor}" opacity="0.08"/>`;
+        s+=`<circle cx="${hx+hw-4}" cy="${eyeY+2}" r="3.5" fill="${b.eyeColor}" opacity="0.08"/>`;
+      } else {
+        s+=`<circle cx="${hx+4}" cy="${eyeY+2}" r="1.5" fill="#383848" opacity="0.5"/>`;
+        s+=`<circle cx="${hx+hw-4}" cy="${eyeY+2}" r="1.5" fill="#383848" opacity="0.5"/>`;
+      }
+    } else if(b.eyeStyle==='cyclops'){
+      // Single large eye
+      s+=`<circle cx="${hx+hw/2}" cy="${eyeY+2}" r="3.5" fill="${metalDk}"/>`;
+      if(eyeActive){
+        s+=`<circle cx="${hx+hw/2}" cy="${eyeY+2}" r="2.8" fill="${b.eyeColor}"/>`;
+        s+=`<circle cx="${hx+hw/2}" cy="${eyeY+1}" r="1.2" fill="#fff" opacity="0.5"/>`;
+        s+=`<circle cx="${hx+hw/2}" cy="${eyeY+2}" r="1" fill="#fff" opacity="0.2"/>`;
+        s+=`<circle cx="${hx+hw/2}" cy="${eyeY+2}" r="5" fill="${b.eyeColor}" opacity="0.06" class="eye-pulse"/>`;
+      } else {
+        s+=`<circle cx="${hx+hw/2}" cy="${eyeY+2}" r="2" fill="#383848" opacity="0.5"/>`;
+      }
+    } else if(b.eyeStyle==='ledbar'){
+      // Horizontal LED array (5 dots)
+      s+=px(hx+2,eyeY+1,hw-4,2,metalDk);
+      for(let d=0;d<5;d++){
+        const dx=hx+3+d*1.8;
+        if(eyeActive){
+          s+=`<circle cx="${dx}" cy="${eyeY+2}" r="0.8" fill="${b.eyeColor}" class="led-seq" style="animation-delay:${d*0.15}s"/>`;
+        } else {
+          s+=`<circle cx="${dx}" cy="${eyeY+2}" r="0.6" fill="#383848" opacity="0.4"/>`;
+        }
+      }
+      if(eyeActive) s+=`<rect x="${hx+2}" y="${eyeY}" width="${hw-4}" height="3" fill="${b.eyeColor}" opacity="0.06" filter="url(#ledGlow)"/>`;
+    } else if(b.eyeStyle==='holo'){
+      // Holographic visor band
+      s+=px(hx+2,eyeY,hw-4,3,metalDk);
+      if(eyeActive){
+        s+=`<defs><linearGradient id="holoGrad${i}" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#a29bfe"/><stop offset="33%" stop-color="#6c5ce7"/>
+          <stop offset="66%" stop-color="#a29bfe"/><stop offset="100%" stop-color="#6c5ce7"/>
+        </linearGradient></defs>`;
+        s+=`<rect x="${hx+3}" y="${eyeY+0.5}" width="${hw-6}" height="2" fill="url(#holoGrad${i})" class="holo-shift"/>`;
+        s+=px(hx+3,eyeY+0.5,hw-6,0.5,'#fff',0.3);
+        s+=`<rect x="${hx+2}" y="${eyeY}" width="${hw-4}" height="3" fill="${b.eyeColor}" opacity="0.1" filter="url(#ledGlow)"/>`;
+      }
     }
-    if(acc.vest){
-      s+=px(6,-17,4,15,acc.vestCol||'#282830');s+=px(6,-17,4,1,'#484858',0.2);
-      s+=px(18,-17,4,15,acc.vestCol||'#282830');
+
+    // ---- MOUTH / SPEAKER GRILLE ----
+    s+=px(hx+3,hy+7,hw-6,1,metalDk);
+    for(let m=0;m<3;m++) s+=px(hx+4+m*2,hy+7,1,1,metalHi,0.25);
+    // Chin LED (active indicator)
+    if(eyeActive) s+=`<circle cx="${hx+hw/2}" cy="${hy+9}" r="0.6" fill="${b.accent}" class="chin-blink"/>`;
+
+    // ---- NECK (mechanical joint) ----
+    s+=px(11,-21,6,3,metal);
+    s+=px(11,-21,6,1,metalHi,0.3);
+    // Neck ridges
+    s+=px(12,-20,4,0.5,metalDk);s+=px(12,-19,4,0.5,metalDk);
+
+    // ---- TORSO / CHASSIS ----
+    s+=px16(6,-17,16,1,metalHi,metal,metalDk); // shoulder plate
+    s+=px(6,-16,16,13,b.body);
+    s+=px(6,-16,16,1,b.bodyHi); // top highlight
+    s+=px(6,-4,16,1,b.bodyShd); // bottom shadow
+    // Chest plate detail
+    s+=px(9,-14,10,1,metalHi,0.3);
+    s+=px(9,-13,10,8,metalDk,0.15);
+    s+=px(9,-13,10,1,metalHi,0.1);
+    // Chassis accent stripe
+    s+=px(8,-11,12,1,b.accent,0.5);s+=px(8,-11,12,1,'#fff',0.1);
+
+    // ---- CHEST DETAIL (unique per bot) ----
+    if(b.detail==='sparks'){
+      // Welding energy core
+      s+=`<circle cx="14" cy="-9" r="2" fill="#f39c12" opacity="0.6" class="core-glow"/>`;
+      s+=`<circle cx="14" cy="-9" r="1" fill="#fff" opacity="0.4"/>`;
+      s+=`<circle cx="14" cy="-9" r="3.5" fill="#f39c12" opacity="0.08"/>`;
+    } else if(b.detail==='scanner'){
+      // QA scan line
+      s+=px(10,-10,8,3,metalDk);
+      s+=`<rect x="10" y="-10" width="8" height="0.5" fill="${b.accent}" class="scan-line"/>`;
+      s+=px(10,-10,8,1,'#fff',0.05);
+    } else if(b.detail==='cables'){
+      // Exposed cables on torso
+      s+=`<path d="M9,-12 Q11,-10 10,-7" stroke="#e74c3c" stroke-width="0.5" fill="none"/>`;
+      s+=`<path d="M11,-13 Q13,-10 12,-7" stroke="#3498db" stroke-width="0.5" fill="none"/>`;
+      s+=`<path d="M13,-12 Q15,-10 14,-7" stroke="#f1c40f" stroke-width="0.4" fill="none"/>`;
+    } else if(b.detail==='heartbeat'){
+      // Heartbeat display on chest
+      s+=px(10,-10,8,3,metalDk);
+      s+=`<path d="M10,-9 L12,-9 L13,-10.5 L14,-7.5 L15,-10 L16,-9 L18,-9" stroke="${b.accent}" stroke-width="0.6" fill="none" class="heartbeat-line"/>`;
     }
-    // Badge
-    s+=px(17,-15,4,5,'#fff',0.12);s+=px(18,-14,2,2,'#60a8f0',0.5);s+=px(18,-14,1,1,'#fff',0.2);
 
-    // ---- ARMS (reaching to desk) ----
-    s+=px(3,-15,3,1,shirtHi); // shoulder highlight L
-    s+=px(3,-14,3,12,shirt);
-    s+=px(22,-15,3,1,shirtHi); // shoulder highlight R
-    s+=px(22,-14,3,12,shirt);
+    // Company badge LED
+    s+=`<circle cx="19" cy="-14" r="1" fill="${b.accent}" opacity="0.4"/>`;
+    s+=`<circle cx="19" cy="-14" r="0.5" fill="#fff" opacity="0.2"/>`;
 
-    // ---- HANDS ON KEYBOARD ----
-    s+=px(2,-2,4,2,C.skin);s+=px(2,-2,4,1,C.skinHi); // highlight
-    s+=px(22,-2,4,2,C.skin);s+=px(22,-2,4,1,C.skinHi);
-    if(acc.watch){s+=px(3,-3,3,1,'#282830');s+=px(4,-4,1,1,'#60a8f0',0.7);}
+    // ---- ARMS (mechanical, reaching to desk) ----
+    // Shoulder joints
+    s+=`<circle cx="5" cy="-15" r="2" fill="${metal}"/>`;
+    s+=`<circle cx="5" cy="-15" r="1" fill="${metalHi}"/>`;
+    s+=`<circle cx="23" cy="-15" r="2" fill="${metal}"/>`;
+    s+=`<circle cx="23" cy="-15" r="1" fill="${metalHi}"/>`;
+    // Upper arms
+    s+=px16(3,-14,3,6,metalHi,b.body,b.bodyShd);
+    s+=px16(22,-14,3,6,metalHi,b.body,b.bodyShd);
+    // Elbow joints
+    s+=`<circle cx="4.5" cy="-8" r="1.5" fill="${metal}"/>`;
+    s+=`<circle cx="23.5" cy="-8" r="1.5" fill="${metal}"/>`;
+    // Forearms
+    s+=px16(3,-7,3,5,metalHi,metal,metalDk);
+    s+=px16(22,-7,3,5,metalHi,metal,metalDk);
 
-    // ---- HELD ITEMS ----
-    if(acc.clipboard){
-      s+=px16(23,-9,7,10,C.woodHi,C.wood,C.woodD);
-      s+=px(24,-8,5,7,'#f0f0e8');
-      s+=px(24,-7,3,1,'#30d070');s+=px(24,-5,4,1,'#f04848');s+=px(24,-3,2,1,'#f0c830');
-    }
-    if(acc.magnifier){
-      s+=`<circle cx="26" cy="-9" r="4" fill="none" stroke="#f0c830" stroke-width="1"/>`;
-      s+=`<circle cx="26" cy="-9" r="3" fill="#60a8f0" opacity="0.1"/>`;
-      s+=`<circle cx="26" cy="-9" r="1" fill="#fff" opacity="0.08"/>`;
-      s+=px(29,-6,1,5,'#f0c830');
-    }
-    if(acc.wrench){
-      s+=px16(23,-9,2,7,C.steelHi,C.steelD,C.steel);
-      s+=px(22,-9,4,2,C.steelL);
-    }
+    // ---- HANDS (mechanical claws/grippers) ----
+    // Left hand
+    s+=px(2,-2,2,2,metalHi);s+=px(4,-2,1,2,metal);s+=px(2,-1,1,1,metalDk);
+    // Right hand
+    s+=px(22,-2,1,2,metal);s+=px(23,-2,2,2,metalHi);s+=px(24,-1,1,1,metalDk);
+    // Finger segments
+    s+=px(1,-1,1,1,metalHi,0.7);s+=px(5,-1,1,1,metalHi,0.7);
+    s+=px(22,-1,1,1,metalHi,0.7);s+=px(25,-1,1,1,metalHi,0.7);
 
-    // ---- LEGS (bent, seated — 16-bit) ----
-    s+=px(8,-3,5,1,pantsHi);s+=px(8,-2,5,3,pants);
-    s+=px(15,-3,5,1,pantsHi);s+=px(15,-2,5,3,pants);
-    // Legs extending forward
-    s+=px(6,1,6,4,pants);s+=px(6,1,6,1,pantsHi);
-    s+=px(16,1,6,4,pants);s+=px(16,1,6,1,pantsHi);
+    // ---- LEGS (mechanical, bent seated) ----
+    // Upper legs (thigh pistons)
+    s+=px16(7,-3,5,4,metalHi,b.body,b.bodyShd);
+    s+=px16(16,-3,5,4,metalHi,b.body,b.bodyShd);
+    // Knee joints
+    s+=`<circle cx="9.5" cy="2" r="1.5" fill="${metal}"/>`;
+    s+=`<circle cx="18.5" cy="2" r="1.5" fill="${metal}"/>`;
+    // Lower legs
+    s+=px16(6,2,5,4,metalHi,metal,metalDk);
+    s+=px16(16,2,5,4,metalHi,metal,metalDk);
+    // Hydraulic detail on legs
+    s+=px(8,0,1,3,b.accent,0.3);s+=px(19,0,1,3,b.accent,0.3);
 
-    // ---- SHOES (16-bit: highlight + base + sole) ----
-    const sc=acc.shoeCol||'#f0f0f0';
-    s+=px(4,5,8,1,sc);s+=px(4,6,8,1,sc.replace(/f/gi,'d')); // darker
-    s+=px(4,7,8,1,'#383838'); // sole
-    s+=px(16,5,8,1,sc);s+=px(16,6,8,1,sc.replace(/f/gi,'d'));
-    s+=px(16,7,8,1,'#383838');
-    // Lace detail
-    s+=px(6,5,1,1,'#fff',0.3);s+=px(18,5,1,1,'#fff',0.3);
+    // ---- FEET (heavy mechanical) ----
+    s+=px16(4,6,8,2,metalHi,metal,metalDk);
+    s+=px16(16,6,8,2,metalHi,metal,metalDk);
+    // Grip pads
+    s+=px(5,7,2,1,b.body,0.4);s+=px(9,7,2,1,b.body,0.4);
+    s+=px(17,7,2,1,b.body,0.4);s+=px(21,7,2,1,b.body,0.4);
 
-    // ---- CHAIR BASE (16-bit) ----
+    // ---- CHAIR BASE ----
     s+=px16(4,8,16,1,C.steelHi,C.steel,C.steelD);
-    s+=px16(9,9,6,2,C.steelL,C.steel,C.steelD); // cylinder
-    s+=px(2,11,5,1,C.steelD);s+=px(17,11,5,1,C.steelD);s+=px(9,11,6,1,C.steelD); // star base
-    // Wheels (circles with highlight)
+    s+=px16(9,9,6,2,C.steelL,C.steel,C.steelD);
+    s+=px(2,11,5,1,C.steelD);s+=px(17,11,5,1,C.steelD);s+=px(9,11,6,1,C.steelD);
     s+=`<circle cx="4" cy="12" r="1.2" fill="#383838"/><circle cx="4" cy="11.5" r="0.5" fill="#505050"/>`;
     s+=`<circle cx="20" cy="12" r="1.2" fill="#383838"/><circle cx="20" cy="11.5" r="0.5" fill="#505050"/>`;
     s+=`<circle cx="12" cy="12" r="1.2" fill="#383838"/><circle cx="12" cy="11.5" r="0.5" fill="#505050"/>`;
 
-    // ---- 32-BIT STATUS INDICATOR (real glow) ----
+    // ---- STATUS INDICATOR (eye-color glow above head) ----
     const lc=status==='green'?C.neonGreen:status==='yellow'?'#f0d040':'#585868';
-    s+=`<circle cx="14" cy="-36" r="2.5" fill="${lc}" filter="url(#ledGlow)"/>`;
-    s+=`<circle cx="14" cy="-36" r="1" fill="#fff" opacity="0.35"/>`;
-    s+=`<circle cx="14" cy="-36" r="5" fill="${lc}" opacity="0.1"/>`;
-    if(status==='green') s+=`<circle cx="14" cy="-36" r="8" fill="${lc}" opacity="0.04" class="status-pulse"/>`;
+    const indicY=b.antenna?-43:-36;
+    s+=`<circle cx="14" cy="${indicY}" r="2.5" fill="${lc}" filter="url(#ledGlow)"/>`;
+    s+=`<circle cx="14" cy="${indicY}" r="1" fill="#fff" opacity="0.35"/>`;
+    s+=`<circle cx="14" cy="${indicY}" r="5" fill="${lc}" opacity="0.1"/>`;
+    if(status==='green') s+=`<circle cx="14" cy="${indicY}" r="8" fill="${lc}" opacity="0.04" class="status-pulse"/>`;
 
     return s;
   }
@@ -1453,6 +1573,14 @@
       @keyframes serverBlink{0%,85%{opacity:1}90%{opacity:.5}95%{opacity:.85}100%{opacity:1}}
       @keyframes cursorBlink{0%,49%{opacity:1}50%,100%{opacity:0}}
       @keyframes statusPulse{0%,100%{r:5;opacity:.08}50%{r:8;opacity:.03}}
+      @keyframes antennaPulse{0%,100%{opacity:.7;r:1.5}50%{opacity:1;r:2}}
+      @keyframes visorScan{0%{transform:translateX(0)}100%{transform:translateX(6px)}}
+      @keyframes eyePulse{0%,100%{r:5;opacity:.06}50%{r:7;opacity:.1}}
+      @keyframes ledSeq{0%,60%{opacity:.3}70%{opacity:1}100%{opacity:.3}}
+      @keyframes holoShift{0%{opacity:.8}50%{opacity:1}100%{opacity:.8}}
+      @keyframes chinBlink{0%,90%{opacity:.6}95%{opacity:1}100%{opacity:.6}}
+      @keyframes coreGlow{0%,100%{opacity:.5;r:2}50%{opacity:.8;r:2.5}}
+      @keyframes scanLine{0%{transform:translateY(0)}100%{transform:translateY(2.5px)}}
       @keyframes steamFloat{0%{opacity:.35;transform:translateY(0)}100%{opacity:0;transform:translateY(-4px)}}
       @keyframes heartbeatDash{0%{stroke-dashoffset:0}100%{stroke-dashoffset:-20}}
       @keyframes walkRight{0%{transform:translateX(0)}100%{transform:translateX(80px)}}
@@ -1476,6 +1604,14 @@
       .server-blink{animation:serverBlink 1.5s steps(2) infinite}
       .cursor-blink{animation:cursorBlink 1s steps(1) infinite}
       .status-pulse{animation:statusPulse 2s ease-in-out infinite}
+      .antenna-pulse{animation:antennaPulse 2s ease-in-out infinite}
+      .visor-scan-0,.visor-scan-1,.visor-scan-2,.visor-scan-3,.visor-scan-4{animation:visorScan 1.5s ease-in-out infinite alternate}
+      .eye-pulse{animation:eyePulse 2.5s ease-in-out infinite}
+      .led-seq{animation:ledSeq 1s ease-in-out infinite}
+      .holo-shift{animation:holoShift 3s ease-in-out infinite}
+      .chin-blink{animation:chinBlink 4s ease-in-out infinite}
+      .core-glow{animation:coreGlow 2s ease-in-out infinite}
+      .scan-line{animation:scanLine 1.5s linear infinite alternate}
       .steam{animation:steamFloat 3s ease-out infinite}
       .heartbeat-line{stroke-dasharray:20;animation:heartbeatDash 2s linear infinite}
       .walk-right{animation:walkRight 8s ease-in-out infinite alternate}
