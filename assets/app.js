@@ -471,7 +471,8 @@ async function renderDashboard() {
     events.items.forEach(e=>{ const li=document.createElement('li'); li.textContent=`[${e.when}] ${e.text}`; eventsList.appendChild(li); });
 
     const historyBody=document.querySelector('#historyTable tbody');
-    history.items.forEach(h=>{
+    const recentHistory = history.items.slice(-10).reverse();
+    recentHistory.forEach(h=>{
       const tr=document.createElement('tr');
       tr.innerHTML=`<td>${h.when}</td><td>${h.project}</td><td>${h.event}</td><td>${badge(h.status)}</td><td>${h.progress}%</td>`;
       historyBody.appendChild(tr);
