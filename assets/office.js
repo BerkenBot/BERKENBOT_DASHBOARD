@@ -651,20 +651,23 @@
     return s;
   }
 
-  /* ---- 16-BIT NEON SIGN (double glow) ---- */
+  /* ---- NEON SIGN (vivid triple-glow) ---- */
   function neonSign(text,color){
     color=color||C.neon;
-    const hi=color.replace(/[0-9a-f]{2}$/i,m=>{const v=Math.min(255,parseInt(m,16)+50);return v.toString(16).padStart(2,'0');});
-    return `<text x="0" y="6" fill="${hi}" font-family="'Press Start 2P',monospace" font-size="5.5" opacity="0.95">${text}</text>`
-      +`<text x="0" y="6" fill="${color}" font-family="'Press Start 2P',monospace" font-size="5.5" opacity="0.2" filter="url(#neonGlow)">${text}</text>`
-      +`<text x="0.3" y="6.3" fill="#000" font-family="'Press Start 2P',monospace" font-size="5.5" opacity="0.15">${text}</text>`;
+    const white='#ffffff';
+    // Layer order: outer glow (wide blur) → mid glow → bright core → white-hot center
+    return `<text x="0" y="6" fill="${color}" font-family="'Press Start 2P',monospace" font-size="5.5" opacity="0.5" filter="url(#neonWide)">${text}</text>`
+      +`<text x="0" y="6" fill="${color}" font-family="'Press Start 2P',monospace" font-size="5.5" opacity="0.7" filter="url(#neonGlow)">${text}</text>`
+      +`<text x="0" y="6" fill="${white}" font-family="'Press Start 2P',monospace" font-size="5.5" opacity="0.95">${text}</text>`
+      +`<text x="0.3" y="6.3" fill="#000" font-family="'Press Start 2P',monospace" font-size="5.5" opacity="0.08">${text}</text>`;
   }
 
-  /* ---- 16-BIT SMALL NEON ---- */
+  /* ---- SMALL NEON (vivid) ---- */
   function neonSmall(text,color){
     color=color||C.neonPink;
-    return `<text x="0" y="4" fill="${color}" font-family="'Press Start 2P',monospace" font-size="3.2" opacity="0.9">${text}</text>`
-      +`<text x="0" y="4" fill="${color}" font-family="'Press Start 2P',monospace" font-size="3.2" opacity="0.12" filter="url(#neonGlow)">${text}</text>`;
+    return `<text x="0" y="4" fill="${color}" font-family="'Press Start 2P',monospace" font-size="3.2" opacity="0.6" filter="url(#neonWide)">${text}</text>`
+      +`<text x="0" y="4" fill="${color}" font-family="'Press Start 2P',monospace" font-size="3.2" opacity="0.8" filter="url(#neonGlow)">${text}</text>`
+      +`<text x="0" y="4" fill="#fff0f8" font-family="'Press Start 2P',monospace" font-size="3.2" opacity="0.95">${text}</text>`;
   }
 
   /* ---- PROJECT TAGS ---- */
@@ -1029,6 +1032,9 @@
     s+=`<defs>
       <!-- Glow filters -->
       <filter id="neonGlow"><feGaussianBlur stdDeviation="3" result="b"/>
+        <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <filter id="neonWide"><feGaussianBlur stdDeviation="8" result="b"/>
         <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
       </filter>
       <filter id="softGlow"><feGaussianBlur stdDeviation="1.5" result="b"/>
@@ -1044,9 +1050,9 @@
         <feComposite in="c" in2="s" operator="in" result="shadow"/>
         <feMerge><feMergeNode in="shadow"/><feMergeNode in="SourceGraphic"/></feMerge>
       </filter>
-      <filter id="monitorGlow"><feGaussianBlur stdDeviation="2" result="b"/><feFlood flood-color="#4080ff" flood-opacity="0.08" result="c"/>
+      <filter id="monitorGlow"><feGaussianBlur stdDeviation="3" result="b"/><feFlood flood-color="#4080ff" flood-opacity="0.15" result="c"/>
         <feComposite in="c" in2="b" operator="in" result="glow"/>
-        <feMerge><feMergeNode in="glow"/><feMergeNode in="SourceGraphic"/></feMerge>
+        <feMerge><feMergeNode in="glow"/><feMergeNode in="glow"/><feMergeNode in="SourceGraphic"/></feMerge>
       </filter>
       <filter id="ledGlow"><feGaussianBlur stdDeviation="1" result="b"/>
         <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
@@ -1117,9 +1123,14 @@
     // ---- 32-BIT NEON SIGNS (real glow) ----
     s+=`<g class="neon-sign" filter="url(#neonGlow)" transform="translate(14,16)">${neonSign('BERKENBOT','#a8a0ff')}</g>`;
     s+=`<g class="neon-sign-2" filter="url(#neonGlow)" transform="translate(14,25)">${neonSmall('LABS  ·  BUILD  SHIP  REPEAT','#ff80b0')}</g>`;
-    // Wall glow from neon
-    s+=`<ellipse cx="60" cy="22" rx="50" ry="10" fill="#a8a0ff" opacity="0.03"/>`;
-    s+=`<ellipse cx="80" cy="28" rx="60" ry="8" fill="#ff80b0" opacity="0.02"/>`;
+    // Wall glow from neon (vivid bloom)
+    s+=`<ellipse cx="60" cy="22" rx="70" ry="18" fill="#a8a0ff" opacity="0.12" filter="url(#neonWide)"/>`;
+    s+=`<ellipse cx="60" cy="22" rx="40" ry="10" fill="#c8c0ff" opacity="0.08"/>`;
+    s+=`<ellipse cx="80" cy="30" rx="70" ry="12" fill="#ff80b0" opacity="0.08" filter="url(#neonWide)"/>`;
+    s+=`<ellipse cx="80" cy="30" rx="40" ry="8" fill="#ffa0c0" opacity="0.06"/>`;
+    // Neon light spill onto floor
+    s+=`<ellipse cx="60" cy="82" rx="50" ry="8" fill="#a8a0ff" opacity="0.04"/>`;
+    s+=`<ellipse cx="80" cy="84" rx="50" ry="6" fill="#ff80b0" opacity="0.03"/>`;
 
     // ---- TIME-OF-DAY LIGHTING (CST) ----
     const now=new Date();
@@ -1231,8 +1242,19 @@
       </linearGradient></defs>`;
       s+=`<polygon points="${winX-5},${82} ${winX+winW+5},${82} ${winX+winW+50},${200} ${winX-30},${200}" fill="url(#floorLight)"/>`;
     }
-    // Ambient light from monitors onto desk area
-    s+=`<ellipse cx="200" cy="90" rx="180" ry="15" fill="#4080ff" opacity="0.012"/>`;
+    // Ambient light from monitors onto desk/floor area
+    s+=`<ellipse cx="200" cy="90" rx="180" ry="20" fill="#4080ff" opacity="0.04"/>`;
+    s+=`<ellipse cx="200" cy="145" rx="160" ry="15" fill="#4060d0" opacity="0.025"/>`;
+    // Under-desk glow pools per workstation row
+    s+=`<ellipse cx="175" cy="100" rx="200" ry="10" fill="#3060c0" opacity="0.03"/>`;
+    s+=`<ellipse cx="175" cy="155" rx="150" ry="10" fill="#3060c0" opacity="0.025"/>`;
+    // Pendant light cones onto floor
+    for(let lx=45;lx<W;lx+=60){
+      s+=`<polygon points="${lx-15},${80} ${lx+15},${80} ${lx+25},${170} ${lx-25},${170}" fill="#fff8d0" opacity="0.015"/>`;
+      s+=`<ellipse cx="${lx}" cy="82" rx="12" ry="3" fill="${C.ledWarm}" opacity="0.04"/>`;
+    }
+    // Server rack glow
+    s+=`<ellipse cx="${W-200}" cy="60" rx="30" ry="10" fill="${C.serverLed}" opacity="0.03"/>`;
 
     // ---- CLOCK ----
     s+=wallClock(winX-12, 12);
@@ -1300,11 +1322,7 @@
       s+=projectTags(ag.projects,bx-2,by+39,50);
     });
 
-    // ---- WALKING PEOPLE (ambient life) ----
-    // Person walking to coffee bar
-    s+=`<g id="walker-1" class="walk-right" transform="translate(55,92)">${walkingPerson('#8b4513','#3498db','#2d3436','right')}</g>`;
-    // Person near ping pong
-    s+=`<g id="walker-2" class="walk-left" transform="translate(${W-130},150)">${walkingPerson('#fdcb6e','#e74c3c','#636e72','left')}</g>`;
+    // ---- WALKING PEOPLE removed per request ----
 
     // ---- 32-BIT AMBIENT DETAILS ----
     // Sneakers (with shadow)
@@ -1322,10 +1340,7 @@
     // Skateboard
     s+=`<g filter="url(#dropShadow)"><rect x="4" y="72" width="2" height="8" rx="1" fill="#e04040"/>`;
     s+=`<circle cx="5" cy="73.5" r="0.8" fill="#f0c830"/><circle cx="5" cy="79" r="0.8" fill="#f0c830"/></g>`;
-    // Drone
-    s+=`<g filter="url(#dropShadow)"><rect x="${W*0.28+50}" y="14" width="4" height="2" rx="0.5" fill="#586068"/>`;
-    s+=`<rect x="${W*0.28+49}" y="13.5" width="2" height="0.5" rx="0.2" fill="#aaa" opacity="0.5"/>`;
-    s+=`<rect x="${W*0.28+54}" y="13.5" width="2" height="0.5" rx="0.2" fill="#aaa" opacity="0.5"/></g>`;
+    // Drone removed per request
 
     return {svg:s, width:W, height:H};
   }
