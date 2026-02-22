@@ -135,93 +135,105 @@
     return s;
   }
 
-  /* ---- DUAL ULTRAWIDE MONITORS ---- */
-  function dualMon(on,content){
+  /* ---- DUAL ULTRAWIDE MONITORS (16-bit + animated content IDs) ---- */
+  function dualMon(on,content,agentIdx){
     let s='';
-    // Monitor L (ultrawide)
-    s+=px(0,0,14,11,C.monBezel);
-    s+=px(0,0,14,1,C.monitor);
-    s+=px(1,1,12,9,'#0a0e1a');
+    // Monitor L (16-bit bezel)
+    s+=px16(0,0,14,11,C.monHi,C.monBezel,C.monitor);
+    s+=px(1,1,12,9,'#080c18');
     // Monitor R
-    s+=px(15,0,14,11,C.monBezel);
-    s+=px(15,0,14,1,C.monitor);
-    s+=px(16,1,12,9,'#0a0e1a');
-    // Stands (single arm mount)
-    s+=px(13,11,3,2,C.steelD);
-    s+=px(11,13,7,1,C.steel);
-    s+=px(14,11,1,2,C.steelL);
-    // Webcam
-    s+=px(13,-1,3,1,'#2d3436');
-    s+=px(14,-1,1,1,'#e74c3c',on?0.8:0.2);
+    s+=px16(15,0,14,11,C.monHi,C.monBezel,C.monitor);
+    s+=px(16,1,12,9,'#080c18');
+    // Stand (16-bit)
+    s+=px16(13,11,3,2,C.steelL,C.steelD,C.steel);
+    s+=px16(11,13,7,1,C.steelHi,C.steel,C.steelD);
+    // Webcam with LED
+    s+=px(13,-1,3,2,'#282830');
+    s+=`<circle cx="14.5" cy="-0.5" r="0.6" fill="${on?'#f04848':'#383838'}" opacity="${on?0.9:0.3}"/>`;
     if(!on)return s;
 
+    // Each screen gets a unique animation group
+    const sid='screen-'+agentIdx;
+
     if(content==='code'){
-      // Left: VS Code-like editor
-      s+=px(2,2,3,7,'#1e2235'); // sidebar
-      s+=px(2,2,3,1,'#636e72',0.3);
-      // File tree dots
-      for(let f=0;f<4;f++) s+=px(3,3+f*1.5,1,1,'#636e72',0.5);
-      // Code lines with indentation
-      s+=px(6,2,5,1,'#c678dd');s+=px(6,3,3,1,'#e06c75');s+=px(7,4,6,1,'#98c379');
-      s+=px(7,5,4,1,'#61afef');s+=px(8,6,5,1,'#e5c07b');s+=px(7,7,3,1,'#56b6c2');
-      s+=px(6,8,7,1,'#c678dd');s+=px(8,9,2,1,'#abb2bf');
-      // Right: terminal with output
-      s+=px(17,2,10,1,'#98c379');s+=px(17,3,8,1,'#abb2bf');
-      s+=px(17,4,6,1,'#e5c07b');s+=px(17,5,9,1,'#61afef');
-      s+=px(17,6,7,1,'#abb2bf');s+=px(17,7,4,1,'#98c379');
-      s+=px(17,8,8,1,'#abb2bf');
-      // Cursor blink
-      s+=`<rect x="17" y="9" width="2" height="1" fill="#98c379" class="cursor-blink"/>`;
-    } else if(content==='review'){
-      // Left: GitHub PR diff view
-      s+=px(2,2,11,1,'#abb2bf',0.5); // tab bar
-      s+=px(2,3,6,1,'#2ecc71',0.4);s+=px(2,4,8,1,'#2ecc71',0.25);
-      s+=px(2,5,5,1,'#e74c3c',0.4);s+=px(2,6,9,1,'#2ecc71',0.25);
-      s+=px(2,7,7,1,'#2ecc71',0.4);s+=px(2,8,4,1,'#abb2bf',0.3);
-      s+=px(2,9,6,1,'#e74c3c',0.3);
-      // Right: CI/CD pipeline
-      s+=px(17,2,3,2,'#2ecc71');s+=px(21,2,3,2,'#2ecc71');s+=px(25,2,3,2,'#f1c40f');
-      s+=px(20,3,1,1,'#636e72');s+=px(24,3,1,1,'#636e72');
-      s+=txt(18,6,'PASS',2,'#2ecc71','start');
-      s+=txt(18,8,'98%',2.5,'#2ecc71','start');
-      s+=px(17,9,10,1,'#636e72',0.3);
-    } else if(content==='research'){
-      // Left: ArXiv papers / browser tabs
-      s+=px(2,2,11,1,'#636e72',0.4); // address bar
-      s+=px(2,3,10,1,'#dfe6e9',0.6);
-      s+=px(2,4,8,1,'#abb2bf',0.3);
-      s+=px(2,6,6,1,'#74b9ff',0.6);s+=px(2,7,9,1,'#abb2bf',0.3);
-      s+=px(2,8,7,1,'#abb2bf',0.3);s+=px(2,9,5,1,'#74b9ff',0.4);
-      // Right: Obsidian-like notes
-      s+=px(17,2,3,1,'#a29bfe');s+=px(21,2,5,1,'#abb2bf',0.3);
-      s+=px(17,3,8,1,'#fdcb6e',0.4);s+=px(17,4,6,1,'#abb2bf',0.3);
-      s+=px(17,6,5,1,'#a29bfe',0.6);s+=px(17,7,9,1,'#abb2bf',0.3);
-      s+=px(17,8,7,1,'#abb2bf',0.3);
-    } else if(content==='ops'){
-      // Left: Grafana-like dashboard
-      for(let i=0;i<10;i++){
-        const bh=Math.floor(Math.random()*5+2);
-        s+=px(2+i,10-bh,1,bh,'#74b9ff',0.7);
+      // FORGE: VS Code with scrolling code + terminal with typing output
+      s+=`<g id="${sid}-L" class="code-scroll">`;
+      s+=px(2,2,3,7,'#1a1e30'); // sidebar
+      for(let f=0;f<4;f++) s+=px(3,3+f*1.5,1,1,'#586068',0.5);
+      // Code lines (will scroll via CSS)
+      const codeColors=['#c678dd','#e06c75','#98c379','#61afef','#e5c07b','#56b6c2','#c678dd','#d19a66'];
+      const codeLens=[5,3,6,4,5,3,7,4];
+      for(let l=0;l<8;l++){
+        s+=px(6,2+l,codeLens[l],1,codeColors[l],0.8);
+        if(l%2===0) s+=px(6,2+l,1,1,codeColors[l]); // keyword highlight
       }
-      s+=px(2,10,10,0.5,'#636e72');
-      // Gauge
-      s+=`<circle cx="7" cy="5" r="3" fill="none" stroke="#2ecc71" stroke-width="0.6" stroke-dasharray="6,12" opacity="0.6"/>`;
-      // Right: log stream
-      s+=px(17,2,10,1,'#2ecc71',0.4);s+=px(17,3,8,1,'#abb2bf',0.3);
-      s+=px(17,4,9,1,'#f1c40f',0.4);s+=px(17,5,7,1,'#abb2bf',0.3);
-      s+=px(17,6,10,1,'#2ecc71',0.4);s+=px(17,7,6,1,'#abb2bf',0.3);
-      s+=px(17,8,8,1,'#e74c3c',0.4);s+=px(17,9,9,1,'#2ecc71',0.3);
-    } else if(content==='monitor'){
-      // Left: heartbeat monitor
-      let hb='M2,6 L3,6 L4,4 L5,8 L6,3 L7,7 L8,5 L9,6 L10,6 L11,4 L12,7';
-      s+=`<path d="${hb}" stroke="#2ecc71" stroke-width="0.7" fill="none" class="heartbeat-line"/>`;
-      s+=px(2,9,10,0.5,'#636e72');
-      s+=txt(7,3,'99.97%',2,'#2ecc71');
-      // Right: status matrix
-      const statuses=['#2ecc71','#2ecc71','#f1c40f','#2ecc71','#2ecc71','#2ecc71','#e74c3c','#2ecc71','#2ecc71','#2ecc71','#f1c40f','#2ecc71'];
-      statuses.forEach((c,i)=>{
-        s+=px(17+(i%4)*2.5,2+Math.floor(i/4)*3,2,2,c,0.8);
+      s+=`</g>`;
+      s+=`<g id="${sid}-R" class="term-type">`;
+      s+=px(17,2,1,1,'#98c379');s+=txt(18,3,'$',1.5,'#98c379','start');
+      const termColors=['#98c379','#abb2bf','#e5c07b','#61afef','#abb2bf','#98c379','#abb2bf','#f04848'];
+      for(let l=0;l<8;l++) s+=px(17,2+l,6+l%4,1,termColors[l],0.6);
+      s+=`<rect x="17" y="9" width="2" height="1" fill="#98c379" class="cursor-blink"/>`;
+      s+=`</g>`;
+    } else if(content==='review'){
+      // ANVIL: Animated diff view + spinning CI pipeline
+      s+=`<g id="${sid}-L" class="diff-flash">`;
+      s+=px(2,2,11,1,'#484858',0.5);
+      const diffLines=[['#2ecc71',6],['#2ecc71',8],['#e74c3c',5],['#2ecc71',9],['#2ecc71',7],['#e74c3c',4],['#abb2bf',6]];
+      diffLines.forEach(([c,w],l)=>{
+        s+=px(2,3+l,w,1,c,c==='#abb2bf'?0.3:0.35);
+        if(c!=='#abb2bf') s+=px(2,3+l,1,1,c==='#2ecc71'?'#fff':'#fff',0.1); // +/- marker
       });
+      s+=`</g>`;
+      s+=`<g id="${sid}-R">`;
+      // CI Pipeline with animated spinner
+      s+=px(17,2,3,2,'#2ecc71');s+=px(21,2,3,2,'#2ecc71');
+      s+=`<g class="ci-spin" transform-origin="26.5 3"><rect x="25" y="2" width="3" height="2" fill="#f0c830"/></g>`;
+      s+=px(20,3,1,1,'#484858');s+=px(24,3,1,1,'#484858');
+      s+=txt(18,7,'PASS',2,'#2ecc71','start');
+      s+=txt(18,9,'98.2%',2,'#40f8a0','start');
+      s+=`</g>`;
+    } else if(content==='research'){
+      // SCOUT: Animated browser with loading bar + flickering notes
+      s+=`<g id="${sid}-L">`;
+      s+=px(2,2,11,1,'#484858',0.4);
+      s+=`<rect x="2" y="2" width="0" height="1" fill="#60a8f0" class="loading-bar"/>`;
+      s+=px(2,3,10,1,'#dfe6e9',0.5);s+=px(2,4,8,1,'#abb2bf',0.25);
+      s+=px(2,6,6,1,'#60a8f0',0.5);s+=px(2,7,9,1,'#abb2bf',0.25);
+      s+=px(2,8,7,1,'#abb2bf',0.25);s+=px(2,9,5,1,'#60a8f0',0.4);
+      s+=`</g>`;
+      s+=`<g id="${sid}-R" class="notes-flicker">`;
+      s+=px(17,2,3,1,'#a090f0');s+=px(21,2,5,1,'#abb2bf',0.3);
+      s+=px(17,3,8,1,'#f0c830',0.4);s+=px(17,4,6,1,'#abb2bf',0.25);
+      s+=px(17,6,5,1,'#a090f0',0.5);s+=px(17,7,9,1,'#abb2bf',0.25);
+      s+=`<rect x="17" y="9" width="4" height="1" fill="#f0c830" class="cursor-blink"/>`;
+      s+=`</g>`;
+    } else if(content==='ops'){
+      // RELAY: Animated bar chart + scrolling logs
+      s+=`<g id="${sid}-L">`;
+      for(let i=0;i<10;i++){
+        const maxH=7;
+        s+=`<rect x="${2+i}" y="${10-maxH}" width="1" height="${maxH}" fill="#60a8f0" opacity="0.6" class="bar-pulse" style="animation-delay:${i*0.15}s"/>`;
+      }
+      s+=px(2,10,10,0.5,'#484858');
+      s+=`<circle cx="7" cy="5" r="3" fill="none" stroke="#40f8a0" stroke-width="0.6" stroke-dasharray="6,12" class="gauge-spin"/>`;
+      s+=`</g>`;
+      s+=`<g id="${sid}-R" class="log-scroll">`;
+      const logColors=['#40f8a0','#abb2bf','#f0c830','#abb2bf','#40f8a0','#abb2bf','#f04848','#40f8a0'];
+      logColors.forEach((c,l)=>s+=px(17,2+l,7+l%3,1,c,0.45));
+      s+=`</g>`;
+    } else if(content==='monitor'){
+      // PULSE: Animated heartbeat + blinking status grid
+      s+=`<g id="${sid}-L">`;
+      s+=`<path d="M2,6 L3,6 L4,4 L5,8 L6,3 L7,7 L8,5 L9,6 L10,6 L11,4 L12,7" stroke="#40f8a0" stroke-width="0.8" fill="none" class="heartbeat-line"/>`;
+      s+=px(2,9,10,0.5,'#484858');
+      s+=`<text x="7" y="3" fill="#40f8a0" font-family="'Press Start 2P',monospace" font-size="2" text-anchor="middle" class="uptime-counter">99.97%</text>`;
+      s+=`</g>`;
+      s+=`<g id="${sid}-R">`;
+      const grid=['#40f8a0','#40f8a0','#f0c830','#40f8a0','#40f8a0','#40f8a0','#f04848','#40f8a0','#40f8a0','#40f8a0','#f0c830','#40f8a0'];
+      grid.forEach((c,i)=>{
+        s+=`<rect x="${17+(i%4)*2.5}" y="${2+Math.floor(i/4)*3}" width="2" height="2" fill="${c}" opacity="0.8" class="status-blink" style="animation-delay:${i*0.3}s"/>`;
+      });
+      s+=`</g>`;
     }
     return s;
   }
@@ -870,14 +882,109 @@
     s+=`<g class="neon-sign" transform="translate(14,16)">${neonSign('BERKENBOT','#a29bfe')}</g>`;
     s+=`<g class="neon-sign-2" transform="translate(14,25)">${neonSmall('LABS  ·  BUILD  SHIP  REPEAT','#fd79a8')}</g>`;
 
+    // ---- TIME-OF-DAY LIGHTING (CST) ----
+    const now=new Date();
+    const cstOff=-6;
+    const utcH=now.getUTCHours()+now.getUTCMinutes()/60;
+    const cstH=(utcH+cstOff+24)%24;
+    
+    // Sky color based on CST hour
+    let skyTop, skyBot, sunMoonY, sunMoonCol, sunMoonR, isNight, bridgeCol, waterCol, cloudOp;
+    if(cstH>=6 && cstH<8){ // sunrise
+      const t=(cstH-6)/2;
+      skyTop=`#${Math.round(20+t*100).toString(16).padStart(2,'0')}${Math.round(20+t*60).toString(16).padStart(2,'0')}${Math.round(60+t*120).toString(16).padStart(2,'0')}`;
+      skyBot='#f0a060';sunMoonY=45-t*15;sunMoonCol='#f8d040';sunMoonR=5;isNight=false;bridgeCol='#c03020';waterCol='#285898';cloudOp=0.15+t*0.1;
+    } else if(cstH>=8 && cstH<17){ // day
+      skyTop='#4090e0';skyBot='#80c0f0';sunMoonY=10+Math.abs(cstH-12.5)*3;sunMoonCol='#f8e860';sunMoonR=4;isNight=false;bridgeCol='#d04030';waterCol='#3878b8';cloudOp=0.3;
+    } else if(cstH>=17 && cstH<20){ // sunset
+      const t=(cstH-17)/3;
+      skyTop=`#${Math.round(100-t*80).toString(16).padStart(2,'0')}${Math.round(80-t*60).toString(16).padStart(2,'0')}${Math.round(180-t*120).toString(16).padStart(2,'0')}`;
+      skyBot=`#${Math.round(200-t*140).toString(16).padStart(2,'0')}${Math.round(100-t*60).toString(16).padStart(2,'0')}${Math.round(60+t*20).toString(16).padStart(2,'0')}`;
+      sunMoonY=30+t*20;sunMoonCol='#f08030';sunMoonR=5;isNight=false;bridgeCol='#a03020';waterCol='#284870';cloudOp=0.2-t*0.1;
+    } else { // night
+      skyTop='#0a0820';skyBot='#101830';sunMoonY=20;sunMoonCol='#e0e8f0';sunMoonR=3;isNight=true;bridgeCol='#601818';waterCol='#101838';cloudOp=0.05;
+    }
+
+    // ---- LARGE WINDOW WITH GOLDEN GATE BRIDGE ----
+    const winX=W*0.28+70, winY=4, winW=120, winH=65;
+    // Window frame
+    s+=px16(winX-2,winY-2,winW+4,winH+4,C.steelHi,C.steelD,C.steel);
+    // Sky
+    s+=px(winX,winY,winW,winH/2,skyTop);
+    s+=px(winX,winY+winH/2-5,winW,5,skyBot);
+    // Sun or moon
+    s+=`<circle cx="${winX+winW*0.75}" cy="${winY+sunMoonY*winH/80}" r="${sunMoonR}" fill="${sunMoonCol}"/>`;
+    if(isNight){
+      // Stars
+      for(let st=0;st<12;st++){
+        const sx=winX+5+((st*37)%110), sy=winY+2+((st*13)%25);
+        s+=`<circle cx="${sx}" cy="${sy}" r="0.4" fill="#fff" opacity="${0.4+Math.random()*0.4}" class="star-twinkle" style="animation-delay:${st*0.5}s"/>`;
+      }
+      // Moon crescent shadow
+      s+=`<circle cx="${winX+winW*0.75+1.5}" cy="${winY+sunMoonY*winH/80-0.5}" r="2.5" fill="${skyTop}"/>`;
+    } else {
+      // Sun glow
+      s+=`<circle cx="${winX+winW*0.75}" cy="${winY+sunMoonY*winH/80}" r="${sunMoonR+3}" fill="${sunMoonCol}" opacity="0.1"/>`;
+    }
+    // Clouds
+    s+=`<g class="cloud-drift" opacity="${cloudOp}">`;
+    s+=`<ellipse cx="${winX+25}" cy="${winY+10}" rx="12" ry="3" fill="#fff"/>`;
+    s+=`<ellipse cx="${winX+22}" cy="${winY+9}" rx="6" ry="2.5" fill="#fff"/>`;
+    s+=`<ellipse cx="${winX+80}" cy="${winY+15}" rx="10" ry="2.5" fill="#fff"/>`;
+    s+=`</g>`;
+    // Water
+    s+=px(winX,winY+winH/2,winW,winH/2,waterCol);
+    // Water shimmer
+    for(let wl=0;wl<8;wl++){
+      s+=`<rect x="${winX+5+wl*14}" y="${winY+winH/2+3+wl%3*5}" width="${8+wl%4}" height="0.5" fill="#fff" opacity="0.06" class="water-shimmer" style="animation-delay:${wl*0.4}s"/>`;
+    }
+    // Golden Gate Bridge
+    const bY=winY+winH/2-8; // bridge deck Y
+    // Towers
+    s+=px16(winX+30,bY-22,4,30,bridgeCol,bridgeCol,'#400808');
+    s+=px16(winX+80,bY-22,4,30,bridgeCol,bridgeCol,'#400808');
+    // Tower tops
+    s+=px(winX+29,bY-22,6,2,bridgeCol);s+=px(winX+79,bY-22,6,2,bridgeCol);
+    // Road deck
+    s+=px(winX+10,bY,100,3,bridgeCol);
+    s+=px(winX+10,bY,100,1,bridgeCol.replace('0','4')); // highlight
+    // Cables (main span catenary)
+    s+=`<path d="M${winX+32},${bY-20} Q${winX+56},${bY-5} ${winX+82},${bY-20}" stroke="${bridgeCol}" stroke-width="0.8" fill="none"/>`;
+    // Suspender cables
+    for(let c=0;c<10;c++){
+      const cx=winX+35+c*5;
+      const cableTop=bY-20+Math.pow((c-4.5)/4.5,2)*15;
+      s+=`<line x1="${cx}" y1="${cableTop}" x2="${cx}" y2="${bY}" stroke="${bridgeCol}" stroke-width="0.3" opacity="0.6"/>`;
+    }
+    // Hills/headlands
+    s+=`<path d="M${winX},${bY+3} Q${winX+15},${bY-8} ${winX+28},${bY+3}" fill="#1a3820" opacity="0.7"/>`;
+    s+=`<path d="M${winX+86},${bY+3} Q${winX+100},${bY-6} ${winX+winW},${bY+3}" fill="#1a3820" opacity="0.6"/>`;
+    // Night bridge lights
+    if(isNight){
+      for(let bl=0;bl<12;bl++){
+        s+=`<circle cx="${winX+15+bl*8}" cy="${bY+1}" r="0.5" fill="#f8d040" opacity="0.7" class="bridge-light" style="animation-delay:${bl*0.2}s"/>`;
+      }
+    }
+    // Window dividers
+    s+=px(winX+winW/3,winY,1,winH,C.steelD,0.5);
+    s+=px(winX+winW*2/3,winY,1,winH,C.steelD,0.5);
+    s+=px(winX,winY+winH/2,winW,1,C.steelD,0.3);
+    // Window reflection
+    s+=px(winX+2,winY+2,3,winH-4,'#fff',0.04);
+
+    // Ambient light cast from window onto floor
+    if(!isNight){
+      s+=`<polygon points="${winX},${80} ${winX+winW},${80} ${winX+winW+40},${180} ${winX-20},${180}" fill="${sunMoonCol}" opacity="0.02"/>`;
+    }
+
     // ---- CLOCK ----
-    s+=wallClock(W*0.28+55, 12);
+    s+=wallClock(winX-12, 12);
 
     // ---- WHITEBOARD ----
     s+=`<g transform="translate(${W*0.28+8},12)">${whiteboard()}</g>`;
 
     // ---- BOOKSHELF ----
-    s+=`<g transform="translate(${W*0.28+45},14)">${bookshelf()}</g>`;
+    s+=`<g transform="translate(${winX+winW+8},14)">${bookshelf()}</g>`;
 
     // ---- GLASS CONF ROOM ----
     s+=`<g transform="translate(${W-70},15)">${glassRoom(60,68)}</g>`;
@@ -918,7 +1025,7 @@
       // Desk
       s+=`<g transform="translate(${bx},${by})">${desk(44)}</g>`;
       // Monitors on desk
-      s+=`<g transform="translate(${bx+7},${by-14})">${dualMon(ag.status==='green',ag.screen)}</g>`;
+      s+=`<g transform="translate(${bx+7},${by-14})">${dualMon(ag.status==='green',ag.screen,i)}</g>`;
       // Desk accessories
       s+=`<g transform="translate(${bx+36},${by-3})">${deskStuff(ag.stuff)}</g>`;
       // Seated character WITH chair (hands at desk height)
@@ -1073,6 +1180,19 @@
       @keyframes walkRight{0%{transform:translateX(0)}100%{transform:translateX(80px)}}
       @keyframes walkLeft{0%{transform:translateX(0)}100%{transform:translateX(-60px)}}
       @keyframes headBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-0.5px)}}
+      @keyframes codeScroll{0%{transform:translateY(0)}100%{transform:translateY(-2px)}}
+      @keyframes diffFlash{0%,100%{opacity:1}50%{opacity:0.7}}
+      @keyframes ciSpin{0%{fill:#f0c830}50%{fill:#40f8a0}100%{fill:#f0c830}}
+      @keyframes loadingBar{0%{width:0}50%{width:11}80%{width:11}100%{width:0}}
+      @keyframes notesFlicker{0%,90%{opacity:1}95%{opacity:0.6}100%{opacity:1}}
+      @keyframes barPulse{0%{height:2;y:8}50%{height:7;y:3}100%{height:2;y:8}}
+      @keyframes gaugeSpin{0%{stroke-dashoffset:0}100%{stroke-dashoffset:18}}
+      @keyframes logScroll{0%{transform:translateY(0)}100%{transform:translateY(-3px)}}
+      @keyframes statusBlink{0%,80%{opacity:0.8}85%{opacity:0.3}90%{opacity:0.9}100%{opacity:0.8}}
+      @keyframes starTwinkle{0%,100%{opacity:0.3}50%{opacity:0.9}}
+      @keyframes cloudDrift{0%{transform:translateX(0)}100%{transform:translateX(15px)}}
+      @keyframes waterShimmer{0%,100%{opacity:0.04}50%{opacity:0.1}}
+      @keyframes bridgeLight{0%,100%{opacity:0.5}50%{opacity:0.9}}
       .neon-sign{animation:neonPulse 3s ease-in-out infinite}
       .neon-sign-2{animation:neonPulse2 4s ease-in-out infinite}
       .server-blink{animation:serverBlink 1.5s steps(2) infinite}
@@ -1082,6 +1202,20 @@
       .heartbeat-line{stroke-dasharray:20;animation:heartbeatDash 2s linear infinite}
       .walk-right{animation:walkRight 8s ease-in-out infinite alternate}
       .walk-left{animation:walkLeft 6s ease-in-out infinite alternate}
+      .code-scroll{animation:codeScroll 3s steps(2) infinite alternate}
+      .term-type{animation:notesFlicker 4s steps(1) infinite}
+      .diff-flash{animation:diffFlash 2s ease-in-out infinite}
+      .ci-spin rect{animation:ciSpin 3s ease-in-out infinite}
+      .loading-bar{animation:loadingBar 4s ease-in-out infinite}
+      .notes-flicker{animation:notesFlicker 5s steps(1) infinite}
+      .bar-pulse{animation:barPulse 2s ease-in-out infinite}
+      .gauge-spin{animation:gaugeSpin 4s linear infinite}
+      .log-scroll{animation:logScroll 5s steps(3) infinite}
+      .status-blink{animation:statusBlink 3s ease-in-out infinite}
+      .star-twinkle{animation:starTwinkle 2s ease-in-out infinite}
+      .cloud-drift{animation:cloudDrift 20s ease-in-out infinite alternate}
+      .water-shimmer{animation:waterShimmer 3s ease-in-out infinite}
+      .bridge-light{animation:bridgeLight 2s ease-in-out infinite}
       ${AGENTS.map((a,i)=>{
         if(a.status==='green')return`#agent-${i}{animation:typing .5s steps(4) infinite}`;
         if(a.status==='yellow')return`#agent-${i}{animation:idle 2.5s steps(4) infinite}`;
