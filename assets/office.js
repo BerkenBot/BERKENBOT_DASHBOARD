@@ -1050,9 +1050,9 @@
         <feComposite in="c" in2="s" operator="in" result="shadow"/>
         <feMerge><feMergeNode in="shadow"/><feMergeNode in="SourceGraphic"/></feMerge>
       </filter>
-      <filter id="monitorGlow"><feGaussianBlur stdDeviation="3" result="b"/><feFlood flood-color="#4080ff" flood-opacity="0.15" result="c"/>
+      <filter id="monitorGlow"><feGaussianBlur stdDeviation="2" result="b"/><feFlood flood-color="#4080ff" flood-opacity="0.08" result="c"/>
         <feComposite in="c" in2="b" operator="in" result="glow"/>
-        <feMerge><feMergeNode in="glow"/><feMergeNode in="glow"/><feMergeNode in="SourceGraphic"/></feMerge>
+        <feMerge><feMergeNode in="glow"/><feMergeNode in="SourceGraphic"/></feMerge>
       </filter>
       <filter id="ledGlow"><feGaussianBlur stdDeviation="1" result="b"/>
         <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
@@ -1242,19 +1242,8 @@
       </linearGradient></defs>`;
       s+=`<polygon points="${winX-5},${82} ${winX+winW+5},${82} ${winX+winW+50},${200} ${winX-30},${200}" fill="url(#floorLight)"/>`;
     }
-    // Ambient light from monitors onto desk/floor area
-    s+=`<ellipse cx="200" cy="90" rx="180" ry="20" fill="#4080ff" opacity="0.04"/>`;
-    s+=`<ellipse cx="200" cy="145" rx="160" ry="15" fill="#4060d0" opacity="0.025"/>`;
-    // Under-desk glow pools per workstation row
-    s+=`<ellipse cx="175" cy="100" rx="200" ry="10" fill="#3060c0" opacity="0.03"/>`;
-    s+=`<ellipse cx="175" cy="155" rx="150" ry="10" fill="#3060c0" opacity="0.025"/>`;
-    // Pendant light cones onto floor
-    for(let lx=45;lx<W;lx+=60){
-      s+=`<polygon points="${lx-15},${80} ${lx+15},${80} ${lx+25},${170} ${lx-25},${170}" fill="#fff8d0" opacity="0.015"/>`;
-      s+=`<ellipse cx="${lx}" cy="82" rx="12" ry="3" fill="${C.ledWarm}" opacity="0.04"/>`;
-    }
-    // Server rack glow
-    s+=`<ellipse cx="${W-200}" cy="60" rx="30" ry="10" fill="${C.serverLed}" opacity="0.03"/>`;
+    // Subtle monitor ambient (no overlays)
+    s+=`<ellipse cx="200" cy="90" rx="180" ry="15" fill="#4080ff" opacity="0.012"/>`;
 
     // ---- CLOCK ----
     s+=wallClock(winX-12, 12);
