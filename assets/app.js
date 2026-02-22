@@ -391,8 +391,11 @@ function drawSVGLineChart({containerId, legendId, samples, series, yMax=100, yLa
   }
 }
 
-(async()=>{
-  try{
+// --- Live dashboard: auto-refresh every 60s ---
+let _agoInterval = null;
+
+async function renderDashboard() {
+  try {
     const [overview, projects, bots, events, security, history, sysm, tokens, llmBench] = await Promise.all([
       load('data/overview.json'),
       load('data/projects.json'),
@@ -405,6 +408,8 @@ function drawSVGLineChart({containerId, legendId, samples, series, yMax=100, yLa
       load('data/llm_benchmarks.json'),
     ]);
 
+    // --- Ago ticker (reset each cycle) ---
+    if(_agoInterval) clearInterval(_agoInterval);
     const updatedAt = new Date(overview.lastUpdated);
     function updateAgo() {
       const diff = Math.max(0, Math.floor((Date.now() - updatedAt) / 1000));
@@ -414,7 +419,15 @@ function drawSVGLineChart({containerId, legendId, samples, series, yMax=100, yLa
       document.getElementById('lastUpdated').textContent = `Last updated: ${overview.lastUpdated}  (${hh}h ${mm}m ${ss}s ago)`;
     }
     updateAgo();
-    setInterval(updateAgo, 1000);
+    _agoInterval = setInterval(updateAgo, 1000);
+
+    // --- Clear dynamic containers ---
+    ['overviewCards','projectCards','botGrid','eventsList','securityList'].forEach(id => {
+      const el = document.getElementById(id); if(el) el.innerHTML = '';
+    });
+    const hb = document.querySelector('#historyTable tbody'); if(hb) hb.innerHTML = '';
+    const bb = document.querySelector('#llmBenchTable tbody'); if(bb) bb.innerHTML = '';
+    const bm = document.getElementById('llmBenchMeta'); if(bm) bm.textContent = '';
 
     const cards = document.getElementById('overviewCards');
     overview.metrics.forEach(m=>{
@@ -522,9 +535,13 @@ function drawSVGLineChart({containerId, legendId, samples, series, yMax=100, yLa
     });
 
   } catch(e){
-    document.body.innerHTML = `<pre style="padding:20px">Dashboard load error: ${e.message}</pre>`;
+    console.error('Dashboard refresh error:', e);
   }
-})();
+}
+
+// Initial render + auto-refresh every 60s
+renderDashboard();
+setInterval(renderDashboard, 60000);
 
 // --- Resizable panels ---
 document.addEventListener('DOMContentLoaded', () => {
