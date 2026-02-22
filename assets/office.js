@@ -101,37 +101,52 @@
     return s;
   }
 
-  /* ---- PENDANT / INDUSTRIAL LIGHT ---- */
+  /* ---- 16-BIT PENDANT / INDUSTRIAL LIGHT ---- */
   function pendant(x){
     let s='';
-    s+=px(x+2,0,1,8,C.steel);
-    s+=px(x-1,8,7,1,C.steelD);
-    s+=px(x,9,5,2,C.steelD);
-    s+=px(x+1,11,3,1,C.led);
-    // Warm glow cone
-    s+=`<polygon points="${x-4},20 ${x+8},20 ${x+5},12 ${x-1},12" fill="${C.ledWarm}" opacity="0.04"/>`;
-    s+=`<polygon points="${x-8},35 ${x+12},35 ${x+7},12 ${x-3},12" fill="${C.ledWarm}" opacity="0.02"/>`;
+    // Cable
+    s+=px(x+2,0,1,7,C.steelD);s+=px(x+3,0,0.5,7,C.steelL,0.3);
+    // Shade (16-bit: highlight top, dark bottom)
+    s+=px16(x-2,7,8,1,C.steelHi,C.steelD,C.steel);
+    s+=px(x-1,8,6,1,C.steelD);s+=px(x-1,8,6,0.5,C.steelL,0.2);
+    s+=px(x,9,4,2,C.steelD);s+=px(x,9,4,0.5,C.steelHi,0.15);
+    // Bulb (warm glow gradient)
+    s+=px(x+1,11,2,1,C.ledHi);
+    s+=px(x,12,4,1,C.led);
+    // Light cone (multi-layer for 16-bit softness)
+    s+=`<polygon points="${x-3},18 ${x+7},18 ${x+4},12 ${x},12" fill="${C.ledHi}" opacity="0.05"/>`;
+    s+=`<polygon points="${x-6},28 ${x+10},28 ${x+6},12 ${x-2},12" fill="${C.ledWarm}" opacity="0.03"/>`;
+    s+=`<polygon points="${x-10},40 ${x+14},40 ${x+8},12 ${x-4},12" fill="${C.ledWarm}" opacity="0.015"/>`;
     return s;
   }
 
-  /* ---- STANDING DESK (more detail) ---- */
+  /* ---- 16-BIT STANDING DESK ---- */
   function desk(w){
     w=w||40;
     let s='';
-    // Desktop surface
-    s+=px(0,0,w,3,C.woodL);
-    s+=px(0,1,w,1,C.wood);
+    // Desktop surface (wood grain: highlight, 2 mid tones, shadow)
+    s+=px(0,0,w,1,C.woodHi);
+    s+=px(0,1,w,1,C.woodL);
+    s+=px(0,2,w,1,C.wood);
     s+=px(0,3,w,1,C.woodD);
-    // Cable management tray
-    s+=px(6,4,w-12,1,C.steelD,0.4);
-    // Motorized legs
-    s+=px(2,4,3,20,C.steel);
-    s+=px(w-5,4,3,20,C.steel);
-    // Feet
-    s+=px(0,24,7,1,C.steelD);
-    s+=px(w-7,24,7,1,C.steelD);
-    // Cross brace
-    s+=px(5,15,w-10,1,C.steelD,0.5);
+    // Wood grain detail
+    for(let g=4;g<w;g+=7) s+=px(g,1,3,1,C.woodHi,0.15);
+    // Front edge bevel
+    s+=px(0,3,w,0.5,C.woodDk,0.4);
+    // Cable management tray (16-bit)
+    s+=px16(6,4,w-12,1.5,C.steelL,C.steelD,C.steel);
+    // Motorized legs (highlight + body + shadow)
+    s+=px(2,4,1,20,C.steelL,0.4);s+=px(3,4,2,20,C.steel);s+=px(4,4,1,20,C.steelD);
+    s+=px(w-5,4,1,20,C.steelL,0.4);s+=px(w-4,4,2,20,C.steel);s+=px(w-3,4,1,20,C.steelD);
+    // Motor housing
+    s+=px16(2,10,3,3,C.steelHi,C.steelD,'#484858');
+    s+=px16(w-5,10,3,3,C.steelHi,C.steelD,'#484858');
+    // Feet (16-bit)
+    s+=px16(0,24,7,1.5,C.steelHi,C.steelD,C.steel);
+    s+=px16(w-7,24,7,1.5,C.steelHi,C.steelD,C.steel);
+    // Cross brace with highlight
+    s+=px(5,15,w-10,0.5,C.steelL,0.3);
+    s+=px(5,15.5,w-10,1,C.steelD,0.4);
     return s;
   }
 
@@ -360,58 +375,73 @@
     return s;
   }
 
-  /* ---- SERVER RACK (detailed) ---- */
+  /* ---- 16-BIT SERVER RACK ---- */
   function serverRack(){
     let s='';
-    s+=px(0,0,18,40,C.server);
-    s+=px(1,1,16,38,'#1a1e22');
-    // Rack units
+    // Outer frame (16-bit)
+    s+=px16(0,0,18,40,C.serverHi,C.server,'#181c20');
+    s+=px(1,1,16,38,'#141820');
+    // Rack units (each with highlight/shadow)
     for(let u=0;u<7;u++){
       const uy=2+u*5;
-      s+=px(2,uy,14,4,'#2a3035');
-      s+=px(2,uy,14,0.5,'#3a4045');
-      // LEDs
-      s+=px(3,uy+1,2,1,C.serverLed);
-      s+=px(6,uy+1,1,1,u%3===2?C.serverLedY:C.serverLedR);
-      s+=px(8,uy+1,1,1,C.serverLed);
-      // Vent lines
-      for(let v=0;v<3;v++) s+=px(10,uy+1+v*0.8,4,0.5,C.serverL,0.25);
-      // Drive bays
-      s+=px(3,uy+2.5,4,1,'#1a1e22');s+=px(8,uy+2.5,4,1,'#1a1e22');
+      s+=px(2,uy,14,0.5,'#404850'); // top highlight
+      s+=px(2,uy+0.5,14,3,'#2a3038');
+      s+=px(2,uy+3.5,14,0.5,'#1a1e24'); // bottom shadow
+      // LEDs (16-bit glow)
+      s+=`<circle cx="4" cy="${uy+2}" r="0.8" fill="${C.serverLed}"/>`;
+      s+=`<circle cx="4" cy="${uy+2}" r="1.5" fill="${C.serverLed}" opacity="0.1"/>`;
+      s+=`<circle cx="7" cy="${uy+2}" r="0.6" fill="${u%3===2?C.serverLedY:C.serverLedR}"/>`;
+      s+=`<circle cx="9" cy="${uy+2}" r="0.6" fill="${C.serverLed}"/>`;
+      // Vent lines (thinner, more of them)
+      for(let v=0;v<4;v++) s+=px(10.5,uy+0.8+v*0.7,3.5,0.3,C.serverL,0.2);
+      // Drive bays (16-bit)
+      s+=px(3,uy+2.5,3.5,1,'#141820');s+=px(3,uy+2.5,3.5,0.3,'#303840',0.3);
+      s+=px(7.5,uy+2.5,3.5,1,'#141820');s+=px(7.5,uy+2.5,3.5,0.3,'#303840',0.3);
     }
-    // Side handles
-    s+=px(0,0,1,40,C.serverL);s+=px(17,0,1,40,C.serverL);
+    // Side handles (16-bit metallic)
+    s+=px(0,0,0.5,40,C.steelHi,0.3);s+=px(0.5,0,0.5,40,C.serverL);
+    s+=px(17,0,0.5,40,C.serverL);s+=px(17.5,0,0.5,40,C.steelD,0.3);
     // Top vent
-    s+=px(3,0,12,1,C.serverL,0.3);
+    s+=px(3,0,12,0.5,C.serverL,0.25);
     return s;
   }
 
-  /* ---- BIG PLANT ---- */
+  /* ---- 16-BIT BIG PLANT ---- */
   function bigPlant(variant){
     let s='';
     if(variant==='fiddle'){
-      // Fiddle leaf fig
-      s+=px(5,12,2,14,C.plantDk);
-      s+=px(6,14,1,4,C.plantDk); // branch
-      // Leaves
-      s+=px(1,2,6,6,C.plant);s+=px(0,4,2,3,C.plantL);
-      s+=px(7,0,5,5,C.plantD);s+=px(9,1,4,3,C.plant);
-      s+=px(3,7,5,4,C.plantL);s+=px(8,5,4,4,C.plant);
-      s+=px(2,0,3,3,C.plantL);
+      // Fiddle leaf fig — 16-bit shaded leaves
+      s+=px(5,12,1,14,C.plantDk);s+=px(6,12,1,14,C.plantD,0.7); // trunk highlight
+      s+=px(6,14,1,4,C.plantDk);
+      // Leaves (each: highlight edge + base + dark center vein)
+      s+=px(1,2,6,1,C.plantHi);s+=px(1,3,6,4,C.plant);s+=px(1,7,6,1,C.plantD);s+=px(3,4,1,3,C.plantDk,0.3); // vein
+      s+=px(7,0,5,1,C.plantHi);s+=px(7,1,5,3,C.plantD);s+=px(7,4,5,1,C.plantDk);s+=px(9,1,1,3,C.plantDk,0.2);
+      s+=px(3,7,5,1,C.plantHi);s+=px(3,8,5,3,C.plantL);s+=px(3,11,5,1,C.plant);s+=px(5,8,1,2,C.plantDk,0.2);
+      s+=px(8,5,4,1,C.plantHi);s+=px(8,6,4,3,C.plant);s+=px(8,9,4,1,C.plantD);
+      s+=px(0,4,2,3,C.plantL);s+=px(2,0,3,2,C.plantHi);
     } else if(variant==='monstera'){
-      // Monstera
-      s+=px(5,10,2,16,C.plantDk);
-      s+=px(1,0,8,8,C.plant);s+=px(3,2,2,2,'#0a0e1a',0.1); // leaf hole
-      s+=px(6,3,6,6,C.plantD);s+=px(8,5,1,1,'#0a0e1a',0.1);
-      s+=px(0,5,4,5,C.plantL);
+      // Monstera — 16-bit with leaf holes and veins
+      s+=px(5,10,1,16,C.plantDk);s+=px(6,10,1,16,C.plantD,0.5);
+      s+=px(1,0,1,8,C.plantHi);s+=px(2,0,6,1,C.plantHi);s+=px(2,1,6,6,C.plant);s+=px(2,7,6,1,C.plantD);
+      s+=px(3,2,2,2,'#080c18',0.08); // leaf hole
+      s+=px(4,3,1,3,C.plantDk,0.2); // vein
+      s+=px(6,3,1,6,C.plantHi);s+=px(7,3,5,1,C.plantHi);s+=px(7,4,5,4,C.plantD);s+=px(7,8,5,1,C.plantDk);
+      s+=px(8,5,1,1,'#080c18',0.08);s+=px(9,4,1,3,C.plantDk,0.2);
+      s+=px(0,5,1,5,C.plantHi);s+=px(1,5,3,1,C.plantHi);s+=px(1,6,3,3,C.plantL);s+=px(1,9,3,1,C.plant);
     } else {
-      // Snake plant
-      s+=px(4,0,2,18,C.plantD);s+=px(7,2,2,16,C.plant);s+=px(2,4,2,14,C.plantL);
-      s+=px(9,6,2,12,C.plantD);
+      // Snake plant — 16-bit with striping
+      s+=px(4,0,1,18,C.plantHi);s+=px(5,0,1,18,C.plantD);s+=px(4,2,2,2,C.plantL,0.3); // stripe
+      s+=px(7,2,1,16,C.plantHi);s+=px(8,2,1,16,C.plant);s+=px(7,6,2,2,C.plantL,0.3);
+      s+=px(2,4,1,14,C.plantL);s+=px(3,4,1,14,C.plantD);s+=px(2,8,2,2,C.plantHi,0.3);
+      s+=px(9,6,1,12,C.plantD);s+=px(10,6,1,12,C.plantDk);s+=px(9,10,2,2,C.plantL,0.2);
     }
-    // Pot
-    s+=px(1,24,10,6,C.potTerra);s+=px(2,23,8,1,C.potTerra);
-    s+=px(2,24,8,1,'#d4896e',0.3);
+    // Pot (16-bit: highlight + body + shadow + rim)
+    s+=px(2,23,8,1,C.potHi); // rim
+    s+=px(1,24,10,1,C.potHi);
+    s+=px(1,25,10,3,C.potTerra);
+    s+=px(1,28,10,2,C.potTerra.replace('48','30')); // darker bottom
+    s+=px(2,24,1,5,'#e0a070',0.2); // left highlight
+    s+=px(3,29,6,1,'#000',0.06); // shadow under pot
     return s;
   }
 
@@ -523,66 +553,98 @@
     return s;
   }
 
-  /* ---- GLASS CONFERENCE ROOM ---- */
+  /* ---- 16-BIT GLASS CONFERENCE ROOM ---- */
   function glassRoom(w,h){
     let s='';
-    // Floor
-    s+=px(0,h-5,w,5,C.carpet);
-    // Glass walls
-    s+=px(0,0,1,h,C.glassFrame);s+=px(w-1,0,1,h,C.glassFrame);s+=px(0,0,w,1,C.glassFrame);
-    s+=px(1,1,w-2,h-6,C.glass,0.06);
-    // Reflections
-    s+=px(2,4,1,h-12,'#fff',0.06);s+=px(4,6,1,h-16,'#fff',0.04);
-    // Table (rounded conference table)
-    s+=px(5,h-16,w-10,3,C.woodD);
-    s+=px(7,h-13,2,9,C.steelD);s+=px(w-9,h-13,2,9,C.steelD);
-    // TV screen
-    const tvW=Math.floor(w*0.5);
-    s+=px(Math.floor((w-tvW)/2),3,tvW,8,C.monitor);
-    s+=px(Math.floor((w-tvW)/2)+1,4,tvW-2,6,'#0984e3',0.3);
-    // "BerkenBot" on TV
-    s+=txt(Math.floor(w/2),8,'SPRINT',2,'#fff');
-    // Chairs
+    // Floor (carpet with texture)
+    s+=px(0,h-5,w,1,C.carpetHi);
+    s+=px(0,h-4,w,4,C.carpet);
+    for(let ct=0;ct<w;ct+=4) s+=px(ct,h-3,2,1,C.carpetL,0.08);
+    // Glass walls (16-bit: frame + glass + reflections)
+    s+=px16(0,0,1.5,h,C.steelHi,C.glassFrame,C.steelD);
+    s+=px16(w-1.5,0,1.5,h,C.steelHi,C.glassFrame,C.steelD);
+    s+=px16(0,0,w,1.5,C.steelHi,C.glassFrame,C.steelD);
+    s+=px(1.5,1.5,w-3,h-6.5,C.glass,0.05);
+    // Reflections (multiple for 16-bit feel)
+    s+=px(3,4,0.5,h-12,'#fff',0.07);
+    s+=px(5,6,0.5,h-16,'#fff',0.04);
+    s+=px(w-5,8,0.5,h-18,'#fff',0.03);
+    // Table (16-bit wood)
+    s+=px(5,h-16,w-10,1,C.woodHi);
+    s+=px(5,h-15,w-10,1,C.woodD);
+    s+=px(5,h-14,w-10,1,C.woodDk);
+    // Table legs
+    s+=px16(7,h-13,2,9,C.steelL,C.steelD,C.steel);
+    s+=px16(w-9,h-13,2,9,C.steelL,C.steelD,C.steel);
+    // TV screen (16-bit bezel)
+    const tvW=Math.floor(w*0.55);
+    s+=px16(Math.floor((w-tvW)/2)-1,2,tvW+2,10,C.monHi,C.monBezel,C.monitor);
+    s+=px(Math.floor((w-tvW)/2),3,tvW,8,'#0060c0',0.3);
+    s+=px(Math.floor((w-tvW)/2),3,tvW,1,'#0080e0',0.15); // screen top glow
+    s+=txt(Math.floor(w/2),8,'SPRINT',2,'#c0e0ff');
+    // Chairs (16-bit)
     for(let c=0;c<3;c++){
-      const cx=6+c*Math.floor((w-14)/2);
-      s+=px(cx,h-10,4,3,'#636e72');
+      const cx=8+c*Math.floor((w-18)/2);
+      s+=px16(cx,h-10,5,3,C.steelL,'#505860',C.steelD);
+      s+=px(cx+1,h-10,3,1,'#606870',0.4); // seat highlight
     }
     return s;
   }
 
-  /* ---- PING PONG TABLE ---- */
+  /* ---- 16-BIT PING PONG TABLE ---- */
   function pingPong(){
     let s='';
-    s+=px(0,0,30,3,'#00695c');s+=px(0,0,30,1,'#00796b');
-    // Net
-    s+=px(14,0,2,2,'#fff',0.4);s+=px(14,-4,2,4,C.cupD,0.6);
-    // Legs
-    s+=px(3,3,2,10,C.steelD);s+=px(25,3,2,10,C.steelD);
-    // Paddles
-    s+=px(4,-3,4,4,'#e74c3c');s+=px(5,-4,2,1,'#8b4513');
-    s+=px(22,-2,4,4,'#2980b9');s+=px(23,-3,2,1,'#8b4513');
-    // Ball
-    s+=`<circle cx="18" cy="-2" r="1.2" fill="#f1c40f"/>`;
+    // Table surface (16-bit green gradient)
+    s+=px(0,0,30,1,'#008060');
+    s+=px(0,1,30,1,'#006850');
+    s+=px(0,2,30,1,'#005040');
+    // White line markings
+    s+=px(0,0,30,0.5,'#fff',0.15);s+=px(0,2.5,30,0.5,'#fff',0.1);
+    s+=px(14.5,0,1,3,'#fff',0.2); // center line
+    // Net (16-bit)
+    s+=px(14,-4,2,1,C.steelD);
+    s+=px(14,-3,2,3,'#fff',0.5);
+    for(let n=0;n<3;n++) s+=px(14,-3+n,2,0.5,'#ddd',0.3); // net mesh
+    s+=px(13.5,-4,1,4,C.steelD);s+=px(16.5,-4,1,4,C.steelD); // net posts
+    // Legs (16-bit)
+    s+=px16(3,3,2,10,C.steelL,C.steelD,C.steel);
+    s+=px16(25,3,2,10,C.steelL,C.steelD,C.steel);
+    // Paddles (16-bit shaded)
+    s+=px(4,-3,4,1,'#d03030');s+=px(4,-2,4,2,'#c02020');s+=px(4,0,4,1,'#a01818');
+    s+=px(5,-4,2,1,'#704020'); // handle
+    s+=px(22,-2,4,1,'#3080c0');s+=px(22,-1,4,2,'#2870a0');s+=px(22,1,4,1,'#205888');
+    s+=px(23,-3,2,1,'#704020');
+    // Ball (16-bit: highlight)
+    s+=`<circle cx="18" cy="-2" r="1.3" fill="#f0c020"/>`;
+    s+=`<circle cx="17.5" cy="-2.5" r="0.5" fill="#fff" opacity="0.3"/>`;
     return s;
   }
 
-  /* ---- BOOKSHELF ---- */
+  /* ---- 16-BIT BOOKSHELF ---- */
   function bookshelf(){
     let s='';
-    s+=px(0,0,20,30,C.woodDk);
-    s+=px(1,1,18,28,'#3d2f1a');
+    // Frame (16-bit wood)
+    s+=px16(0,0,20,30,C.woodHi,C.woodDk,'#604010');
+    s+=px(1,1,18,28,'#382818');
+    s+=px(1,1,0.5,28,C.woodDk,0.3); // inner shadow left
     // Shelves
     for(let sh=0;sh<4;sh++){
       const sy=1+sh*7;
-      s+=px(1,sy+6,18,1,C.woodDk);
-      // Books
-      const colors=[C.book1,C.book2,C.book3,C.book4,C.book5,'#e67e22','#2c3e50'];
+      s+=px(1,sy+6,18,0.5,C.woodHi,0.4);
+      s+=px(1,sy+6.5,18,0.5,C.woodDk);
+      // Books (16-bit: each with spine highlight)
+      const colors=[C.book1,C.book2,C.book3,C.book4,C.book5,'#e07020','#283848'];
+      // Use seeded random based on shelf index for consistency
       let bx=2;
-      for(let b=0;b<5+Math.floor(Math.random()*3);b++){
-        const bw=1+Math.floor(Math.random()*2);
-        const bh=4+Math.floor(Math.random()*2);
+      for(let b=0;b<6;b++){
+        const bw=1+(b+sh)%2;
+        const bh=4+(b+sh*2)%3;
         if(bx+bw>18)break;
-        s+=px(bx,sy+6-bh,bw,bh,colors[b%colors.length]);
+        const bc=colors[(b+sh)%colors.length];
+        s+=px(bx,sy+6-bh,bw,1,bc); // top edge
+        s+=px(bx,sy+7-bh,bw,bh-2,bc);
+        s+=px(bx,sy+5,bw,1,'#000',0.1); // bottom shadow
+        s+=px(bx,sy+6-bh,0.5,bh,'#fff',0.08); // spine highlight
         bx+=bw+0.5;
       }
     }
@@ -621,51 +683,85 @@
     return s;
   }
 
-  /* ---- DESK ACCESSORIES ---- */
+  /* ---- 16-BIT DESK ACCESSORIES ---- */
   function deskStuff(type){
     let s='';
     if(type==='forge'){
-      // Energy drink
-      s+=px(0,0,2,4,'#e74c3c');s+=px(0,0,2,1,'#c0392b');
-      // Mechanical keyboard (wider)
-      s+=px(5,-1,12,3,'#2d3436');
-      for(let k=0;k<5;k++) s+=px(6+k*2,0,1,1,'#636e72',0.5);
+      // Energy drink (16-bit: label + highlight)
+      s+=px(0,0,2,1,'#d03030');s+=px(0,1,2,2,'#e04848');s+=px(0,3,2,1,'#c02020');
+      s+=px(0,0,0.5,4,'#ff6060',0.15); // can highlight
+      s+=px(0,1,2,0.5,'#f0f0f0',0.2); // label stripe
+      // Mechanical keyboard (16-bit)
+      s+=px(5,-1,12,1,'#383840');s+=px(5,0,12,1,'#303038');s+=px(5,1,12,1,'#282830');
+      for(let k=0;k<5;k++){s+=px(6+k*2,0,1,1,'#505860');s+=px(6+k*2,-0.5,1,0.5,'#606870',0.3);}
+      // RGB glow
+      s+=px(6,-1,2,0.5,'#f04848',0.15);s+=px(10,-1,2,0.5,'#40f0a0',0.15);s+=px(14,-1,2,0.5,'#4080f0',0.15);
     } else if(type==='anvil'){
-      // Tea mug
-      s+=px(0,0,3,3,C.cup);s+=px(3,1,1,1,C.cupD);
-      // Rubber duck
-      s+=px(6,0,3,3,'#f1c40f');s+=px(7,-1,1,1,'#f1c40f');s+=px(8,1,1,1,'#e67e22');
+      // Tea mug (16-bit)
+      s+=px(0,0,3,1,C.cupHi);s+=px(0,1,3,1,C.cup);s+=px(0,2,3,1,C.cupD);
+      s+=px(3,1,1,1,C.cupD); // handle
+      s+=`<path d="M1,-1 Q1.5,-3 1,-4" stroke="#d0d0d0" stroke-width="0.3" fill="none" opacity="0.2" class="steam"/>`;
+      // Rubber duck (16-bit)
+      s+=px(6,0,3,1,'#f8d840');s+=px(6,1,3,1,'#f0c830');s+=px(6,2,3,1,'#d8b020');
+      s+=px(7,-1,1,1,'#f8d840'); // head
+      s+=px(8,1,1,1,'#e08020'); // beak
+      s+=`<circle cx="7.3" cy="-0.3" r="0.4" fill="#181828"/>`;
     } else if(type==='scout'){
-      // Notebook
-      s+=px(0,0,5,4,'#2d3436');s+=px(1,1,3,2,'#fefefe',0.3);
-      // Pen
-      s+=px(6,0,1,4,'#0984e3');
+      // Notebook (16-bit)
+      s+=px(0,0,5,1,'#303840');s+=px(0,1,5,2,'#282830');s+=px(0,3,5,1,'#202028');
+      s+=px(1,1,3,1,'#f0f0e8',0.2); // page edge
+      s+=px(0,0,0.5,4,'#404850'); // spine
+      // Pen (16-bit)
+      s+=px(6,0,0.5,4,'#3080d0');s+=px(6.5,0,0.5,4,'#2060a0');
+      s+=px(6,0,1,0.5,'#c0c0c0'); // clip
     } else if(type==='relay'){
-      // Cable spaghetti
-      s+=`<path d="M0,0 Q3,2 2,4 Q1,6 4,5" stroke="#e74c3c" stroke-width="0.5" fill="none"/>`;
-      s+=`<path d="M2,0 Q5,1 3,3 Q1,5 5,4" stroke="#74b9ff" stroke-width="0.5" fill="none"/>`;
+      // Cable spaghetti (16-bit: thicker, more cables)
+      s+=`<path d="M0,0 Q3,2 2,4 Q1,6 4,5" stroke="#e04040" stroke-width="0.6" fill="none"/>`;
+      s+=`<path d="M2,0 Q5,1 3,3 Q1,5 5,4" stroke="#4080f0" stroke-width="0.6" fill="none"/>`;
+      s+=`<path d="M1,1 Q4,0 3,3 Q2,5 5,3" stroke="#f0c020" stroke-width="0.4" fill="none"/>`;
+      // USB stick
+      s+=px(6,2,3,1.5,C.steelL);s+=px(6,2,3,0.5,C.steelHi);s+=px(6.5,3.5,2,0.5,'#4080f0');
     } else if(type==='pulse'){
-      // Coffee cup with steam
-      s+=px(0,1,3,3,C.cup);s+=px(3,2,1,1,C.cupD);
-      s+=`<path d="M1,-2 Q2,-4 1,-5" stroke="#ddd" stroke-width="0.3" fill="none" opacity="0.3" class="steam"/>`;
+      // Coffee cup (16-bit)
+      s+=px(0,1,3,1,C.cupHi);s+=px(0,2,3,1,C.cup);s+=px(0,3,3,1,C.cupD);
+      s+=px(3,2,1,1,C.cupD); // handle
+      s+=px(0,1,0.5,3,'#fff',0.08); // highlight
+      // Steam (double wisp)
+      s+=`<path d="M1,-1 Q2,-3 1,-5" stroke="#d0d8e0" stroke-width="0.3" fill="none" opacity="0.25" class="steam"/>`;
+      s+=`<path d="M2,0 Q3,-2 2,-4" stroke="#d0d8e0" stroke-width="0.25" fill="none" opacity="0.15" class="steam" style="animation-delay:1.5s"/>`;
     }
     return s;
   }
 
-  /* ---- CLOCK ---- */
+  /* ---- 16-BIT CLOCK (with real CST time hands) ---- */
   function wallClock(x,y){
     let s='';
-    s+=`<circle cx="${x}" cy="${y}" r="5" fill="#1e1e2e" stroke="${C.steelD}" stroke-width="0.5"/>`;
-    s+=`<circle cx="${x}" cy="${y}" r="4" fill="#0a0e1a"/>`;
-    // Hour marks
+    // Bezel (16-bit metallic ring)
+    s+=`<circle cx="${x}" cy="${y}" r="6" fill="${C.steelD}"/>`;
+    s+=`<circle cx="${x}" cy="${y}" r="5.5" fill="${C.steelL}" opacity="0.3"/>`;
+    s+=`<circle cx="${x}" cy="${y}" r="5" fill="#080c18"/>`;
+    // Face gradient
+    s+=`<circle cx="${x}" cy="${y}" r="4.5" fill="#101828"/>`;
+    // Hour marks (16-bit: lines not dots)
     for(let h=0;h<12;h++){
       const a=h*30*Math.PI/180;
-      s+=`<circle cx="${x+Math.sin(a)*3.2}" cy="${y-Math.cos(a)*3.2}" r="0.3" fill="${C.steelL}"/>`;
+      const ix=Math.sin(a), iy=-Math.cos(a);
+      s+=`<line x1="${x+ix*3}" y1="${y+iy*3}" x2="${x+ix*4}" y2="${y+iy*4}" stroke="${h%3===0?'#fff':'#808898'}" stroke-width="${h%3===0?0.5:0.3}"/>`;
     }
-    // Hands
-    s+=`<line x1="${x}" y1="${y}" x2="${x+1.5}" y2="${y-2}" stroke="#fff" stroke-width="0.4"/>`;
-    s+=`<line x1="${x}" y1="${y}" x2="${x-0.5}" y2="${y-3}" stroke="#aaa" stroke-width="0.3"/>`;
-    s+=`<circle cx="${x}" cy="${y}" r="0.5" fill="#e74c3c"/>`;
+    // Real CST time hands
+    const now=new Date();
+    const cstOff=-6;
+    const ch=(now.getUTCHours()+cstOff+24)%24;
+    const cm=now.getUTCMinutes();
+    const ha=(ch%12+cm/60)*30*Math.PI/180;
+    const ma=cm*6*Math.PI/180;
+    // Hour hand
+    s+=`<line x1="${x}" y1="${y}" x2="${x+Math.sin(ha)*2.5}" y2="${y-Math.cos(ha)*2.5}" stroke="#e0e8f0" stroke-width="0.5" stroke-linecap="round"/>`;
+    // Minute hand
+    s+=`<line x1="${x}" y1="${y}" x2="${x+Math.sin(ma)*3.5}" y2="${y-Math.cos(ma)*3.5}" stroke="#c0c8d0" stroke-width="0.35" stroke-linecap="round"/>`;
+    // Center dot
+    s+=`<circle cx="${x}" cy="${y}" r="0.6" fill="#f04040"/>`;
+    s+=`<circle cx="${x}" cy="${y}" r="0.3" fill="#fff" opacity="0.4"/>`;
     return s;
   }
 
@@ -867,23 +963,40 @@
     return s;
   }
 
-  /* ---- WALKING CHARACTER (for ambient life) ---- */
+  /* ---- 16-BIT WALKING CHARACTER ---- */
   function walkingPerson(hairCol, shirtCol, pantsCol, dir){
     let s='';
-    // Simple walking sprite
     const flip = dir==='left' ? 'transform="scale(-1,1)"' : '';
+    const shirtHi=shirtCol.replace(/[0-9a-f]{2}$/i,m=>{const v=Math.min(255,parseInt(m,16)+35);return v.toString(16).padStart(2,'0');});
     s+=`<g ${flip}>`;
-    s+=px(4,0,8,4,hairCol); // hair
-    s+=px(5,3,6,7,C.skin); // head
-    s+=px(7,5,2,2,'#2d3436'); // eye
-    s+=px(4,10,8,8,shirtCol); // body
-    s+=px(2,11,2,6,shirtCol); // arm back
-    s+=px(12,11,2,6,shirtCol); // arm front  
-    s+=px(5,18,3,5,pantsCol); // leg
-    s+=px(8,18,3,5,pantsCol); // leg
-    s+=px(4,23,4,2,'#fff'); // shoe
-    s+=px(8,23,4,2,'#fff'); // shoe
+    // Hair (16-bit)
+    s+=px(4,0,8,1,hairCol.replace(/[0-9a-f]{2}$/i,m=>{const v=Math.min(255,parseInt(m,16)+25);return v.toString(16).padStart(2,'0');}));
+    s+=px(4,1,8,3,hairCol);
+    // Head (16-bit: hi/mid/shd)
+    s+=px(5,3,6,1,C.skinHi);s+=px(5,4,6,5,C.skin);s+=px(5,9,6,1,C.skinShd);
+    s+=px(4,5,1,3,C.skin); // ear
+    // Eye
+    s+=px(7,5,2,2,'#181828');s+=px(7,5,1,1,'#fff',0.4);
+    // Mouth
+    s+=px(7,8,2,1,'#d06048',0.6);
+    // Body (16-bit)
+    s+=px(4,10,8,1,shirtHi);s+=px(4,11,8,6,shirtCol);s+=px(4,17,8,1,shirtCol.replace(/[0-9a-f]{2}$/i,m=>{const v=Math.max(0,parseInt(m,16)-30);return v.toString(16).padStart(2,'0');}));
+    // Arms (animated swing via CSS)
+    s+=px(2,11,2,1,shirtHi);s+=px(2,12,2,5,shirtCol);
+    s+=px(12,11,2,1,shirtHi);s+=px(12,12,2,5,shirtCol);
+    // Hands
+    s+=px(2,17,2,1,C.skin);s+=px(12,17,2,1,C.skin);
+    // Legs (walking pose)
+    s+=px(5,18,3,1,pantsCol.replace(/[0-9a-f]{2}$/i,m=>{const v=Math.min(255,parseInt(m,16)+20);return v.toString(16).padStart(2,'0');}));
+    s+=px(5,19,3,4,pantsCol);
+    s+=px(8,18,3,1,pantsCol.replace(/[0-9a-f]{2}$/i,m=>{const v=Math.min(255,parseInt(m,16)+20);return v.toString(16).padStart(2,'0');}));
+    s+=px(8,19,3,4,pantsCol);
+    // Shoes (16-bit)
+    s+=px(4,23,4,1,'#f0f0f0');s+=px(4,24,4,1,'#d0d0d0');
+    s+=px(8,23,4,1,'#f0f0f0');s+=px(8,24,4,1,'#d0d0d0');
     s+=`</g>`;
+    // Walking shadow on floor
+    s+=`<ellipse cx="8" cy="25" rx="5" ry="1" fill="#000" opacity="0.08"/>`;
     return s;
   }
 
