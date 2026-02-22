@@ -831,7 +831,26 @@
     return s;
   }
 
+  /* ---- LOC BADGE (lines of code counter near character) ---- */
+  function locBadge(x, y, lines){
+    let s='';
+    const label = lines >= 1000 ? (lines/1000).toFixed(1)+'k' : String(lines);
+    const bw = label.length * 3.2 + 8;
+    // Badge background
+    s+=px(x-bw/2,y,bw,7,'#181828',0.85);
+    s+=px(x-bw/2,y,bw,1,'#282840',0.6);
+    // Code icon (tiny </>)
+    s+=txt(x-bw/2+3,y+5,'</>',2,'#60a8f0','start');
+    // Count
+    s+=txt16(x+2,y+5.5,label,2.5,lines>500?'#40f8a0':lines>0?'#f0c830':'#585868');
+    // "lines" sublabel
+    s+=txt(x+2,y+9,'lines today',1.5,'#585868');
+    return s;
+  }
+
   /* ============ BUILD SCENE ============ */
+  let _agentLocData = null;
+
   function buildOffice(){
     const W=600, H=240;
     let s='';
@@ -1034,6 +1053,9 @@
       // ---- LABELS below workstation (16-bit drop shadow) ----
       s+=txt16(bx+22,by+32,ag.name,3.5,'#e8f0ff');
       s+=txt16(bx+22,by+37,ag.role,2.2,'#90a0b0');
+      // LOC badge (floating above character's head)
+      const agLines = (_agentLocData && _agentLocData.agents && _agentLocData.agents[ag.name]) || 0;
+      s+=locBadge(bx+22, by-22, agLines);
       s+=projectTags(ag.projects,bx-2,by+39,50);
     });
 
@@ -1225,6 +1247,20 @@
     document.head.appendChild(style);
   }
 
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);
-  else init();
+  async function loadAndInit(){
+    // Load agent LOC stats
+    try{
+      const base = window.DASH_BASE || (() => {
+        const p = window.location.pathname || '/';
+        return p.includes('/BERKENBOT_DASHBOARD') ? '/BERKENBOT_DASHBOARD/' : '/';
+      })();
+      const url = new URL('data/agent_stats.json', `${window.location.origin}${base}`).toString();
+      const r = await fetch(`${url}?v=${Date.now()}`, {cache:'no-store'});
+      if(r.ok) _agentLocData = await r.json();
+    }catch(e){console.log('agent_stats not available yet');}
+    init();
+  }
+
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',loadAndInit);
+  else loadAndInit();
 })();

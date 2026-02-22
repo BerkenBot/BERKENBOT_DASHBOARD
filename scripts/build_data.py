@@ -26,6 +26,7 @@ def main():
       subprocess.run(["python3", str(ROOT / "scripts" / "collect_token_metrics.py")], check=False)
       subprocess.run(["python3", str(ROOT / "scripts" / "collect_llm_benchmarks.py")], check=False)
       subprocess.run(["python3", str(ROOT / "scripts" / "ingest_github_activity.py")], check=False)
+      subprocess.run(["python3", str(ROOT / "scripts" / "collect_agent_stats.py")], check=False)
     except Exception:
       pass
 
