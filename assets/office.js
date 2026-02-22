@@ -1,6 +1,6 @@
 /* =========================================================
-   Agent Office — 8-bit Silicon Valley Startup HQ
-   BerkenBot Labs — A real company, real employees
+   Agent Office — 32-bit Silicon Valley Startup HQ
+   BerkenBot Labs — HD pixel art, smooth gradients, real lighting
    ========================================================= */
 (function () {
   'use strict';
@@ -388,10 +388,10 @@
       s+=px(2,uy+0.5,14,3,'#2a3038');
       s+=px(2,uy+3.5,14,0.5,'#1a1e24'); // bottom shadow
       // LEDs (16-bit glow)
-      s+=`<circle cx="4" cy="${uy+2}" r="0.8" fill="${C.serverLed}"/>`;
-      s+=`<circle cx="4" cy="${uy+2}" r="1.5" fill="${C.serverLed}" opacity="0.1"/>`;
-      s+=`<circle cx="7" cy="${uy+2}" r="0.6" fill="${u%3===2?C.serverLedY:C.serverLedR}"/>`;
-      s+=`<circle cx="9" cy="${uy+2}" r="0.6" fill="${C.serverLed}"/>`;
+      s+=`<circle cx="4" cy="${uy+2}" r="0.8" fill="${C.serverLed}" filter="url(#ledGlow)"/>`;
+      s+=`<circle cx="4" cy="${uy+2}" r="2" fill="${C.serverLed}" opacity="0.08"/>`;
+      s+=`<circle cx="7" cy="${uy+2}" r="0.6" fill="${u%3===2?C.serverLedY:C.serverLedR}" filter="url(#ledGlow)"/>`;
+      s+=`<circle cx="9" cy="${uy+2}" r="0.6" fill="${C.serverLed}" filter="url(#ledGlow)"/>`;
       // Vent lines (thinner, more of them)
       for(let v=0;v<4;v++) s+=px(10.5,uy+0.8+v*0.7,3.5,0.3,C.serverL,0.2);
       // Drive bays (16-bit)
@@ -953,12 +953,12 @@
     s+=`<circle cx="20" cy="12" r="1.2" fill="#383838"/><circle cx="20" cy="11.5" r="0.5" fill="#505050"/>`;
     s+=`<circle cx="12" cy="12" r="1.2" fill="#383838"/><circle cx="12" cy="11.5" r="0.5" fill="#505050"/>`;
 
-    // ---- STATUS INDICATOR (16-bit glow) ----
+    // ---- 32-BIT STATUS INDICATOR (real glow) ----
     const lc=status==='green'?C.neonGreen:status==='yellow'?'#f0d040':'#585868';
-    s+=`<circle cx="14" cy="-36" r="2.5" fill="${lc}"/>`;
-    s+=`<circle cx="14" cy="-36" r="1" fill="#fff" opacity="0.3"/>`;
-    s+=`<circle cx="14" cy="-36" r="4" fill="${lc}" opacity="0.15"/>`;
-    if(status==='green') s+=`<circle cx="14" cy="-36" r="6" fill="${lc}" opacity="0.05" class="status-pulse"/>`;
+    s+=`<circle cx="14" cy="-36" r="2.5" fill="${lc}" filter="url(#ledGlow)"/>`;
+    s+=`<circle cx="14" cy="-36" r="1" fill="#fff" opacity="0.35"/>`;
+    s+=`<circle cx="14" cy="-36" r="5" fill="${lc}" opacity="0.1"/>`;
+    if(status==='green') s+=`<circle cx="14" cy="-36" r="8" fill="${lc}" opacity="0.04" class="status-pulse"/>`;
 
     return s;
   }
@@ -1025,23 +1025,70 @@
     const W=600, H=240;
     let s='';
 
-    // ---- DEFS ----
+    // ---- 32-BIT DEFS: gradients, filters, patterns ----
     s+=`<defs>
-      <filter id="neonGlow"><feGaussianBlur stdDeviation="2.5" result="b"/>
+      <!-- Glow filters -->
+      <filter id="neonGlow"><feGaussianBlur stdDeviation="3" result="b"/>
+        <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <filter id="softGlow"><feGaussianBlur stdDeviation="1.5" result="b"/>
         <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
       </filter>
+      <filter id="dropShadow"><feGaussianBlur in="SourceAlpha" stdDeviation="1.5"/>
+        <feOffset dx="1" dy="2" result="s"/><feFlood flood-color="#000" flood-opacity="0.3" result="c"/>
+        <feComposite in="c" in2="s" operator="in" result="shadow"/>
+        <feMerge><feMergeNode in="shadow"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <filter id="furnitureShadow"><feGaussianBlur in="SourceAlpha" stdDeviation="2"/>
+        <feOffset dx="1.5" dy="3" result="s"/><feFlood flood-color="#000" flood-opacity="0.2" result="c"/>
+        <feComposite in="c" in2="s" operator="in" result="shadow"/>
+        <feMerge><feMergeNode in="shadow"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <filter id="monitorGlow"><feGaussianBlur stdDeviation="2" result="b"/><feFlood flood-color="#4080ff" flood-opacity="0.08" result="c"/>
+        <feComposite in="c" in2="b" operator="in" result="glow"/>
+        <feMerge><feMergeNode in="glow"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <filter id="ledGlow"><feGaussianBlur stdDeviation="1" result="b"/>
+        <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <!-- Gradients -->
+      <linearGradient id="wallGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#1e1e38"/><stop offset="60%" stop-color="#141428"/><stop offset="100%" stop-color="#101020"/>
+      </linearGradient>
+      <linearGradient id="floorGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#222038"/><stop offset="100%" stop-color="#161424"/>
+      </linearGradient>
+      <linearGradient id="woodGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="${C.woodHi}"/><stop offset="30%" stop-color="${C.woodL}"/>
+        <stop offset="70%" stop-color="${C.wood}"/><stop offset="100%" stop-color="${C.woodD}"/>
+      </linearGradient>
+      <linearGradient id="steelGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="${C.steelHi}"/><stop offset="40%" stop-color="${C.steelL}"/>
+        <stop offset="80%" stop-color="${C.steel}"/><stop offset="100%" stop-color="${C.steelD}"/>
+      </linearGradient>
+      <linearGradient id="monitorGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#3a3a48"/><stop offset="20%" stop-color="#2a2a34"/><stop offset="100%" stop-color="#181820"/>
+      </linearGradient>
+      <linearGradient id="skinGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="${C.skinHi}"/><stop offset="50%" stop-color="${C.skin}"/><stop offset="100%" stop-color="${C.skinShd}"/>
+      </linearGradient>
+      <radialGradient id="lightCone" cx="50%" cy="0%" r="100%">
+        <stop offset="0%" stop-color="${C.ledWarm}" stop-opacity="0.08"/><stop offset="100%" stop-color="${C.ledWarm}" stop-opacity="0"/>
+      </radialGradient>
+      <linearGradient id="glassGrad" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#fff" stop-opacity="0.08"/><stop offset="50%" stop-color="#80b8f0" stop-opacity="0.04"/><stop offset="100%" stop-color="#fff" stop-opacity="0.02"/>
+      </linearGradient>
       <marker id="arrowhead" markerWidth="4" markerHeight="3" refX="4" refY="1.5" orient="auto">
         <polygon points="0 0, 4 1.5, 0 3" fill="#e17055"/>
       </marker>
     </defs>`;
 
-    // ---- WALLS (taller scene) ----
+    // ---- 32-BIT WALLS ----
     s+=brickWall(W, Math.floor(W*0.28));
 
-    // ---- FLOOR (16-bit polished concrete with reflections) ----
-    s+=px(0,80,W,1,C.steelD,0.4); // baseboard highlight
-    s+=px(0,81,W,1,'#383848');
-    s+=px(0,82,W,158,C.floor);
+    // ---- 32-BIT FLOOR (gradient + reflections) ----
+    s+=`<rect x="0" y="80" width="${W}" height="1.5" fill="url(#steelGrad)" opacity="0.5"/>`;
+    s+=`<rect x="0" y="82" width="${W}" height="158" fill="url(#floorGrad)"/>`;
     // Subtle gradient bands for depth
     s+=px(0,82,W,20,C.floorHi,0.06);
     s+=px(0,160,W,40,'#000',0.04);
@@ -1067,9 +1114,12 @@
     // ---- LIGHTS ----
     for(let lx=45;lx<W;lx+=60)s+=pendant(lx);
 
-    // ---- NEON SIGNS ----
-    s+=`<g class="neon-sign" transform="translate(14,16)">${neonSign('BERKENBOT','#a29bfe')}</g>`;
-    s+=`<g class="neon-sign-2" transform="translate(14,25)">${neonSmall('LABS  ·  BUILD  SHIP  REPEAT','#fd79a8')}</g>`;
+    // ---- 32-BIT NEON SIGNS (real glow) ----
+    s+=`<g class="neon-sign" filter="url(#neonGlow)" transform="translate(14,16)">${neonSign('BERKENBOT','#a8a0ff')}</g>`;
+    s+=`<g class="neon-sign-2" filter="url(#neonGlow)" transform="translate(14,25)">${neonSmall('LABS  ·  BUILD  SHIP  REPEAT','#ff80b0')}</g>`;
+    // Wall glow from neon
+    s+=`<ellipse cx="60" cy="22" rx="50" ry="10" fill="#a8a0ff" opacity="0.03"/>`;
+    s+=`<ellipse cx="80" cy="28" rx="60" ry="8" fill="#ff80b0" opacity="0.02"/>`;
 
     // ---- TIME-OF-DAY LIGHTING (CST) ----
     const now=new Date();
@@ -1094,15 +1144,21 @@
       skyTop='#0a0820';skyBot='#101830';sunMoonY=20;sunMoonCol='#e0e8f0';sunMoonR=3;isNight=true;bridgeCol='#601818';waterCol='#101838';cloudOp=0.05;
     }
 
-    // ---- LARGE WINDOW WITH GOLDEN GATE BRIDGE ----
+    // ---- 32-BIT PANORAMIC WINDOW ----
     const winX=W*0.28+70, winY=4, winW=120, winH=65;
-    // Window frame
-    s+=px16(winX-2,winY-2,winW+4,winH+4,C.steelHi,C.steelD,C.steel);
-    // Sky
-    s+=px(winX,winY,winW,winH/2,skyTop);
-    s+=px(winX,winY+winH/2-5,winW,5,skyBot);
-    // Sun or moon
-    s+=`<circle cx="${winX+winW*0.75}" cy="${winY+sunMoonY*winH/80}" r="${sunMoonR}" fill="${sunMoonCol}"/>`;
+    // Window frame (gradient metallic)
+    s+=`<rect x="${winX-3}" y="${winY-3}" width="${winW+6}" height="${winH+6}" rx="1" fill="url(#steelGrad)"/>`;
+    s+=`<rect x="${winX-1}" y="${winY-1}" width="${winW+2}" height="${winH+2}" rx="0.5" fill="#101020"/>`;
+    // Sky (proper gradient)
+    s+=`<defs><linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="${skyTop}"/><stop offset="70%" stop-color="${skyBot}"/><stop offset="100%" stop-color="${waterCol}"/>
+    </linearGradient></defs>`;
+    s+=`<rect x="${winX}" y="${winY}" width="${winW}" height="${winH}" fill="url(#skyGrad)"/>`;
+    // Sun or moon (32-bit: radial glow)
+    const smX=winX+winW*0.75, smY=winY+sunMoonY*winH/80;
+    s+=`<circle cx="${smX}" cy="${smY}" r="${sunMoonR+6}" fill="${sunMoonCol}" opacity="0.06"/>`;
+    s+=`<circle cx="${smX}" cy="${smY}" r="${sunMoonR+3}" fill="${sunMoonCol}" opacity="0.12"/>`;
+    s+=`<circle cx="${smX}" cy="${smY}" r="${sunMoonR}" fill="${sunMoonCol}" filter="url(#softGlow)"/>`;
     if(isNight){
       // Stars
       for(let st=0;st<12;st++){
@@ -1111,18 +1167,20 @@
       }
       // Moon crescent shadow
       s+=`<circle cx="${winX+winW*0.75+1.5}" cy="${winY+sunMoonY*winH/80-0.5}" r="2.5" fill="${skyTop}"/>`;
-    } else {
-      // Sun glow
-      s+=`<circle cx="${winX+winW*0.75}" cy="${winY+sunMoonY*winH/80}" r="${sunMoonR+3}" fill="${sunMoonCol}" opacity="0.1"/>`;
     }
-    // Clouds
-    s+=`<g class="cloud-drift" opacity="${cloudOp}">`;
-    s+=`<ellipse cx="${winX+25}" cy="${winY+10}" rx="12" ry="3" fill="#fff"/>`;
-    s+=`<ellipse cx="${winX+22}" cy="${winY+9}" rx="6" ry="2.5" fill="#fff"/>`;
-    s+=`<ellipse cx="${winX+80}" cy="${winY+15}" rx="10" ry="2.5" fill="#fff"/>`;
+    // Clouds (32-bit: soft blurred)
+    s+=`<g class="cloud-drift" opacity="${cloudOp}" filter="url(#softGlow)">`;
+    s+=`<ellipse cx="${winX+25}" cy="${winY+10}" rx="14" ry="3.5" fill="#fff" opacity="0.7"/>`;
+    s+=`<ellipse cx="${winX+21}" cy="${winY+9}" rx="8" ry="3" fill="#fff" opacity="0.5"/>`;
+    s+=`<ellipse cx="${winX+30}" cy="${winY+11}" rx="6" ry="2" fill="#fff" opacity="0.6"/>`;
+    s+=`<ellipse cx="${winX+78}" cy="${winY+14}" rx="12" ry="3" fill="#fff" opacity="0.6"/>`;
+    s+=`<ellipse cx="${winX+82}" cy="${winY+13}" rx="7" ry="2.5" fill="#fff" opacity="0.4"/>`;
     s+=`</g>`;
-    // Water
-    s+=px(winX,winY+winH/2,winW,winH/2,waterCol);
+    // Water (32-bit gradient)
+    s+=`<defs><linearGradient id="waterGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="${waterCol}"/><stop offset="100%" stop-color="${waterCol}" stop-opacity="0.6"/>
+    </linearGradient></defs>`;
+    s+=`<rect x="${winX}" y="${winY+winH/2}" width="${winW}" height="${winH/2}" fill="url(#waterGrad)"/>`;
     // Water shimmer
     for(let wl=0;wl<8;wl++){
       s+=`<rect x="${winX+5+wl*14}" y="${winY+winH/2+3+wl%3*5}" width="${8+wl%4}" height="0.5" fill="#fff" opacity="0.06" class="water-shimmer" style="animation-delay:${wl*0.4}s"/>`;
@@ -1158,13 +1216,23 @@
     s+=px(winX+winW/3,winY,1,winH,C.steelD,0.5);
     s+=px(winX+winW*2/3,winY,1,winH,C.steelD,0.5);
     s+=px(winX,winY+winH/2,winW,1,C.steelD,0.3);
-    // Window reflection
-    s+=px(winX+2,winY+2,3,winH-4,'#fff',0.04);
+    // Window glass reflection (32-bit: diagonal gradient overlay)
+    s+=`<rect x="${winX}" y="${winY}" width="${winW}" height="${winH}" fill="url(#glassGrad)"/>`;
+    s+=`<rect x="${winX+3}" y="${winY+2}" width="2" height="${winH-4}" rx="1" fill="#fff" opacity="0.06"/>`;
+    s+=`<rect x="${winX+8}" y="${winY+4}" width="1" height="${winH-8}" rx="0.5" fill="#fff" opacity="0.03"/>`;
+    // Window divider reflections
+    s+=`<rect x="${winX+winW/3-.5}" y="${winY}" width="1" height="${winH}" fill="#fff" opacity="0.03"/>`;
+    s+=`<rect x="${winX+winW*2/3-.5}" y="${winY}" width="1" height="${winH}" fill="#fff" opacity="0.03"/>`;
 
-    // Ambient light cast from window onto floor
+    // 32-BIT: Ambient light cast from window onto floor (gradient fade)
     if(!isNight){
-      s+=`<polygon points="${winX},${80} ${winX+winW},${80} ${winX+winW+40},${180} ${winX-20},${180}" fill="${sunMoonCol}" opacity="0.02"/>`;
+      s+=`<defs><linearGradient id="floorLight" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="${sunMoonCol}" stop-opacity="0.04"/><stop offset="100%" stop-color="${sunMoonCol}" stop-opacity="0"/>
+      </linearGradient></defs>`;
+      s+=`<polygon points="${winX-5},${82} ${winX+winW+5},${82} ${winX+winW+50},${200} ${winX-30},${200}" fill="url(#floorLight)"/>`;
     }
+    // Ambient light from monitors onto desk area
+    s+=`<ellipse cx="200" cy="90" rx="180" ry="15" fill="#4080ff" opacity="0.012"/>`;
 
     // ---- CLOCK ----
     s+=wallClock(winX-12, 12);
@@ -1177,13 +1245,13 @@
     s+=`<g transform="translate(${winX+winW+8},14)">${bookshelf()}</g>`;
 
     // ---- GLASS CONF ROOM ----
-    s+=`<g transform="translate(${W-70},15)">${glassRoom(60,68)}</g>`;
+    s+=`<g filter="url(#furnitureShadow)" transform="translate(${W-70},15)">${glassRoom(60,68)}</g>`;
 
     // ---- COFFEE STATION (back wall, left side) ----
-    s+=`<g transform="translate(6,16)">${coffeeStation()}</g>`;
+    s+=`<g filter="url(#dropShadow)" transform="translate(6,16)">${coffeeStation()}</g>`;
 
     // ---- PING PONG (lounge) ----
-    s+=`<g transform="translate(${W-160},130)">${pingPong()}</g>`;
+    s+=`<g filter="url(#furnitureShadow)" transform="translate(${W-160},130)">${pingPong()}</g>`;
 
     // ---- PLANTS ----
     s+=`<g transform="translate(48,50)">${bigPlant('fiddle')}</g>`;
@@ -1194,9 +1262,11 @@
 
     // ---- SERVER RACK (RELAY's domain) ----
     const rackX=W-220;
+    s+=`<g filter="url(#furnitureShadow)">`;
     s+=`<g transform="translate(${rackX},38)" class="server-blink">${serverRack()}</g>`;
     s+=`<g transform="translate(${rackX+20},38)">${serverRack()}</g>`;
     s+=`<g transform="translate(${rackX+40},38)">${serverRack()}</g>`;
+    s+=`</g>`;
     s+=px(rackX-2,36,64,2,C.steelD,0.4);
 
     // ---- AGENT WORKSTATIONS (more spread out for taller scene) ----
@@ -1212,10 +1282,10 @@
       const st=stations[i];
       const bx=st.x, by=st.y;
 
-      // Desk
-      s+=`<g transform="translate(${bx},${by})">${desk(44)}</g>`;
-      // Monitors on desk
-      s+=`<g transform="translate(${bx+7},${by-14})">${dualMon(ag.status==='green',ag.screen,i)}</g>`;
+      // Desk (with drop shadow)
+      s+=`<g filter="url(#furnitureShadow)" transform="translate(${bx},${by})">${desk(44)}</g>`;
+      // Monitors on desk (with glow)
+      s+=`<g filter="url(#monitorGlow)" transform="translate(${bx+7},${by-14})">${dualMon(ag.status==='green',ag.screen,i)}</g>`;
       // Desk accessories
       s+=`<g transform="translate(${bx+36},${by-3})">${deskStuff(ag.stuff)}</g>`;
       // Seated character WITH chair (hands at desk height)
@@ -1236,15 +1306,26 @@
     // Person near ping pong
     s+=`<g id="walker-2" class="walk-left" transform="translate(${W-130},150)">${walkingPerson('#fdcb6e','#e74c3c','#636e72','left')}</g>`;
 
-    // ---- AMBIENT DETAILS ----
-    s+=px(W-128,143,4,2,'#e74c3c'); // sneakers
-    s+=px(W-123,143,4,2,'#2980b9');
-    s+=px(W-52,52,8,6,'#d4a574');s+=px(W-51,53,6,4,'#e74c3c',0.3); // pizza
-    s+=px(192,66,4,3,'#ffeaa7'); // post-it
-    // Skateboard leaning on wall
-    s+=px(4,72,2,8,'#e74c3c');s+=px(3,73,1,1,'#fdcb6e');s+=px(3,78,1,1,'#fdcb6e');
-    // Drone on shelf
-    s+=px(W*0.28+50,14,4,2,'#636e72');s+=px(W*0.28+49,13,2,1,'#aaa',0.4);s+=px(W*0.28+54,13,2,1,'#aaa',0.4);
+    // ---- 32-BIT AMBIENT DETAILS ----
+    // Sneakers (with shadow)
+    s+=`<g filter="url(#dropShadow)">`;
+    s+=`<rect x="${W-128}" y="143" width="4" height="2" rx="0.5" fill="#e04040"/>`;
+    s+=`<rect x="${W-123}" y="143" width="4" height="2" rx="0.5" fill="#2878b0"/>`;
+    s+=`</g>`;
+    // Pizza box
+    s+=`<g filter="url(#dropShadow)">`;
+    s+=`<rect x="${W-52}" y="52" width="8" height="6" rx="0.5" fill="url(#woodGrad)"/>`;
+    s+=`<rect x="${W-51}" y="53" width="6" height="4" rx="0.3" fill="#e04040" opacity="0.25"/>`;
+    s+=`</g>`;
+    // Post-it (with slight shadow)
+    s+=`<rect x="192" y="66" width="4" height="3" rx="0.3" fill="#fff0a0" filter="url(#dropShadow)"/>`;
+    // Skateboard
+    s+=`<g filter="url(#dropShadow)"><rect x="4" y="72" width="2" height="8" rx="1" fill="#e04040"/>`;
+    s+=`<circle cx="5" cy="73.5" r="0.8" fill="#f0c830"/><circle cx="5" cy="79" r="0.8" fill="#f0c830"/></g>`;
+    // Drone
+    s+=`<g filter="url(#dropShadow)"><rect x="${W*0.28+50}" y="14" width="4" height="2" rx="0.5" fill="#586068"/>`;
+    s+=`<rect x="${W*0.28+49}" y="13.5" width="2" height="0.5" rx="0.2" fill="#aaa" opacity="0.5"/>`;
+    s+=`<rect x="${W*0.28+54}" y="13.5" width="2" height="0.5" rx="0.2" fill="#aaa" opacity="0.5"/></g>`;
 
     return {svg:s, width:W, height:H};
   }
@@ -1262,7 +1343,7 @@
       <div id="officeZoomWrap" style="overflow:hidden;touch-action:none;position:relative;width:100%;cursor:grab;">
         <svg xmlns="http://www.w3.org/2000/svg" id="officeSvg"
              viewBox="0 0 ${width} ${fullH}"
-             style="image-rendering:pixelated;image-rendering:crisp-edges;display:block;width:100%;height:auto;">
+             style="display:block;width:100%;height:auto;">
           ${svg}
         </svg>
       </div>`;
@@ -1360,8 +1441,8 @@
       @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
       .office-section { padding: 16px !important; }
       .agent-office-wrap { overflow: hidden; }
-      #agentOffice svg{image-rendering:pixelated;image-rendering:crisp-edges;}
-      @keyframes typing{0%,100%{transform:translateY(0)}15%{transform:translateY(-0.6px)}35%{transform:translateY(0.4px)}60%{transform:translateY(-0.3px)}80%{transform:translateY(0.2px)}}
+      #agentOffice svg{shape-rendering:geometricPrecision;}
+      @keyframes typing{0%,100%{transform:translateY(0)}15%{transform:translateY(-0.5px)}30%{transform:translateY(0.3px)}50%{transform:translateY(-0.4px)}70%{transform:translateY(0.2px)}85%{transform:translateY(-0.2px)}}
       @keyframes idle{0%,100%{transform:translateY(0)}50%{transform:translateY(1px)}}
       @keyframes neonPulse{0%,100%{opacity:.9}50%{opacity:.5}}
       @keyframes neonPulse2{0%,100%{opacity:.85}30%{opacity:.45}70%{opacity:.7}}
@@ -1410,8 +1491,8 @@
       .water-shimmer{animation:waterShimmer 3s ease-in-out infinite}
       .bridge-light{animation:bridgeLight 2s ease-in-out infinite}
       ${AGENTS.map((a,i)=>{
-        if(a.status==='green')return`#agent-${i}{animation:typing .5s steps(4) infinite}`;
-        if(a.status==='yellow')return`#agent-${i}{animation:idle 2.5s steps(4) infinite}`;
+        if(a.status==='green')return`#agent-${i}{animation:typing .6s ease-in-out infinite}`;
+        if(a.status==='yellow')return`#agent-${i}{animation:idle 2.5s ease-in-out infinite}`;
         return`#agent-${i}{opacity:.35}`;
       }).join('\n')}
     `;
