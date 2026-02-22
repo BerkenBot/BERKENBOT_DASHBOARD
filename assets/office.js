@@ -1,1526 +1,1232 @@
 /* =========================================================
-   Agent Office — 32-bit Silicon Valley Startup HQ
-   BerkenBot Labs — HD pixel art, smooth gradients, real lighting
+   BERKENBOT DASHBOARD — AGENT OFFICE
+   "Midnight Studio" — Moody, atmospheric pixel art office
+   Apple Design Award quality redesign
    ========================================================= */
 (function () {
   'use strict';
 
-  /* 16-bit palette — Sega Genesis / SNES richness */
-  const C = {
-    skin:'#f4c08a', skinHi:'#fce0b8', skinShd:'#d48e5c', skinD:'#b87040',
-    floor:'#1a1828', floorHi:'#2a283a', floorL:'#222030', floorTile:'#201e2e',
-    concrete:'#3a3a4c', concreteL:'#4e4e62', concreteHi:'#5a5a6e',
-    brick:'#a0522d', brickHi:'#c06030', brickL:'#8b4513', brickM:'#6b3410', brickDk:'#4a2508',
-    steel:'#a8b0b8', steelD:'#6e7880', steelL:'#d0d8e0', steelHi:'#e8eef2',
-    wood:'#d4a574', woodD:'#b08050', woodL:'#e8c89a', woodDk:'#805a28', woodHi:'#f0dab0',
-    glass:'#6ab4f8', glassHi:'#a0d4ff', glassFrame:'#90a0b0',
-    monitor:'#181820', monBezel:'#2a2a34', monHi:'#3a3a48',
-    led:'#f8cc60', ledWarm:'#fff0a0', ledHi:'#fff8d0',
-    plant:'#20b880', plantD:'#109868', plantL:'#60f0c0', plantDk:'#087850', plantHi:'#80ffd8',
-    pot:'#607078', potL:'#a0b0b8', potTerra:'#c87848', potHi:'#d89868',
-    board:'#f8f8f0', boardFrame:'#586068',
-    cup:'#f0f0f0', cupD:'#d0d8e0', cupHi:'#ffffff',
-    slack:'#611f69',
-    neon:'#a8a0ff', neonHi:'#d0c8ff', neonPink:'#ff80b0', neonGreen:'#40f8a0',
-    wall:'#141428', wallHi:'#1e1e38', wallL:'#1a1a32', wallM:'#181830',
-    carpet:'#183858', carpetL:'#204870', carpetHi:'#285880',
-    espresso:'#2d1810',
-    server:'#282e32', serverHi:'#383e44', serverL:'#586068', serverLed:'#30e890', serverLedR:'#f04848', serverLedY:'#f8d050',
-    rug:'#6858d8', rugD:'#5040b0', rugL:'#8070f0', rugHi:'#9888ff',
-    cactus:'#30d070', cactusD:'#28a858',
-    book1:'#e84040', book2:'#3898e0', book3:'#f0c830', book4:'#9858c0', book5:'#28c8a0',
-    hair1:'#c04040', hair2:'#282830', hair3:'#e8c050', hair4:'#686870', hair5:'#282830',
-    shirt1:'#e84848', shirt2:'#30d070', shirt3:'#2898e0', shirt4:'#f878a8', shirt5:'#a090f0',
+  /* ==================== REFINED PALETTE ==================== */
+  const P = {
+    // Base atmosphere
+    base: '#0a0e1a',
+    wall: '#12162a',
+    wallGrad: '#0e1222',
+    
+    // Hero neon
+    neonPurple: '#8b5cf6',
+    neonPink: '#ec4899',
+    
+    // Light sources
+    warmLight: '#fbbf24',
+    monitorBlue: '#3b82f6',
+    successGreen: '#10b981',
+    
+    // Materials
+    steel: '#475569',
+    steelLight: '#94a3b8',
+    steelDark: '#334155',
+    wood: '#92684a',
+    woodLight: '#b8845f',
+    woodDark: '#6b4e35',
+    
+    // Floor
+    floor: '#0d1018',
+    floorLight: '#13151f',
+    
+    // Skin tones
+    skin: '#f4c08a',
+    skinHi: '#fce0b8',
+    skinShd: '#d48e5c',
+    
+    // Brick
+    brick: '#8b4513',
+    brickHi: '#a0522d',
+    brickDk: '#6b3410',
+    
+    // Glass & monitors
+    glass: '#6ab4f8',
+    monitorBg: '#080c14',
+    monitorBezel: '#1a1e28',
+    
+    // Plants
+    plant: '#20b880',
+    plantDk: '#109868',
+    plantHi: '#60f0c0',
+    
+    // Accents
+    white: '#ffffff',
+    errorRed: '#ef4444',
+    warningYellow: '#f59e0b',
   };
 
-  let _gradId=0;
-  function px(x,y,w,h,fill,o){
-    return `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${fill}"${o?` opacity="${o}"`:''}shape-rendering="crispEdges"/>`;
+  /* ==================== UTILITY FUNCTIONS ==================== */
+  function px(x, y, w, h, fill, opacity) {
+    return `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${fill}"${opacity !== undefined ? ` opacity="${opacity}"` : ''} shape-rendering="crispEdges"/>`;
   }
-  /* 16-bit shaded rect: top highlight + body + bottom shadow */
-  function px16(x,y,w,h,hi,mid,shd){
-    return px(x,y,w,1,hi)+px(x,y+1,w,Math.max(1,h-2),mid)+px(x,y+h-1,w,1,shd);
+
+  function txt(x, y, text, size, fill, anchor, bold) {
+    return `<text x="${x}" y="${y}" fill="${fill || P.white}" font-family="'Press Start 2P',monospace" font-size="${size || 3}" text-anchor="${anchor || 'middle'}"${bold ? ' font-weight="bold"' : ''}>${text}</text>`;
   }
-  /* Dithered blend between two colors (checkerboard pattern) */
-  function dither(x,y,w,h,c1,c2){
-    let s='';
-    for(let dy=0;dy<h;dy++){
-      for(let dx=0;dx<w;dx++){
-        s+=px(x+dx,y+dy,1,1,(dx+dy)%2===0?c1:c2);
+
+  function txt16(x, y, text, size, fill, anchor) {
+    return txt(x + 0.5, y + 0.5, text, size, '#000', anchor) + txt(x, y, text, size, fill, anchor, true);
+  }
+
+  /* ==================== BRICK WALL ==================== */
+  function brickWall(endX) {
+    let s = '';
+    for (let row = 0; row < 20; row++) {
+      const y = row * 4;
+      const offset = (row % 2) ? 5 : 0;
+      for (let col = -1; col < Math.ceil(endX / 10) + 1; col++) {
+        const x = col * 10 + offset;
+        if (x + 9 < 0 || x > endX) continue;
+        const cx = Math.max(0, x);
+        const cw = Math.min(9, endX - cx, x + 9 - cx);
+        if (cw <= 0) continue;
+        const shade = (col + row) % 3 === 0 ? P.brickHi : (col + row) % 3 === 1 ? P.brick : P.brickDk;
+        s += px(cx, y, cw, 1, P.brickHi, 0.3);
+        s += px(cx, y + 1, cw, 2, shade);
+        s += px(cx, y + 3, cw, 0.5, P.brickDk, 0.5);
       }
     }
     return s;
   }
-  function txt(x,y,text,size,fill,anchor,bold){
-    return `<text x="${x}" y="${y}" fill="${fill||'#b8c8f0'}" font-family="'Press Start 2P',monospace" font-size="${size||3}" text-anchor="${anchor||'middle'}"${bold?' font-weight="bold"':''}>${text}</text>`;
-  }
-  /* Shadow text (16-bit style drop shadow) */
-  function txt16(x,y,text,size,fill,anchor){
-    return txt(x+0.5,y+0.5,text,size,'#000',anchor)+txt(x,y,text,size,fill,anchor,true);
-  }
 
-  /* ---- 16-BIT BRICK WALL ---- */
-  function brickWall(totalW, brickEnd){
-    let s='';
-    // Dark base wall with gradient feel
-    s+=px(0,0,totalW,80,C.wall);
-    s+=px(0,0,totalW,2,C.wallHi); // top edge lighter
-    // Wainscoting
-    s+=px(0,62,totalW,18,C.wallM);
-    s+=px(0,62,totalW,1,C.wallHi,0.2);
-    // Brick section with highlight/shadow per brick
-    for(let row=0;row<20;row++){
-      const y=row*4, off=(row%2)?5:0;
-      for(let col=-1;col<Math.ceil(brickEnd/10)+1;col++){
-        const x=col*10+off;
-        if(x+9<0||x>brickEnd)continue;
-        const cx=Math.max(0,x), cw=Math.min(9,brickEnd-cx,x+9-cx);
-        if(cw<=0)continue;
-        const shade=(col+row)%3===0?C.brickHi:(col+row)%3===1?C.brick:C.brickM;
-        // Top highlight, body, bottom shadow — 16-bit shading
-        s+=px(cx,y,cw,1,(col+row)%3===0?C.brickHi:C.brickL);
-        s+=px(cx,y+1,cw,1,shade);
-        s+=px(cx,y+2,cw,1,C.brickDk);
-        // Mortar lines
-        s+=px(cx,y+3,cw,0.5,'#3a2810',0.4);
-      }
-    }
-    // Concrete section with richer texture
-    s+=px(brickEnd,0,totalW-brickEnd,80,C.concreteL);
-    s+=px(brickEnd,0,totalW-brickEnd,1,C.concreteHi,0.3);
-    for(let i=0;i<25;i++){
-      const tx=brickEnd+4+i*15;
-      if(tx<totalW){
-        s+=px(tx,4+(i%7)*10,10,1,C.concreteHi,0.12);
-        s+=px(tx+2,6+(i%5)*12,6,1,C.concrete,0.08);
-      }
-    }
-    // Exposed pipe with highlight
-    s+=px(0,3,totalW,2,C.steelD,0.5);
-    s+=px(0,3,totalW,0.5,C.steelHi,0.25);
+  /* ==================== HERO NEON SIGN ==================== */
+  function heroNeonSign(x, y, text, color) {
+    let s = '';
+    const tubeColor = color || P.neonPurple;
+    
+    // Mounting brackets (visible hardware)
+    s += px(x - 3, y - 2, 2, 1, P.steel);
+    s += px(x + 68, y - 2, 2, 1, P.steel);
+    s += `<circle cx="${x - 2}" cy="${y - 1.5}" r="0.8" fill="${P.steelDark}"/>`;
+    s += `<circle cx="${x + 69}" cy="${y - 1.5}" r="0.8" fill="${P.steelDark}"/>`;
+    
+    // Triple-layer glow: wide atmospheric bloom → mid-range glow → tight core
+    s += `<text x="${x}" y="${y}" fill="${tubeColor}" font-family="'Press Start 2P',monospace" font-size="6" opacity="0.15" filter="url(#neonBloom)">${text}</text>`;
+    s += `<text x="${x}" y="${y}" fill="${tubeColor}" font-family="'Press Start 2P',monospace" font-size="6" opacity="0.4" filter="url(#neonMid)">${text}</text>`;
+    s += `<text x="${x}" y="${y}" fill="${tubeColor}" font-family="'Press Start 2P',monospace" font-size="6" opacity="0.8" filter="url(#neonCore)">${text}</text>`;
+    s += `<text x="${x}" y="${y}" fill="#ffffff" font-family="'Press Start 2P',monospace" font-size="6" opacity="0.95">${text}</text>`;
+    
     return s;
   }
 
-  /* ---- 16-BIT PENDANT / INDUSTRIAL LIGHT ---- */
-  function pendant(x){
-    let s='';
+  function smallNeonSign(x, y, text, color) {
+    let s = '';
+    const tubeColor = color || P.neonPink;
+    s += `<text x="${x}" y="${y}" fill="${tubeColor}" font-family="'Press Start 2P',monospace" font-size="3" opacity="0.15" filter="url(#neonBloom)">${text}</text>`;
+    s += `<text x="${x}" y="${y}" fill="${tubeColor}" font-family="'Press Start 2P',monospace" font-size="3" opacity="0.5" filter="url(#neonMid)">${text}</text>`;
+    s += `<text x="${x}" y="${y}" fill="${tubeColor}" font-family="'Press Start 2P',monospace" font-size="3" opacity="0.9">${text}</text>`;
+    return s;
+  }
+
+  /* ==================== PENDANT LIGHT WITH CONE ==================== */
+  function pendantLight(x, y) {
+    let s = '';
     // Cable
-    s+=px(x+2,0,1,7,C.steelD);s+=px(x+3,0,0.5,7,C.steelL,0.3);
-    // Shade (16-bit: highlight top, dark bottom)
-    s+=px16(x-2,7,8,1,C.steelHi,C.steelD,C.steel);
-    s+=px(x-1,8,6,1,C.steelD);s+=px(x-1,8,6,0.5,C.steelL,0.2);
-    s+=px(x,9,4,2,C.steelD);s+=px(x,9,4,0.5,C.steelHi,0.15);
-    // Bulb (warm glow gradient)
-    s+=px(x+1,11,2,1,C.ledHi);
-    s+=px(x,12,4,1,C.led);
-    // Light cone (multi-layer for 16-bit softness)
-    s+=`<polygon points="${x-3},18 ${x+7},18 ${x+4},12 ${x},12" fill="${C.ledHi}" opacity="0.05"/>`;
-    s+=`<polygon points="${x-6},28 ${x+10},28 ${x+6},12 ${x-2},12" fill="${C.ledWarm}" opacity="0.03"/>`;
-    s+=`<polygon points="${x-10},40 ${x+14},40 ${x+8},12 ${x-4},12" fill="${C.ledWarm}" opacity="0.015"/>`;
+    s += px(x + 2, y, 0.5, 8, P.steelDark, 0.6);
+    // Shade
+    s += px(x, y + 8, 4, 1, P.steel);
+    s += px(x - 1, y + 9, 6, 2, P.steelDark);
+    s += px(x, y + 9, 4, 1, P.steelLight, 0.2);
+    // Bulb
+    s += `<circle cx="${x + 2}" cy="${y + 12}" r="1.2" fill="${P.warmLight}" opacity="0.9"/>`;
+    s += `<circle cx="${x + 2}" cy="${y + 12}" r="0.5" fill="${P.white}" opacity="0.6"/>`;
+    // Light cone onto floor (warm golden)
+    s += `<polygon class="light-cone" points="${x - 4},${y + 50} ${x + 8},${y + 50} ${x + 4},${y + 13} ${x},${y + 13}" fill="${P.warmLight}" opacity="0.08"/>`;
+    s += `<polygon class="light-cone" points="${x - 8},${y + 80} ${x + 12},${y + 80} ${x + 5},${y + 13} ${x - 1},${y + 13}" fill="${P.warmLight}" opacity="0.04"/>`;
     return s;
   }
 
-  /* ---- 16-BIT STANDING DESK ---- */
-  function desk(w){
-    w=w||40;
-    let s='';
-    // Desktop surface (wood grain: highlight, 2 mid tones, shadow)
-    s+=px(0,0,w,1,C.woodHi);
-    s+=px(0,1,w,1,C.woodL);
-    s+=px(0,2,w,1,C.wood);
-    s+=px(0,3,w,1,C.woodD);
-    // Wood grain detail
-    for(let g=4;g<w;g+=7) s+=px(g,1,3,1,C.woodHi,0.15);
-    // Front edge bevel
-    s+=px(0,3,w,0.5,C.woodDk,0.4);
-    // Cable management tray (16-bit)
-    s+=px16(6,4,w-12,1.5,C.steelL,C.steelD,C.steel);
-    // Motorized legs (highlight + body + shadow)
-    s+=px(2,4,1,20,C.steelL,0.4);s+=px(3,4,2,20,C.steel);s+=px(4,4,1,20,C.steelD);
-    s+=px(w-5,4,1,20,C.steelL,0.4);s+=px(w-4,4,2,20,C.steel);s+=px(w-3,4,1,20,C.steelD);
-    // Motor housing
-    s+=px16(2,10,3,3,C.steelHi,C.steelD,'#484858');
-    s+=px16(w-5,10,3,3,C.steelHi,C.steelD,'#484858');
-    // Feet (16-bit)
-    s+=px16(0,24,7,1.5,C.steelHi,C.steelD,C.steel);
-    s+=px16(w-7,24,7,1.5,C.steelHi,C.steelD,C.steel);
-    // Cross brace with highlight
-    s+=px(5,15,w-10,0.5,C.steelL,0.3);
-    s+=px(5,15.5,w-10,1,C.steelD,0.4);
+  /* ==================== DESK ==================== */
+  function desk(w) {
+    let s = '';
+    w = w || 40;
+    // Desktop
+    s += px(0, 0, w, 1, P.woodLight);
+    s += px(0, 1, w, 2, P.wood);
+    s += px(0, 3, w, 1, P.woodDark);
+    // Grain detail
+    for (let g = 4; g < w; g += 8) s += px(g, 1, 3, 1, P.woodLight, 0.15);
+    // Legs
+    s += px(2, 4, 2, 20, P.steel);
+    s += px(w - 4, 4, 2, 20, P.steel);
+    s += px(2, 4, 1, 20, P.steelLight, 0.3);
+    s += px(w - 4, 4, 1, 20, P.steelLight, 0.3);
+    // Feet
+    s += px(0, 24, 7, 1.5, P.steelDark);
+    s += px(w - 7, 24, 7, 1.5, P.steelDark);
     return s;
   }
 
-  /* ---- DUAL ULTRAWIDE MONITORS (16-bit + animated content IDs) ---- */
-  function dualMon(on,content,agentIdx){
-    let s='';
-    // Monitor L (16-bit bezel)
-    s+=px16(0,0,14,11,C.monHi,C.monBezel,C.monitor);
-    s+=px(1,1,12,9,'#080c18');
+  /* ==================== DUAL MONITORS WITH ANIMATED CONTENT ==================== */
+  function dualMonitors(on, content, agentIdx) {
+    let s = '';
+    // Monitor L
+    s += px(0, 0, 14, 11, P.monitorBezel);
+    s += px(0.5, 0.5, 13, 10, P.monitorBezel, 0.8);
+    s += px(1, 1, 12, 9, P.monitorBg);
     // Monitor R
-    s+=px16(15,0,14,11,C.monHi,C.monBezel,C.monitor);
-    s+=px(16,1,12,9,'#080c18');
-    // Stand (16-bit)
-    s+=px16(13,11,3,2,C.steelL,C.steelD,C.steel);
-    s+=px16(11,13,7,1,C.steelHi,C.steel,C.steelD);
-    // Webcam with LED
-    s+=px(13,-1,3,2,'#282830');
-    s+=`<circle cx="14.5" cy="-0.5" r="0.6" fill="${on?'#f04848':'#383838'}" opacity="${on?0.9:0.3}"/>`;
-    if(!on)return s;
+    s += px(15, 0, 14, 11, P.monitorBezel);
+    s += px(15.5, 0.5, 13, 10, P.monitorBezel, 0.8);
+    s += px(16, 1, 12, 9, P.monitorBg);
+    // Stand
+    s += px(13, 11, 3, 2, P.steel);
+    s += px(11, 13, 7, 1, P.steelDark);
+    // Webcam LED
+    s += `<circle cx="14.5" cy="-0.5" r="0.6" fill="${on ? P.errorRed : P.steelDark}" opacity="${on ? 0.9 : 0.3}"/>`;
+    
+    if (!on) return s;
 
-    // Each screen gets a unique animation group
-    const sid='screen-'+agentIdx;
+    const sid = 'screen-' + agentIdx;
+    
+    // Monitor glow (forward cast onto desk)
+    s += `<ellipse class="monitor-glow" cx="7" cy="12" rx="10" ry="2" fill="${P.monitorBlue}" opacity="0.08"/>`;
+    s += `<ellipse class="monitor-glow" cx="22" cy="12" rx="10" ry="2" fill="${P.monitorBlue}" opacity="0.08"/>`;
 
-    if(content==='code'){
-      // FORGE: VS Code with scrolling code + terminal with typing output
-      s+=`<g id="${sid}-L" class="code-scroll">`;
-      s+=px(2,2,3,7,'#1a1e30'); // sidebar
-      for(let f=0;f<4;f++) s+=px(3,3+f*1.5,1,1,'#586068',0.5);
-      // Code lines (will scroll via CSS)
-      const codeColors=['#c678dd','#e06c75','#98c379','#61afef','#e5c07b','#56b6c2','#c678dd','#d19a66'];
-      const codeLens=[5,3,6,4,5,3,7,4];
-      for(let l=0;l<8;l++){
-        s+=px(6,2+l,codeLens[l],1,codeColors[l],0.8);
-        if(l%2===0) s+=px(6,2+l,1,1,codeColors[l]); // keyword highlight
+    if (content === 'code') {
+      // FORGE: VS Code
+      s += `<g id="${sid}-L" class="code-scroll">`;
+      s += px(2, 2, 3, 7, '#1a1e30');
+      const codeColors = ['#c678dd', '#e06c75', '#98c379', '#61afef', '#e5c07b'];
+      for (let l = 0; l < 7; l++) {
+        s += px(6, 2 + l, 4 + (l % 3), 1, codeColors[l % codeColors.length], 0.7);
       }
-      s+=`</g>`;
-      s+=`<g id="${sid}-R" class="term-type">`;
-      s+=px(17,2,1,1,'#98c379');s+=txt(18,3,'$',1.5,'#98c379','start');
-      const termColors=['#98c379','#abb2bf','#e5c07b','#61afef','#abb2bf','#98c379','#abb2bf','#f04848'];
-      for(let l=0;l<8;l++) s+=px(17,2+l,6+l%4,1,termColors[l],0.6);
-      s+=`<rect x="17" y="9" width="2" height="1" fill="#98c379" class="cursor-blink"/>`;
-      s+=`</g>`;
-    } else if(content==='review'){
-      // ANVIL: Animated diff view + spinning CI pipeline
-      s+=`<g id="${sid}-L" class="diff-flash">`;
-      s+=px(2,2,11,1,'#484858',0.5);
-      const diffLines=[['#2ecc71',6],['#2ecc71',8],['#e74c3c',5],['#2ecc71',9],['#2ecc71',7],['#e74c3c',4],['#abb2bf',6]];
-      diffLines.forEach(([c,w],l)=>{
-        s+=px(2,3+l,w,1,c,c==='#abb2bf'?0.3:0.35);
-        if(c!=='#abb2bf') s+=px(2,3+l,1,1,c==='#2ecc71'?'#fff':'#fff',0.1); // +/- marker
-      });
-      s+=`</g>`;
-      s+=`<g id="${sid}-R">`;
-      // CI Pipeline with animated spinner
-      s+=px(17,2,3,2,'#2ecc71');s+=px(21,2,3,2,'#2ecc71');
-      s+=`<g class="ci-spin" transform-origin="26.5 3"><rect x="25" y="2" width="3" height="2" fill="#f0c830"/></g>`;
-      s+=px(20,3,1,1,'#484858');s+=px(24,3,1,1,'#484858');
-      s+=txt(18,7,'PASS',2,'#2ecc71','start');
-      s+=txt(18,9,'98.2%',2,'#40f8a0','start');
-      s+=`</g>`;
-    } else if(content==='research'){
-      // SCOUT: Animated browser with loading bar + flickering notes
-      s+=`<g id="${sid}-L">`;
-      s+=px(2,2,11,1,'#484858',0.4);
-      s+=`<rect x="2" y="2" width="0" height="1" fill="#60a8f0" class="loading-bar"/>`;
-      s+=px(2,3,10,1,'#dfe6e9',0.5);s+=px(2,4,8,1,'#abb2bf',0.25);
-      s+=px(2,6,6,1,'#60a8f0',0.5);s+=px(2,7,9,1,'#abb2bf',0.25);
-      s+=px(2,8,7,1,'#abb2bf',0.25);s+=px(2,9,5,1,'#60a8f0',0.4);
-      s+=`</g>`;
-      s+=`<g id="${sid}-R" class="notes-flicker">`;
-      s+=px(17,2,3,1,'#a090f0');s+=px(21,2,5,1,'#abb2bf',0.3);
-      s+=px(17,3,8,1,'#f0c830',0.4);s+=px(17,4,6,1,'#abb2bf',0.25);
-      s+=px(17,6,5,1,'#a090f0',0.5);s+=px(17,7,9,1,'#abb2bf',0.25);
-      s+=`<rect x="17" y="9" width="4" height="1" fill="#f0c830" class="cursor-blink"/>`;
-      s+=`</g>`;
-    } else if(content==='ops'){
-      // RELAY: Animated bar chart + scrolling logs
-      s+=`<g id="${sid}-L">`;
-      for(let i=0;i<10;i++){
-        const maxH=7;
-        s+=`<rect x="${2+i}" y="${10-maxH}" width="1" height="${maxH}" fill="#60a8f0" opacity="0.6" class="bar-pulse" style="animation-delay:${i*0.15}s"/>`;
+      s += `</g>`;
+      s += `<g id="${sid}-R" class="term-type">`;
+      s += txt(18, 3, '$', 1.5, P.successGreen, 'start');
+      for (let l = 0; l < 6; l++) s += px(17, 3 + l, 5 + (l % 2), 1, P.successGreen, 0.5);
+      s += `<rect x="17" y="9" width="2" height="1" fill="${P.successGreen}" class="cursor-blink"/>`;
+      s += `</g>`;
+    } else if (content === 'review') {
+      // ANVIL: Diff view
+      s += `<g id="${sid}-L" class="diff-flash">`;
+      for (let l = 0; l < 7; l++) {
+        const col = l % 3 === 0 ? P.successGreen : l % 3 === 1 ? P.errorRed : '#abb2bf';
+        s += px(2, 2 + l, 6 + (l % 3), 1, col, 0.6);
       }
-      s+=px(2,10,10,0.5,'#484858');
-      s+=`<circle cx="7" cy="5" r="3" fill="none" stroke="#40f8a0" stroke-width="0.6" stroke-dasharray="6,12" class="gauge-spin"/>`;
-      s+=`</g>`;
-      s+=`<g id="${sid}-R" class="log-scroll">`;
-      const logColors=['#40f8a0','#abb2bf','#f0c830','#abb2bf','#40f8a0','#abb2bf','#f04848','#40f8a0'];
-      logColors.forEach((c,l)=>s+=px(17,2+l,7+l%3,1,c,0.45));
-      s+=`</g>`;
-    } else if(content==='monitor'){
-      // PULSE: Animated heartbeat + blinking status grid
-      s+=`<g id="${sid}-L">`;
-      s+=`<path d="M2,6 L3,6 L4,4 L5,8 L6,3 L7,7 L8,5 L9,6 L10,6 L11,4 L12,7" stroke="#40f8a0" stroke-width="0.8" fill="none" class="heartbeat-line"/>`;
-      s+=px(2,9,10,0.5,'#484858');
-      s+=`<text x="7" y="3" fill="#40f8a0" font-family="'Press Start 2P',monospace" font-size="2" text-anchor="middle" class="uptime-counter">99.97%</text>`;
-      s+=`</g>`;
-      s+=`<g id="${sid}-R">`;
-      const grid=['#40f8a0','#40f8a0','#f0c830','#40f8a0','#40f8a0','#40f8a0','#f04848','#40f8a0','#40f8a0','#40f8a0','#f0c830','#40f8a0'];
-      grid.forEach((c,i)=>{
-        s+=`<rect x="${17+(i%4)*2.5}" y="${2+Math.floor(i/4)*3}" width="2" height="2" fill="${c}" opacity="0.8" class="status-blink" style="animation-delay:${i*0.3}s"/>`;
+      s += `</g>`;
+      s += `<g id="${sid}-R">`;
+      s += txt(20, 5, 'PASS', 2, P.successGreen, 'start');
+      s += txt(20, 8, '98%', 2, P.successGreen, 'start');
+      s += `</g>`;
+    } else if (content === 'research') {
+      // SCOUT: Browser
+      s += `<g id="${sid}-L">`;
+      s += px(2, 2, 10, 1, P.steel, 0.4);
+      s += `<rect x="2" y="2" width="0" height="1" fill="${P.monitorBlue}" class="loading-bar"/>`;
+      for (let l = 0; l < 6; l++) s += px(2, 4 + l, 7 + (l % 3), 1, '#abb2bf', 0.4);
+      s += `</g>`;
+      s += `<g id="${sid}-R" class="notes-flicker">`;
+      for (let l = 0; l < 6; l++) s += px(17, 2 + l, 6 + (l % 2), 1, P.warningYellow, 0.5);
+      s += `</g>`;
+    } else if (content === 'ops') {
+      // RELAY: Metrics
+      s += `<g id="${sid}-L">`;
+      for (let i = 0; i < 10; i++) {
+        s += `<rect x="${2 + i}" y="5" width="1" height="4" fill="${P.monitorBlue}" opacity="0.6" class="bar-pulse" style="animation-delay:${i * 0.1}s"/>`;
+      }
+      s += `</g>`;
+      s += `<g id="${sid}-R" class="log-scroll">`;
+      for (let l = 0; l < 7; l++) {
+        const col = l % 2 === 0 ? P.successGreen : '#abb2bf';
+        s += px(17, 2 + l, 8, 1, col, 0.5);
+      }
+      s += `</g>`;
+    } else if (content === 'monitor') {
+      // PULSE: Heartbeat
+      s += `<g id="${sid}-L">`;
+      s += `<path d="M2,6 L3,6 L4,4 L5,8 L6,3 L7,7 L8,5 L9,6 L10,6 L11,4 L12,7" stroke="${P.successGreen}" stroke-width="0.8" fill="none" class="heartbeat-line"/>`;
+      s += txt(7, 4, '99.9%', 2, P.successGreen);
+      s += `</g>`;
+      s += `<g id="${sid}-R">`;
+      const grid = [P.successGreen, P.successGreen, P.warningYellow, P.successGreen, P.successGreen, P.successGreen, P.errorRed, P.successGreen];
+      grid.forEach((c, i) => {
+        s += `<rect x="${17 + (i % 4) * 2.5}" y="${2 + Math.floor(i / 4) * 3}" width="2" height="2" fill="${c}" opacity="0.8" class="status-blink" style="animation-delay:${i * 0.3}s"/>`;
       });
-      s+=`</g>`;
+      s += `</g>`;
     }
     return s;
   }
 
-  /* ---- ERGO CHAIR (Herman Miller-style) ---- */
-  function chair(color){
-    let s='';
-    // Back
-    s+=px(3,0,10,6,color);
-    s+=px(2,1,1,4,color);s+=px(13,1,1,4,color);
-    // Mesh pattern
-    for(let i=0;i<4;i++) s+=px(4,1+i*1.5,8,0.5,'#000',0.1);
-    // Lumbar support
-    s+=px(3,4,10,1,color);
-    // Seat
-    s+=px(2,6,12,3,'#2d3436');
-    s+=px(3,6,10,1,'#3d4d4d');
+  /* ==================== SEATED AGENT CHARACTER ==================== */
+  function seatedAgent(ag, i) {
+    let s = '';
+    const hair = ag.hair;
+    const shirt = ag.shirt;
+    const pants = ag.pants;
+    const status = ag.status;
+    const acc = ag.acc;
+    
+    // Chair back
+    s += px(2, -10, 20, 10, P.steelDark);
+    s += px(3, -9, 18, 8, P.steel, 0.3);
+    for (let my = -9; my < -2; my += 2) s += px(4, my, 16, 0.5, '#000', 0.1);
+    
     // Armrests
-    s+=px(0,3,2,4,C.steelD);s+=px(14,3,2,4,C.steelD);
-    s+=px(0,2,3,1,color);s+=px(13,2,3,1,color);
-    // Gas cylinder
-    s+=px(7,9,2,4,C.steel);
-    // Star base
-    s+=px(3,13,10,1,C.steel);
-    s+=px(1,14,3,1,C.steelD);s+=px(12,14,3,1,C.steelD);
-    // Wheels
-    s+=px(1,14,2,1,'#444');s+=px(13,14,2,1,'#444');s+=px(7,14,2,1,'#444');
-    return s;
-  }
-
-  /* ---- DETAILED CHARACTER ---- */
-  function agent(hairCol,shirtCol,pantsCol,status,acc){
-    let s='';
+    s += px(1, -8, 2, 14, P.steelDark);
+    s += px(21, -8, 2, 14, P.steelDark);
+    
     // Hair
-    s+=px(7,0,10,5,hairCol);
-    s+=px(6,2,1,2,hairCol); // sideburn L
-    s+=px(17,2,1,2,hairCol); // sideburn R
-    if(acc.buzzcut) { s+=px(7,0,10,3,hairCol); }
-    if(acc.beanie){ s+=px(6,-1,12,4,acc.beanie); s+=px(8,-2,8,2,acc.beanie); s+=px(7,-1,10,1,'#fff',0.1); }
-    if(acc.ponytail){ s+=px(16,1,2,6,hairCol); s+=px(17,3,1,4,hairCol); }
+    s += px(9, -32, 10, 6, hair);
+    s += px(9, -32, 10, 1, hair, 1);
+    s += px(8, -30, 1, 3, hair);
+    s += px(19, -30, 1, 3, hair);
+    
+    if (acc.beanie) {
+      s += px(8, -33, 12, 5, acc.beanie);
+      s += px(10, -34, 8, 2, acc.beanie);
+    }
+    if (acc.ponytail) {
+      s += px(18, -31, 2, 7, hair);
+    }
+    
     // Head
-    s+=px(8,3,8,9,C.skin);
-    s+=px(7,5,1,4,C.skin); // ear L
-    s+=px(16,5,1,4,C.skin); // ear R
+    s += px(10, -28, 8, 1, P.skinHi);
+    s += px(10, -27, 8, 8, P.skin);
+    s += px(10, -20, 8, 1, P.skinShd);
+    s += px(9, -26, 1, 5, P.skin);
+    s += px(18, -26, 1, 5, P.skin);
+    
     // Eyes
-    if(status==='green'){
-      s+=px(10,6,2,2,'#2d3436');s+=px(14,6,2,2,'#2d3436');
-      s+=px(10,6,1,1,'#fff');s+=px(14,6,1,1,'#fff'); // pupil highlight
-    } else if(status==='yellow'){
-      s+=px(10,7,2,1,'#2d3436');s+=px(14,7,2,1,'#2d3436');
+    if (status === 'green') {
+      s += px(11, -25, 3, 3, '#e8e8f0');
+      s += px(12, -24, 2, 2, '#2848a0');
+      s += px(12, -24, 1, 1, '#181828');
+      s += px(13, -25, 1, 1, P.white);
+      s += px(15, -25, 3, 3, '#e8e8f0');
+      s += px(16, -24, 2, 2, '#2848a0');
+      s += px(16, -24, 1, 1, '#181828');
+      s += px(17, -25, 1, 1, P.white);
     } else {
-      s+=px(10,7,2,1,'#636e72');s+=px(14,7,2,1,'#636e72');
+      s += px(12, -24, 2, 1, '#484858');
+      s += px(16, -24, 2, 1, '#484858');
     }
-    // Eyebrows
-    s+=px(9,5,3,1,hairCol,0.6);s+=px(13,5,3,1,hairCol,0.6);
-    // Nose
-    s+=px(12,8,1,2,C.skinShd,0.5);
-    // Mouth
-    if(status==='green') s+=px(11,10,3,1,'#e17055');
-    else s+=px(11,10,2,1,'#b07050');
+    
     // Glasses
-    if(acc.glasses){
-      s+=`<rect x="9" y="5.5" width="4" height="3" fill="none" stroke="${acc.glassCol||'#2d3436'}" stroke-width="0.5" rx="0.5"/>`;
-      s+=`<rect x="13.5" y="5.5" width="4" height="3" fill="none" stroke="${acc.glassCol||'#2d3436'}" stroke-width="0.5" rx="0.5"/>`;
-      s+=px(13,6.5,0.5,1,acc.glassCol||'#2d3436');
-      s+=px(9,7,0,0,''); // nose bridge
+    if (acc.glasses) {
+      const gc = acc.glassCol || '#303038';
+      s += `<rect x="10.5" y="-26" width="4.5" height="4" fill="none" stroke="${gc}" stroke-width="0.6" rx="0.5"/>`;
+      s += `<rect x="15" y="-26" width="4.5" height="4" fill="none" stroke="${gc}" stroke-width="0.6" rx="0.5"/>`;
+      s += px(14.5, -25, 0.5, 1, gc);
     }
+    
     // Headphones
-    if(acc.headphones){
-      s+=px(6,3,1,6,'#2d3436');s+=px(17,3,1,6,'#2d3436');
-      s+=`<path d="M6,3 Q12,-1 17,3" stroke="#2d3436" stroke-width="1" fill="none"/>`;
-      s+=px(5,5,2,4,acc.hpColor||'#e74c3c');s+=px(17,5,2,4,acc.hpColor||'#e74c3c');
-      // Mic boom
-      if(acc.mic){s+=px(4,7,1,4,'#2d3436');s+=px(3,11,2,1,'#636e72');}
+    if (acc.headphones) {
+      const hc = acc.hpColor || P.errorRed;
+      s += px(8, -29, 1, 7, '#282830');
+      s += px(19, -29, 1, 7, '#282830');
+      s += `<path d="M8,-29 Q14,-33 19,-29" stroke="#282830" stroke-width="1.2" fill="none"/>`;
+      s += px(7, -27, 2, 5, hc);
+      s += px(19, -27, 2, 5, hc);
+      if (acc.mic) {
+        s += px(6, -25, 1, 5, '#282830');
+        s += px(5, -20, 3, 2, '#484858');
+      }
     }
-    // Body / T-shirt
-    s+=px(6,12,12,10,shirtCol);
-    // Shirt detail
-    if(acc.hoodie){
-      s+=px(10,12,4,2,shirtCol);
-      s+=px(11,12,2,3,'#000',0.06); // hood string
-      s+=px(7,17,10,2,shirtCol); // kangaroo pocket
-      s+=px(8,17,8,1,'#000',0.04);
-    }
-    if(acc.vest){
-      s+=px(6,12,3,10,acc.vestCol||'#2d3436');
-      s+=px(15,12,3,10,acc.vestCol||'#2d3436');
-    }
-    // Company badge
-    s+=px(14,13,3,4,'#fff',0.15);s+=px(15,14,1,1,'#74b9ff',0.5);
-    // Arms
-    s+=px(3,13,3,8,shirtCol);s+=px(18,13,3,8,shirtCol);
-    // Hands on keyboard position
-    s+=px(3,21,3,2,C.skin);s+=px(18,21,3,2,C.skin);
-    // Watch
-    if(acc.watch){s+=px(3,20,3,1,'#2d3436');s+=px(4,19,1,1,'#74b9ff',0.6);}
-    // Held items
-    if(acc.clipboard){
-      s+=px(19,18,6,8,'#b8895a');s+=px(20,19,4,6,'#fefefe');
-      s+=px(20,20,3,1,'#2ecc71');s+=px(20,22,3,1,'#e74c3c');s+=px(20,24,2,1,'#f1c40f');
-    }
-    if(acc.magnifier){
-      s+=`<circle cx="23" cy="18" r="3.5" fill="none" stroke="#fdcb6e" stroke-width="0.8"/>`;
-      s+=`<circle cx="23" cy="18" r="2.5" fill="#74b9ff" opacity="0.12"/>`;
-      s+=px(25,20,1,4,'#fdcb6e');
-    }
-    if(acc.wrench){
-      s+=px(19,17,1,6,C.steelD);s+=px(18,17,3,2,C.steel);
-    }
-    // Pants
-    s+=px(7,22,5,7,pantsCol);s+=px(13,22,5,7,pantsCol);
-    s+=px(12,22,1,7,'#000',0.05); // gap between legs
-    // Sneakers
-    const sc=acc.shoeCol||'#fff';
-    s+=px(5,29,7,3,sc);s+=px(12,29,7,3,sc);
-    s+=px(5,30,3,1,'#dfe6e9',0.5);s+=px(12,30,3,1,'#dfe6e9',0.5);
-    // Sole
-    s+=px(5,31,7,1,'#444');s+=px(12,31,7,1,'#444');
-    // Status indicator (floating above)
-    const lc=status==='green'?'#2ecc71':status==='yellow'?'#f1c40f':'#636e72';
-    s+=`<circle cx="12" cy="-3" r="2" fill="${lc}"/>`;
-    s+=`<circle cx="12" cy="-3" r="3.5" fill="${lc}" opacity="0.15"/>`;
-    if(status==='green') s+=`<circle cx="12" cy="-3" r="5" fill="${lc}" opacity="0.06" class="status-pulse"/>`;
-    return s;
-  }
-
-  /* ---- 16-BIT SERVER RACK ---- */
-  function serverRack(){
-    let s='';
-    // Outer frame (16-bit)
-    s+=px16(0,0,18,40,C.serverHi,C.server,'#181c20');
-    s+=px(1,1,16,38,'#141820');
-    // Rack units (each with highlight/shadow)
-    for(let u=0;u<7;u++){
-      const uy=2+u*5;
-      s+=px(2,uy,14,0.5,'#404850'); // top highlight
-      s+=px(2,uy+0.5,14,3,'#2a3038');
-      s+=px(2,uy+3.5,14,0.5,'#1a1e24'); // bottom shadow
-      // LEDs (16-bit glow)
-      s+=`<circle cx="4" cy="${uy+2}" r="0.8" fill="${C.serverLed}" filter="url(#ledGlow)"/>`;
-      s+=`<circle cx="4" cy="${uy+2}" r="2" fill="${C.serverLed}" opacity="0.08"/>`;
-      s+=`<circle cx="7" cy="${uy+2}" r="0.6" fill="${u%3===2?C.serverLedY:C.serverLedR}" filter="url(#ledGlow)"/>`;
-      s+=`<circle cx="9" cy="${uy+2}" r="0.6" fill="${C.serverLed}" filter="url(#ledGlow)"/>`;
-      // Vent lines (thinner, more of them)
-      for(let v=0;v<4;v++) s+=px(10.5,uy+0.8+v*0.7,3.5,0.3,C.serverL,0.2);
-      // Drive bays (16-bit)
-      s+=px(3,uy+2.5,3.5,1,'#141820');s+=px(3,uy+2.5,3.5,0.3,'#303840',0.3);
-      s+=px(7.5,uy+2.5,3.5,1,'#141820');s+=px(7.5,uy+2.5,3.5,0.3,'#303840',0.3);
-    }
-    // Side handles (16-bit metallic)
-    s+=px(0,0,0.5,40,C.steelHi,0.3);s+=px(0.5,0,0.5,40,C.serverL);
-    s+=px(17,0,0.5,40,C.serverL);s+=px(17.5,0,0.5,40,C.steelD,0.3);
-    // Top vent
-    s+=px(3,0,12,0.5,C.serverL,0.25);
-    return s;
-  }
-
-  /* ---- 16-BIT BIG PLANT ---- */
-  function bigPlant(variant){
-    let s='';
-    if(variant==='fiddle'){
-      // Fiddle leaf fig — 16-bit shaded leaves
-      s+=px(5,12,1,14,C.plantDk);s+=px(6,12,1,14,C.plantD,0.7); // trunk highlight
-      s+=px(6,14,1,4,C.plantDk);
-      // Leaves (each: highlight edge + base + dark center vein)
-      s+=px(1,2,6,1,C.plantHi);s+=px(1,3,6,4,C.plant);s+=px(1,7,6,1,C.plantD);s+=px(3,4,1,3,C.plantDk,0.3); // vein
-      s+=px(7,0,5,1,C.plantHi);s+=px(7,1,5,3,C.plantD);s+=px(7,4,5,1,C.plantDk);s+=px(9,1,1,3,C.plantDk,0.2);
-      s+=px(3,7,5,1,C.plantHi);s+=px(3,8,5,3,C.plantL);s+=px(3,11,5,1,C.plant);s+=px(5,8,1,2,C.plantDk,0.2);
-      s+=px(8,5,4,1,C.plantHi);s+=px(8,6,4,3,C.plant);s+=px(8,9,4,1,C.plantD);
-      s+=px(0,4,2,3,C.plantL);s+=px(2,0,3,2,C.plantHi);
-    } else if(variant==='monstera'){
-      // Monstera — 16-bit with leaf holes and veins
-      s+=px(5,10,1,16,C.plantDk);s+=px(6,10,1,16,C.plantD,0.5);
-      s+=px(1,0,1,8,C.plantHi);s+=px(2,0,6,1,C.plantHi);s+=px(2,1,6,6,C.plant);s+=px(2,7,6,1,C.plantD);
-      s+=px(3,2,2,2,'#080c18',0.08); // leaf hole
-      s+=px(4,3,1,3,C.plantDk,0.2); // vein
-      s+=px(6,3,1,6,C.plantHi);s+=px(7,3,5,1,C.plantHi);s+=px(7,4,5,4,C.plantD);s+=px(7,8,5,1,C.plantDk);
-      s+=px(8,5,1,1,'#080c18',0.08);s+=px(9,4,1,3,C.plantDk,0.2);
-      s+=px(0,5,1,5,C.plantHi);s+=px(1,5,3,1,C.plantHi);s+=px(1,6,3,3,C.plantL);s+=px(1,9,3,1,C.plant);
+    
+    // Nose & mouth
+    s += px(14, -23, 1, 2, P.skinShd, 0.4);
+    if (status === 'green') {
+      s += px(13, -20, 3, 1, '#d06048');
     } else {
-      // Snake plant — 16-bit with striping
-      s+=px(4,0,1,18,C.plantHi);s+=px(5,0,1,18,C.plantD);s+=px(4,2,2,2,C.plantL,0.3); // stripe
-      s+=px(7,2,1,16,C.plantHi);s+=px(8,2,1,16,C.plant);s+=px(7,6,2,2,C.plantL,0.3);
-      s+=px(2,4,1,14,C.plantL);s+=px(3,4,1,14,C.plantD);s+=px(2,8,2,2,C.plantHi,0.3);
-      s+=px(9,6,1,12,C.plantD);s+=px(10,6,1,12,C.plantDk);s+=px(9,10,2,2,C.plantL,0.2);
+      s += px(13, -21, 2, 1, '#a06048');
     }
-    // Pot (16-bit: highlight + body + shadow + rim)
-    s+=px(2,23,8,1,C.potHi); // rim
-    s+=px(1,24,10,1,C.potHi);
-    s+=px(1,25,10,3,C.potTerra);
-    s+=px(1,28,10,2,C.potTerra.replace('48','30')); // darker bottom
-    s+=px(2,24,1,5,'#e0a070',0.2); // left highlight
-    s+=px(3,29,6,1,'#000',0.06); // shadow under pot
-    return s;
-  }
-
-  /* ---- WHITEBOARD (data-driven from projects) ---- */
-  function whiteboard(projects){
-    const bW=55, bH=50;
-    let s='';
-    // Frame (16-bit)
-    s+=px16(0,0,bW,bH,C.steelL,C.boardFrame,C.steelD);
-    s+=px(1,1,bW-2,bH-2,C.board);
-    // Header
-    s+=px(2,2,bW-4,5,'#282840',0.08);
-    s+=txt(bW/2,6,'ACTIVE PROJECTS',2.2,'#282840');
-    s+=px(2,7,bW-4,0.5,'#c0c0c8');
-
-    // Project list
-    const statusColors={green:'#2ecc71',yellow:'#f0c830',red:'#f04848',gray:'#888'};
-    const items=(projects||[]).slice(0,8);
-    items.forEach((p,i)=>{
-      const y=9+i*5;
-      // Status dot
-      const sc=statusColors[p.status]||'#888';
-      s+=`<circle cx="5" cy="${y+2}" r="1.5" fill="${sc}"/>`;
-      // Project name
-      s+=txt(8,y+3,p.name||'?',1.8,'#282840','start');
-      // Progress bar
-      const barW=16;
-      s+=px(32,y+1,barW,2,'#e0e0e0');
-      s+=px(32,y+1,Math.round(barW*(p.progress||0)/100),2,sc);
-      // Percentage
-      s+=txt(50,y+3,(p.progress||0)+'%',1.5,'#484858','start');
-    });
-
-    // Marker tray (16-bit)
-    s+=px16(2,bH-2,bW-4,2,C.steelL,C.steelD,C.steel);
-    s+=px(6,bH-3,3,1,'#e04040');s+=px(11,bH-3,3,1,'#2080e0');s+=px(16,bH-3,3,1,'#20c070');s+=px(21,bH-3,3,1,'#282830');
-    return s;
-  }
-
-  /* ---- COFFEE STATION (back wall mounted) ---- */
-  function coffeeStation(){
-    const w=45, h=55;
-    let s='';
-    // Back panel / shelving unit
-    s+=px16(0,0,w,h,C.woodHi,C.woodD,C.woodDk);
-    s+=px(1,1,w-2,h-2,C.wood);
-
-    // Top shelf
-    s+=px16(2,8,w-4,2,C.woodHi,C.woodL,C.woodD);
-    // Mugs on top shelf
-    const mugColors=['#f0f0f0','#e04040','#2080e0','#282830','#f0c830'];
-    mugColors.forEach((c,i)=>{
-      s+=px(4+i*8,3,3,5,c);s+=px(7+i*8,5,1,2,c); // handle
-      s+=px(4+i*8,3,3,1,'#fff',0.15); // rim highlight
-    });
-
-    // Middle shelf
-    s+=px16(2,22,w-4,2,C.woodHi,C.woodL,C.woodD);
-
-    // Espresso machine (16-bit, centered)
-    s+=px16(4,10,14,12,C.steelHi,C.steelD,C.steel);
-    s+=px(5,11,12,8,C.steel);s+=px(5,11,12,1,C.steelHi); // body highlight
-    s+=px(6,19,4,3,'#282830'); // group head
-    s+=px(7,20,2,1,C.steelL); // portafilter
-    s+=px(5,9,3,2,'#282830'); // buttons
-    s+=`<circle cx="7" cy="10" r="0.7" fill="#40f8a0"/>`; // power LED
-    // Drip tray
-    s+=px(5,22,10,1,'#484848');
-    // Steam
-    s+=`<path d="M10,10 Q11,7 10,5" stroke="#fff" stroke-width="0.3" fill="none" opacity="0.15" class="steam"/>`;
-    s+=`<path d="M12,10 Q13,6 11,4" stroke="#fff" stroke-width="0.3" fill="none" opacity="0.1" class="steam" style="animation-delay:1s"/>`;
-
-    // Grinder
-    s+=px16(20,12,8,10,C.steelHi,'#484858','#282830');
-    s+=px(21,10,6,2,'#383840'); // hopper
-    s+=px(22,9,4,1,'#484858'); // hopper top
-    s+=`<circle cx="24" cy="15" r="1.5" fill="#282830"/>`; // dial
-    s+=`<circle cx="24" cy="15" r="0.5" fill="${C.steelL}"/>`; // dial dot
-
-    // Kettle
-    s+=px(32,14,6,8,C.steelL);s+=px(32,14,6,1,C.steelHi); // highlight
-    s+=px(38,17,2,2,C.steelD); // handle
-    s+=px(32,13,3,2,C.steelD); // spout
-
-    // Bottom shelf items
-    s+=px16(2,36,w-4,2,C.woodHi,C.woodL,C.woodD);
-
-    // Bean bags
-    s+=px(4,24,7,12,'#402010');s+=px(4,24,7,1,'#583018'); // bag 1
-    s+=txt(7,31,'BEANS',1.5,'#a08060');
-    s+=px(13,24,7,12,'#302818');s+=px(13,24,7,1,'#484030');
-    s+=txt(16,31,'DARK',1.5,'#a09870');
-
-    // Sugar & supplies
-    s+=px(24,25,4,8,'#f0f0e8');s+=txt(26,30,'S',1.5,'#888'); // sugar
-    s+=px(30,26,5,7,'#f0f0e8');s+=txt(32,31,'☕',2,'#604020'); // tea box
-    s+=px(37,27,5,6,C.glass,0.3); // water pitcher
-    s+=px(37,27,5,1,'#fff',0.1);
-
-    // Snack basket on bottom
-    s+=px(4,38,12,6,C.potTerra,0.5);
-    s+=px(5,37,2,2,'#f0c830');s+=px(8,37,2,2,'#e04040');s+=px(11,37,2,2,'#20c070'); // fruit
-    // Cookies/snacks
-    s+=px(20,38,8,5,'#d4a060');s+=px(20,38,8,1,'#e0b070');
-
-    // "FUEL UP" sign
-    s+=txt(w/2,h-3,'☕ FUEL UP',2.5,'#a08060');
-
-    return s;
-  }
-
-  /* ---- 16-BIT GLASS CONFERENCE ROOM ---- */
-  function glassRoom(w,h){
-    let s='';
-    // Floor (carpet with texture)
-    s+=px(0,h-5,w,1,C.carpetHi);
-    s+=px(0,h-4,w,4,C.carpet);
-    for(let ct=0;ct<w;ct+=4) s+=px(ct,h-3,2,1,C.carpetL,0.08);
-    // Glass walls (16-bit: frame + glass + reflections)
-    s+=px16(0,0,1.5,h,C.steelHi,C.glassFrame,C.steelD);
-    s+=px16(w-1.5,0,1.5,h,C.steelHi,C.glassFrame,C.steelD);
-    s+=px16(0,0,w,1.5,C.steelHi,C.glassFrame,C.steelD);
-    s+=px(1.5,1.5,w-3,h-6.5,C.glass,0.05);
-    // Reflections (multiple for 16-bit feel)
-    s+=px(3,4,0.5,h-12,'#fff',0.07);
-    s+=px(5,6,0.5,h-16,'#fff',0.04);
-    s+=px(w-5,8,0.5,h-18,'#fff',0.03);
-    // Table (16-bit wood)
-    s+=px(5,h-16,w-10,1,C.woodHi);
-    s+=px(5,h-15,w-10,1,C.woodD);
-    s+=px(5,h-14,w-10,1,C.woodDk);
-    // Table legs
-    s+=px16(7,h-13,2,9,C.steelL,C.steelD,C.steel);
-    s+=px16(w-9,h-13,2,9,C.steelL,C.steelD,C.steel);
-    // TV screen (16-bit bezel)
-    const tvW=Math.floor(w*0.55);
-    s+=px16(Math.floor((w-tvW)/2)-1,2,tvW+2,10,C.monHi,C.monBezel,C.monitor);
-    s+=px(Math.floor((w-tvW)/2),3,tvW,8,'#0060c0',0.3);
-    s+=px(Math.floor((w-tvW)/2),3,tvW,1,'#0080e0',0.15); // screen top glow
-    s+=txt(Math.floor(w/2),8,'SPRINT',2,'#c0e0ff');
-    // Chairs (16-bit)
-    for(let c=0;c<3;c++){
-      const cx=8+c*Math.floor((w-18)/2);
-      s+=px16(cx,h-10,5,3,C.steelL,'#505860',C.steelD);
-      s+=px(cx+1,h-10,3,1,'#606870',0.4); // seat highlight
+    
+    // Neck
+    s += px(12, -19, 4, 2, P.skin);
+    
+    // Body
+    s += px(6, -17, 16, 14, shirt);
+    s += px(6, -17, 16, 1, shirt, 1);
+    
+    if (acc.hoodie) {
+      s += px(12, -17, 4, 3, shirt, 0.5);
+      s += px(10, -9, 8, 2, shirt, 0.3);
     }
+    if (acc.vest) {
+      s += px(6, -17, 4, 15, acc.vestCol || '#282830');
+      s += px(18, -17, 4, 15, acc.vestCol || '#282830');
+    }
+    
+    // Badge
+    s += px(17, -15, 4, 5, P.white, 0.12);
+    s += px(18, -14, 2, 2, P.monitorBlue, 0.5);
+    
+    // Arms
+    s += px(3, -15, 3, 12, shirt);
+    s += px(22, -15, 3, 12, shirt);
+    
+    // Hands
+    s += px(2, -2, 4, 2, P.skin);
+    s += px(2, -2, 4, 1, P.skinHi);
+    s += px(22, -2, 4, 2, P.skin);
+    s += px(22, -2, 4, 1, P.skinHi);
+    
+    if (acc.watch) {
+      s += px(3, -3, 3, 1, '#282830');
+      s += px(4, -4, 1, 1, P.monitorBlue, 0.7);
+    }
+    
+    // Held items
+    if (acc.clipboard) {
+      s += px(23, -9, 7, 10, P.wood);
+      s += px(24, -8, 5, 7, '#f0f0e8');
+      s += px(24, -7, 3, 1, P.successGreen);
+      s += px(24, -5, 4, 1, P.errorRed);
+    }
+    if (acc.magnifier) {
+      s += `<circle cx="26" cy="-9" r="4" fill="none" stroke="${P.warningYellow}" stroke-width="1"/>`;
+      s += `<circle cx="26" cy="-9" r="3" fill="${P.monitorBlue}" opacity="0.1"/>`;
+      s += px(29, -6, 1, 5, P.warningYellow);
+    }
+    if (acc.wrench) {
+      s += px(23, -9, 2, 7, P.steel);
+      s += px(22, -9, 4, 2, P.steelLight);
+    }
+    
+    // Legs
+    s += px(8, -3, 5, 4, pants);
+    s += px(15, -3, 5, 4, pants);
+    s += px(6, 1, 6, 4, pants);
+    s += px(16, 1, 6, 4, pants);
+    
+    // Shoes
+    const sc = acc.shoeCol || P.white;
+    s += px(4, 5, 8, 2, sc);
+    s += px(4, 7, 8, 1, '#383838');
+    s += px(16, 5, 8, 2, sc);
+    s += px(16, 7, 8, 1, '#383838');
+    
+    // Chair base
+    s += px(4, 8, 16, 1, P.steel);
+    s += px(9, 9, 6, 2, P.steel);
+    s += px(2, 11, 5, 1, P.steelDark);
+    s += px(17, 11, 5, 1, P.steelDark);
+    s += px(9, 11, 6, 1, P.steelDark);
+    
+    // Wheels
+    s += `<circle cx="4" cy="12" r="1.2" fill="#383838"/>`;
+    s += `<circle cx="20" cy="12" r="1.2" fill="#383838"/>`;
+    s += `<circle cx="12" cy="12" r="1.2" fill="#383838"/>`;
+    
+    // Status indicator
+    const lc = status === 'green' ? P.successGreen : status === 'yellow' ? P.warningYellow : '#585868';
+    s += `<circle cx="14" cy="-36" r="2.5" fill="${lc}" filter="url(#ledGlow)"/>`;
+    s += `<circle cx="14" cy="-36" r="1" fill="${P.white}" opacity="0.35"/>`;
+    if (status === 'green') {
+      s += `<circle cx="14" cy="-36" r="7" fill="${lc}" opacity="0.08" class="status-pulse"/>`;
+    }
+    
     return s;
   }
 
-  /* ---- 16-BIT PING PONG TABLE ---- */
-  function pingPong(){
-    let s='';
-    // Table surface (16-bit green gradient)
-    s+=px(0,0,30,1,'#008060');
-    s+=px(0,1,30,1,'#006850');
-    s+=px(0,2,30,1,'#005040');
-    // White line markings
-    s+=px(0,0,30,0.5,'#fff',0.15);s+=px(0,2.5,30,0.5,'#fff',0.1);
-    s+=px(14.5,0,1,3,'#fff',0.2); // center line
-    // Net (16-bit)
-    s+=px(14,-4,2,1,C.steelD);
-    s+=px(14,-3,2,3,'#fff',0.5);
-    for(let n=0;n<3;n++) s+=px(14,-3+n,2,0.5,'#ddd',0.3); // net mesh
-    s+=px(13.5,-4,1,4,C.steelD);s+=px(16.5,-4,1,4,C.steelD); // net posts
-    // Legs (16-bit)
-    s+=px16(3,3,2,10,C.steelL,C.steelD,C.steel);
-    s+=px16(25,3,2,10,C.steelL,C.steelD,C.steel);
-    // Paddles (16-bit shaded)
-    s+=px(4,-3,4,1,'#d03030');s+=px(4,-2,4,2,'#c02020');s+=px(4,0,4,1,'#a01818');
-    s+=px(5,-4,2,1,'#704020'); // handle
-    s+=px(22,-2,4,1,'#3080c0');s+=px(22,-1,4,2,'#2870a0');s+=px(22,1,4,1,'#205888');
-    s+=px(23,-3,2,1,'#704020');
-    // Ball (16-bit: highlight)
-    s+=`<circle cx="18" cy="-2" r="1.3" fill="#f0c020"/>`;
-    s+=`<circle cx="17.5" cy="-2.5" r="0.5" fill="#fff" opacity="0.3"/>`;
+  /* ==================== BIG PLANT ==================== */
+  function bigPlant(variant) {
+    let s = '';
+    if (variant === 'fiddle') {
+      s += px(5, 12, 1, 14, P.plantDk);
+      s += px(1, 2, 6, 5, P.plant);
+      s += px(7, 0, 5, 3, P.plantDk);
+      s += px(3, 7, 5, 3, P.plantHi);
+      s += px(8, 5, 4, 3, P.plant);
+    } else if (variant === 'monstera') {
+      s += px(5, 10, 1, 16, P.plantDk);
+      s += px(2, 0, 6, 7, P.plant);
+      s += px(7, 3, 5, 4, P.plantDk);
+      s += px(1, 5, 3, 3, P.plantHi);
+    } else {
+      s += px(4, 0, 1, 18, P.plantHi);
+      s += px(7, 2, 1, 16, P.plant);
+      s += px(2, 4, 1, 14, P.plantHi);
+      s += px(9, 6, 1, 12, P.plantDk);
+    }
+    // Pot
+    s += px(2, 23, 8, 1, P.steel, 0.6);
+    s += px(1, 24, 10, 5, '#8b6f47');
+    s += px(1, 24, 1, 5, P.woodLight, 0.2);
     return s;
   }
 
-  /* ---- 16-BIT BOOKSHELF ---- */
-  function bookshelf(){
-    let s='';
-    // Frame (16-bit wood)
-    s+=px16(0,0,20,30,C.woodHi,C.woodDk,'#604010');
-    s+=px(1,1,18,28,'#382818');
-    s+=px(1,1,0.5,28,C.woodDk,0.3); // inner shadow left
+  /* ==================== WHITEBOARD ==================== */
+  function whiteboard(projects) {
+    const bW = 55, bH = 50;
+    let s = '';
+    s += px(0, 0, bW, bH, P.steel);
+    s += px(1, 1, bW - 2, bH - 2, '#f8f8f0');
+    s += px(2, 2, bW - 4, 5, P.base, 0.05);
+    s += txt(bW / 2, 6, 'ACTIVE PROJECTS', 2.2, '#282840');
+    s += px(2, 7, bW - 4, 0.5, '#c0c0c8');
+    
+    const statusColors = { green: P.successGreen, yellow: P.warningYellow, red: P.errorRed, gray: '#888' };
+    const items = (projects || []).slice(0, 8);
+    items.forEach((p, i) => {
+      const y = 9 + i * 5;
+      const sc = statusColors[p.status] || '#888';
+      s += `<circle cx="5" cy="${y + 2}" r="1.5" fill="${sc}"/>`;
+      s += txt(8, y + 3, p.name || '?', 1.8, '#282840', 'start');
+      const barW = 16;
+      s += px(32, y + 1, barW, 2, '#e0e0e0');
+      s += px(32, y + 1, Math.round(barW * (p.progress || 0) / 100), 2, sc);
+      s += txt(50, y + 3, (p.progress || 0) + '%', 1.5, '#484858', 'start');
+    });
+    
+    s += px(2, bH - 2, bW - 4, 2, P.steelDark);
+    return s;
+  }
+
+  /* ==================== COFFEE STATION ==================== */
+  function coffeeStation() {
+    let s = '';
+    const w = 45, h = 55;
+    s += px(0, 0, w, h, P.wood);
+    s += px(1, 1, w - 2, h - 2, P.woodDark);
+    
     // Shelves
-    for(let sh=0;sh<4;sh++){
-      const sy=1+sh*7;
-      s+=px(1,sy+6,18,0.5,C.woodHi,0.4);
-      s+=px(1,sy+6.5,18,0.5,C.woodDk);
-      // Books (16-bit: each with spine highlight)
-      const colors=[C.book1,C.book2,C.book3,C.book4,C.book5,'#e07020','#283848'];
-      // Use seeded random based on shelf index for consistency
-      let bx=2;
-      for(let b=0;b<6;b++){
-        const bw=1+(b+sh)%2;
-        const bh=4+(b+sh*2)%3;
-        if(bx+bw>18)break;
-        const bc=colors[(b+sh)%colors.length];
-        s+=px(bx,sy+6-bh,bw,1,bc); // top edge
-        s+=px(bx,sy+7-bh,bw,bh-2,bc);
-        s+=px(bx,sy+5,bw,1,'#000',0.1); // bottom shadow
-        s+=px(bx,sy+6-bh,0.5,bh,'#fff',0.08); // spine highlight
-        bx+=bw+0.5;
+    s += px(2, 8, w - 4, 2, P.woodLight);
+    s += px(2, 22, w - 4, 2, P.woodLight);
+    s += px(2, 36, w - 4, 2, P.woodLight);
+    
+    // Espresso machine
+    s += px(4, 10, 14, 12, P.steel);
+    s += px(5, 11, 12, 8, P.steelDark);
+    s += px(6, 19, 4, 3, '#282830');
+    s += `<circle cx="7" cy="10" r="0.7" fill="${P.successGreen}"/>`;
+    
+    // Steam
+    s += `<path d="M10,10 Q11,7 10,5" stroke="${P.white}" stroke-width="0.3" fill="none" opacity="0.15" class="steam"/>`;
+    
+    // Grinder
+    s += px(20, 12, 8, 10, P.steelDark);
+    s += px(21, 10, 6, 2, '#383840');
+    
+    // Mugs
+    const mugColors = ['#f0f0f0', P.errorRed, P.monitorBlue, '#282830'];
+    mugColors.forEach((c, i) => {
+      s += px(4 + i * 8, 3, 3, 5, c);
+      s += px(7 + i * 8, 5, 1, 2, c);
+    });
+    
+    s += txt(w / 2, h - 3, 'FUEL UP', 2.5, P.woodDark);
+    return s;
+  }
+
+  /* ==================== SERVER RACK ==================== */
+  function serverRack() {
+    let s = '';
+    s += px(0, 0, 18, 40, P.steelDark);
+    s += px(1, 1, 16, 38, '#141820');
+    
+    for (let u = 0; u < 7; u++) {
+      const uy = 2 + u * 5;
+      s += px(2, uy, 14, 3.5, '#2a3038');
+      s += `<circle cx="4" cy="${uy + 2}" r="0.8" fill="${P.successGreen}" filter="url(#ledGlow)"/>`;
+      s += `<circle cx="7" cy="${uy + 2}" r="0.6" fill="${u % 3 === 2 ? P.warningYellow : P.errorRed}" filter="url(#ledGlow)"/>`;
+      
+      // Server glow onto floor
+      s += `<ellipse cx="9" cy="${uy + 40}" rx="8" ry="2" fill="${P.successGreen}" opacity="0.03"/>`;
+    }
+    return s;
+  }
+
+  /* ==================== BOOKSHELF ==================== */
+  function bookshelf() {
+    let s = '';
+    s += px(0, 0, 20, 30, P.woodDark);
+    s += px(1, 1, 18, 28, '#382818');
+    
+    for (let sh = 0; sh < 4; sh++) {
+      const sy = 1 + sh * 7;
+      s += px(1, sy + 6, 18, 0.5, P.woodLight, 0.4);
+      const colors = [P.errorRed, P.monitorBlue, P.warningYellow, '#9858c0', P.successGreen];
+      let bx = 2;
+      for (let b = 0; b < 6; b++) {
+        const bw = 1 + (b + sh) % 2;
+        const bh = 4 + (b + sh * 2) % 3;
+        if (bx + bw > 18) break;
+        const bc = colors[(b + sh) % colors.length];
+        s += px(bx, sy + 6 - bh, bw, bh, bc);
+        bx += bw + 0.5;
       }
     }
     return s;
   }
 
-  /* ---- NEON SIGN (vivid triple-glow) ---- */
-  function neonSign(text,color){
-    color=color||C.neon;
-    const white='#ffffff';
-    // Layer order: outer glow (wide blur) → mid glow → bright core → white-hot center
-    return `<text x="0" y="6" fill="${color}" font-family="'Press Start 2P',monospace" font-size="5.5" opacity="0.5" filter="url(#neonWide)">${text}</text>`
-      +`<text x="0" y="6" fill="${color}" font-family="'Press Start 2P',monospace" font-size="5.5" opacity="0.7" filter="url(#neonGlow)">${text}</text>`
-      +`<text x="0" y="6" fill="${white}" font-family="'Press Start 2P',monospace" font-size="5.5" opacity="0.95">${text}</text>`
-      +`<text x="0.3" y="6.3" fill="#000" font-family="'Press Start 2P',monospace" font-size="5.5" opacity="0.08">${text}</text>`;
+  /* ==================== GLASS CONFERENCE ROOM ==================== */
+  function glassRoom(w, h) {
+    let s = '';
+    s += px(0, h - 5, w, 5, '#183858', 0.3);
+    s += px(0, 0, 1.5, h, P.steel);
+    s += px(w - 1.5, 0, 1.5, h, P.steel);
+    s += px(0, 0, w, 1.5, P.steel);
+    s += px(1.5, 1.5, w - 3, h - 6.5, P.glass, 0.05);
+    
+    // Reflections
+    s += px(3, 4, 0.5, h - 12, P.white, 0.07);
+    s += px(w - 5, 8, 0.5, h - 18, P.white, 0.03);
+    
+    // Table
+    s += px(5, h - 16, w - 10, 2, P.wood);
+    s += px(7, h - 14, 2, 9, P.steel);
+    s += px(w - 9, h - 14, 2, 9, P.steel);
+    
+    // TV
+    const tvW = Math.floor(w * 0.55);
+    s += px(Math.floor((w - tvW) / 2) - 1, 2, tvW + 2, 10, P.monitorBezel);
+    s += px(Math.floor((w - tvW) / 2), 3, tvW, 8, P.monitorBg);
+    s += txt(Math.floor(w / 2), 8, 'SPRINT', 2, '#c0e0ff');
+    
+    return s;
   }
 
-  /* ---- SMALL NEON (vivid) ---- */
-  function neonSmall(text,color){
-    color=color||C.neonPink;
-    return `<text x="0" y="4" fill="${color}" font-family="'Press Start 2P',monospace" font-size="3.2" opacity="0.6" filter="url(#neonWide)">${text}</text>`
-      +`<text x="0" y="4" fill="${color}" font-family="'Press Start 2P',monospace" font-size="3.2" opacity="0.8" filter="url(#neonGlow)">${text}</text>`
-      +`<text x="0" y="4" fill="#fff0f8" font-family="'Press Start 2P',monospace" font-size="3.2" opacity="0.95">${text}</text>`;
+  /* ==================== PING PONG TABLE ==================== */
+  function pingPong() {
+    let s = '';
+    s += px(0, 0, 30, 3, '#006850');
+    s += px(0, 0, 30, 0.5, P.white, 0.15);
+    s += px(14.5, 0, 1, 3, P.white, 0.2);
+    
+    // Net
+    s += px(14, -4, 2, 1, P.steelDark);
+    s += px(14, -3, 2, 3, P.white, 0.5);
+    s += px(13.5, -4, 1, 4, P.steelDark);
+    s += px(16.5, -4, 1, 4, P.steelDark);
+    
+    // Legs
+    s += px(3, 3, 2, 10, P.steel);
+    s += px(25, 3, 2, 10, P.steel);
+    
+    // Paddles
+    s += px(4, -3, 4, 3, '#c02020');
+    s += px(22, -2, 4, 3, '#2870a0');
+    
+    // Ball
+    s += `<circle cx="18" cy="-2" r="1.3" fill="${P.warningYellow}"/>`;
+    return s;
   }
 
-  /* ---- PROJECT TAGS ---- */
-  function projectTags(projects, x, y, maxW){
-    let s='';
-    let cx=0, cy=0;
-    const colors=['#6c5ce7','#00b894','#0984e3','#fdcb6e','#e74c3c','#fd79a8'];
-    projects.forEach((p,i)=>{
-      const tw=p.length*2.8+4;
-      if(cx+tw>maxW){cx=0;cy+=5;}
-      s+=px(x+cx,y+cy,tw,4,colors[i%colors.length],0.3);
-      s+=px(x+cx,y+cy,tw,0.5,colors[i%colors.length],0.5);
-      s+=txt(x+cx+tw/2,y+cy+3,p,1.8,'#eaf0ff');
-      cx+=tw+2;
+  /* ==================== LOC BADGE ==================== */
+  function locBadge(x, y, lines) {
+    let s = '';
+    const label = lines >= 1000 ? (lines / 1000).toFixed(1) + 'k' : String(lines);
+    const bw = label.length * 3.2 + 8;
+    s += px(x - bw / 2, y, bw, 7, P.base, 0.85);
+    s += txt(x - bw / 2 + 3, y + 5, '</>', 2, P.monitorBlue, 'start');
+    s += txt16(x + 2, y + 5.5, label, 2.5, lines > 500 ? P.successGreen : lines > 0 ? P.warningYellow : '#585868');
+    return s;
+  }
+
+  /* ==================== PROJECT TAGS ==================== */
+  function projectTags(projects, x, y, maxW) {
+    let s = '';
+    let cx = 0, cy = 0;
+    const colors = ['#6c5ce7', '#00b894', '#0984e3', '#fdcb6e', '#e74c3c', '#fd79a8'];
+    projects.forEach((p, i) => {
+      const tw = p.length * 2.8 + 4;
+      if (cx + tw > maxW) { cx = 0; cy += 5; }
+      s += px(x + cx, y + cy, tw, 4, colors[i % colors.length], 0.3);
+      s += txt(x + cx + tw / 2, y + cy + 3, p, 1.8, '#eaf0ff');
+      cx += tw + 2;
     });
     return s;
   }
 
-  /* ---- 16-BIT DESK ACCESSORIES ---- */
-  function deskStuff(type){
-    let s='';
-    if(type==='forge'){
-      // Energy drink (16-bit: label + highlight)
-      s+=px(0,0,2,1,'#d03030');s+=px(0,1,2,2,'#e04848');s+=px(0,3,2,1,'#c02020');
-      s+=px(0,0,0.5,4,'#ff6060',0.15); // can highlight
-      s+=px(0,1,2,0.5,'#f0f0f0',0.2); // label stripe
-      // Mechanical keyboard (16-bit)
-      s+=px(5,-1,12,1,'#383840');s+=px(5,0,12,1,'#303038');s+=px(5,1,12,1,'#282830');
-      for(let k=0;k<5;k++){s+=px(6+k*2,0,1,1,'#505860');s+=px(6+k*2,-0.5,1,0.5,'#606870',0.3);}
-      // RGB glow
-      s+=px(6,-1,2,0.5,'#f04848',0.15);s+=px(10,-1,2,0.5,'#40f0a0',0.15);s+=px(14,-1,2,0.5,'#4080f0',0.15);
-    } else if(type==='anvil'){
-      // Tea mug (16-bit)
-      s+=px(0,0,3,1,C.cupHi);s+=px(0,1,3,1,C.cup);s+=px(0,2,3,1,C.cupD);
-      s+=px(3,1,1,1,C.cupD); // handle
-      s+=`<path d="M1,-1 Q1.5,-3 1,-4" stroke="#d0d0d0" stroke-width="0.3" fill="none" opacity="0.2" class="steam"/>`;
-      // Rubber duck (16-bit)
-      s+=px(6,0,3,1,'#f8d840');s+=px(6,1,3,1,'#f0c830');s+=px(6,2,3,1,'#d8b020');
-      s+=px(7,-1,1,1,'#f8d840'); // head
-      s+=px(8,1,1,1,'#e08020'); // beak
-      s+=`<circle cx="7.3" cy="-0.3" r="0.4" fill="#181828"/>`;
-    } else if(type==='scout'){
-      // Notebook (16-bit)
-      s+=px(0,0,5,1,'#303840');s+=px(0,1,5,2,'#282830');s+=px(0,3,5,1,'#202028');
-      s+=px(1,1,3,1,'#f0f0e8',0.2); // page edge
-      s+=px(0,0,0.5,4,'#404850'); // spine
-      // Pen (16-bit)
-      s+=px(6,0,0.5,4,'#3080d0');s+=px(6.5,0,0.5,4,'#2060a0');
-      s+=px(6,0,1,0.5,'#c0c0c0'); // clip
-    } else if(type==='relay'){
-      // Cable spaghetti (16-bit: thicker, more cables)
-      s+=`<path d="M0,0 Q3,2 2,4 Q1,6 4,5" stroke="#e04040" stroke-width="0.6" fill="none"/>`;
-      s+=`<path d="M2,0 Q5,1 3,3 Q1,5 5,4" stroke="#4080f0" stroke-width="0.6" fill="none"/>`;
-      s+=`<path d="M1,1 Q4,0 3,3 Q2,5 5,3" stroke="#f0c020" stroke-width="0.4" fill="none"/>`;
-      // USB stick
-      s+=px(6,2,3,1.5,C.steelL);s+=px(6,2,3,0.5,C.steelHi);s+=px(6.5,3.5,2,0.5,'#4080f0');
-    } else if(type==='pulse'){
-      // Coffee cup (16-bit)
-      s+=px(0,1,3,1,C.cupHi);s+=px(0,2,3,1,C.cup);s+=px(0,3,3,1,C.cupD);
-      s+=px(3,2,1,1,C.cupD); // handle
-      s+=px(0,1,0.5,3,'#fff',0.08); // highlight
-      // Steam (double wisp)
-      s+=`<path d="M1,-1 Q2,-3 1,-5" stroke="#d0d8e0" stroke-width="0.3" fill="none" opacity="0.25" class="steam"/>`;
-      s+=`<path d="M2,0 Q3,-2 2,-4" stroke="#d0d8e0" stroke-width="0.25" fill="none" opacity="0.15" class="steam" style="animation-delay:1.5s"/>`;
+  /* ==================== FLOATING PARTICLES (dust motes) ==================== */
+  function dustParticles(count) {
+    let s = '';
+    for (let i = 0; i < count; i++) {
+      const x = 50 + Math.random() * 500;
+      const y = 100 + Math.random() * 100;
+      const delay = Math.random() * 15;
+      s += `<circle cx="${x}" cy="${y}" r="0.5" fill="${P.white}" opacity="0.15" class="dust-mote" style="animation-delay:${delay}s"/>`;
     }
     return s;
   }
 
-  /* ---- 16-BIT CLOCK (with real CST time hands) ---- */
-  function wallClock(x,y){
-    let s='';
-    // Bezel (16-bit metallic ring)
-    s+=`<circle cx="${x}" cy="${y}" r="6" fill="${C.steelD}"/>`;
-    s+=`<circle cx="${x}" cy="${y}" r="5.5" fill="${C.steelL}" opacity="0.3"/>`;
-    s+=`<circle cx="${x}" cy="${y}" r="5" fill="#080c18"/>`;
-    // Face gradient
-    s+=`<circle cx="${x}" cy="${y}" r="4.5" fill="#101828"/>`;
-    // Hour marks (16-bit: lines not dots)
-    for(let h=0;h<12;h++){
-      const a=h*30*Math.PI/180;
-      const ix=Math.sin(a), iy=-Math.cos(a);
-      s+=`<line x1="${x+ix*3}" y1="${y+iy*3}" x2="${x+ix*4}" y2="${y+iy*4}" stroke="${h%3===0?'#fff':'#808898'}" stroke-width="${h%3===0?0.5:0.3}"/>`;
-    }
-    // Real CST time hands
-    const now=new Date();
-    const cstOff=-6;
-    const ch=(now.getUTCHours()+cstOff+24)%24;
-    const cm=now.getUTCMinutes();
-    const ha=(ch%12+cm/60)*30*Math.PI/180;
-    const ma=cm*6*Math.PI/180;
-    // Hour hand
-    s+=`<line x1="${x}" y1="${y}" x2="${x+Math.sin(ha)*2.5}" y2="${y-Math.cos(ha)*2.5}" stroke="#e0e8f0" stroke-width="0.5" stroke-linecap="round"/>`;
-    // Minute hand
-    s+=`<line x1="${x}" y1="${y}" x2="${x+Math.sin(ma)*3.5}" y2="${y-Math.cos(ma)*3.5}" stroke="#c0c8d0" stroke-width="0.35" stroke-linecap="round"/>`;
-    // Center dot
-    s+=`<circle cx="${x}" cy="${y}" r="0.6" fill="#f04040"/>`;
-    s+=`<circle cx="${x}" cy="${y}" r="0.3" fill="#fff" opacity="0.4"/>`;
-    return s;
-  }
-
-  /* ============ AGENTS DATA ============ */
+  /* ==================== AGENTS DATA ==================== */
   const AGENTS = [
     {
-      name:'FORGE', role:'Lead Engineer',
-      projects:['SCALARA','GH_INTEL','LOCAL_TTS','LORA_GEN','C64'],
-      hair:'#b33939', shirt:'#e74c3c', pants:'#2d3436', status:'green',
-      acc:{headphones:true,hpColor:'#e74c3c',mic:true,hoodie:true,shoeCol:'#e74c3c',watch:true},
-      screen:'code', stuff:'forge',
+      name: 'FORGE', role: 'Lead Engineer',
+      projects: ['SCALARA', 'GH_INTEL', 'LOCAL_TTS', 'LORA_GEN', 'C64'],
+      hair: '#b33939', shirt: '#e74c3c', pants: '#2d3436', status: 'green',
+      acc: { headphones: true, hpColor: '#e74c3c', mic: true, hoodie: true, shoeCol: '#e74c3c', watch: true },
+      screen: 'code', stuff: 'forge',
     },
     {
-      name:'ANVIL', role:'QA Lead',
-      projects:['SCALARA','GH_INTEL','LOCAL_TTS','LORA_GEN','C64'],
-      hair:'#2d3436', shirt:'#2ecc71', pants:'#636e72', status:'green',
-      acc:{glasses:true,glassCol:'#2d3436',clipboard:true,shoeCol:'#2d3436',watch:true},
-      screen:'review', stuff:'anvil',
+      name: 'ANVIL', role: 'QA Lead',
+      projects: ['SCALARA', 'GH_INTEL', 'LOCAL_TTS', 'LORA_GEN', 'C64'],
+      hair: '#2d3436', shirt: '#2ecc71', pants: '#636e72', status: 'green',
+      acc: { glasses: true, glassCol: '#2d3436', clipboard: true, shoeCol: '#2d3436', watch: true },
+      screen: 'review', stuff: 'anvil',
     },
     {
-      name:'SCOUT', role:'Research Lead',
-      projects:['COMPUTE_BUDGET','LOCAL_TTS','LORA_GEN'],
-      hair:'#fdcb6e', shirt:'#0984e3', pants:'#2d3436', status:'green',
-      acc:{magnifier:true,hoodie:true,shoeCol:'#0984e3',ponytail:true},
-      screen:'research', stuff:'scout',
+      name: 'SCOUT', role: 'Research Lead',
+      projects: ['COMPUTE_BUDGET', 'LOCAL_TTS', 'LORA_GEN'],
+      hair: '#fdcb6e', shirt: '#0984e3', pants: '#2d3436', status: 'green',
+      acc: { magnifier: true, hoodie: true, shoeCol: '#0984e3', ponytail: true },
+      screen: 'research', stuff: 'scout',
     },
     {
-      name:'RELAY', role:'DevOps Engineer',
-      projects:['DATA_AUDIT','COMPUTE_BUDGET','OPS_INFRA'],
-      hair:'#636e72', shirt:'#fd79a8', pants:'#2d3436', status:'green',
-      acc:{beanie:'#2d3436',headphones:true,hpColor:'#fd79a8',wrench:true,shoeCol:'#636e72',buzzcut:true},
-      screen:'ops', stuff:'relay',
+      name: 'RELAY', role: 'DevOps Engineer',
+      projects: ['DATA_AUDIT', 'COMPUTE_BUDGET', 'OPS_INFRA'],
+      hair: '#636e72', shirt: '#fd79a8', pants: '#2d3436', status: 'green',
+      acc: { beanie: '#2d3436', headphones: true, hpColor: '#fd79a8', wrench: true, shoeCol: '#636e72', buzzcut: true },
+      screen: 'ops', stuff: 'relay',
     },
     {
-      name:'PULSE', role:'SRE / Monitor',
-      projects:['COMPUTE_BUDGET','OPS_INFRA'],
-      hair:'#2d3436', shirt:'#a29bfe', pants:'#636e72', status:'green',
-      acc:{glasses:true,glassCol:'#a29bfe',headphones:true,hpColor:'#a29bfe',shoeCol:'#fff',vest:true,vestCol:'#2d3436'},
-      screen:'monitor', stuff:'pulse',
+      name: 'PULSE', role: 'SRE / Monitor',
+      projects: ['COMPUTE_BUDGET', 'OPS_INFRA'],
+      hair: '#2d3436', shirt: '#a29bfe', pants: '#636e72', status: 'green',
+      acc: { glasses: true, glassCol: '#a29bfe', headphones: true, hpColor: '#a29bfe', shoeCol: P.white, vest: true, vestCol: '#2d3436' },
+      screen: 'monitor', stuff: 'pulse',
     },
   ];
 
-  /* ---- 16-BIT SEATED CHARACTER ---- */
-  function seatedAgent(ag, i){
-    let s='';
-    const hair=ag.hair, shirt=ag.shirt, pants=ag.pants, status=ag.status, acc=ag.acc;
-    // Derived 16-bit shading colors
-    const shirtHi=shirt.replace(/[0-9a-f]{2}$/i,m=>{const v=Math.min(255,parseInt(m,16)+40);return v.toString(16).padStart(2,'0');});
-    const shirtShd=shirt.replace(/[0-9a-f]{2}$/i,m=>{const v=Math.max(0,parseInt(m,16)-40);return v.toString(16).padStart(2,'0');});
-    const pantsHi=pants.replace(/[0-9a-f]{2}$/i,m=>{const v=Math.min(255,parseInt(m,16)+30);return v.toString(16).padStart(2,'0');});
-
-    // ---- CHAIR BACK (behind character) ----
-    s+=px16(2,-10,20,10,C.steelL,C.steelD,C.steel); // chair back frame
-    // Mesh pattern (16-bit detail)
-    for(let my=-9;my<-2;my+=2) s+=px(4,my,16,1,'#000',0.06);
-    s+=px(1,-8,2,14,C.steelD); // armrest L
-    s+=px(0,-7,1,12,C.steelL,0.3); // armrest highlight
-    s+=px(21,-8,2,14,C.steelD); // armrest R
-    s+=px(1,-9,3,2,shirt,0.5); // arm pad L
-    s+=px(20,-9,3,2,shirt,0.5); // arm pad R
-
-    // ---- HAIR ----
-    s+=px(9,-32,10,6,hair);
-    s+=px(9,-32,10,1,hair.replace(/[0-9a-f]{2}$/i,m=>{const v=Math.min(255,parseInt(m,16)+30);return v.toString(16).padStart(2,'0');})); // highlight
-    s+=px(8,-30,1,3,hair);s+=px(19,-30,1,3,hair); // sideburns
-    if(acc.beanie){s+=px(8,-33,12,5,acc.beanie);s+=px(10,-34,8,2,acc.beanie);s+=px(9,-33,10,1,'#fff',0.12);}
-    if(acc.ponytail){s+=px(18,-31,2,7,hair);s+=px(19,-28,1,5,hair);}
-
-    // ---- HEAD (16-bit: highlight + base + shadow) ----
-    s+=px(10,-28,8,1,C.skinHi); // forehead highlight
-    s+=px(10,-27,8,8,C.skin);
-    s+=px(10,-20,8,1,C.skinShd); // jaw shadow
-    s+=px(9,-26,1,5,C.skin);s+=px(18,-26,1,5,C.skin); // ears
-    s+=px(9,-26,1,1,C.skinHi); // ear highlight
-
-    // ---- EYEBROWS ----
-    s+=px(11,-26,3,1,hair,0.7);s+=px(15,-26,3,1,hair,0.7);
-
-    // ---- EYES (16-bit: white + iris + pupil + highlight) ----
-    if(status==='green'){
-      s+=px(11,-25,3,3,'#e8e8f0'); // white L
-      s+=px(12,-24,2,2,'#2848a0'); // iris L
-      s+=px(12,-24,1,1,'#181828'); // pupil L
-      s+=px(13,-25,1,1,'#fff'); // highlight L
-      s+=px(15,-25,3,3,'#e8e8f0'); // white R
-      s+=px(16,-24,2,2,'#2848a0'); // iris R
-      s+=px(16,-24,1,1,'#181828'); // pupil R
-      s+=px(17,-25,1,1,'#fff'); // highlight R
-    } else {
-      s+=px(12,-24,2,1,'#484858');s+=px(16,-24,2,1,'#484858');
-    }
-
-    // ---- GLASSES ----
-    if(acc.glasses){
-      const gc=acc.glassCol||'#303038';
-      s+=`<rect x="10.5" y="-26" width="4.5" height="4" fill="none" stroke="${gc}" stroke-width="0.6" rx="0.5"/>`;
-      s+=px(11,-25,3,2,'#88c0f0',0.08); // lens glare
-      s+=`<rect x="15" y="-26" width="4.5" height="4" fill="none" stroke="${gc}" stroke-width="0.6" rx="0.5"/>`;
-      s+=px(16,-25,3,2,'#88c0f0',0.08);
-      s+=px(14.5,-25,0.5,1,gc);
-    }
-
-    // ---- HEADPHONES (16-bit) ----
-    if(acc.headphones){
-      const hc=acc.hpColor||'#e04040';
-      s+=px(8,-29,1,7,'#282830');s+=px(19,-29,1,7,'#282830');
-      s+=`<path d="M8,-29 Q14,-33 19,-29" stroke="#282830" stroke-width="1.2" fill="none"/>`;
-      s+=px(7,-27,2,5,hc);s+=px(7,-27,2,1,hc.replace(/[0-9a-f]{2}$/i,m=>{const v=Math.min(255,parseInt(m,16)+40);return v.toString(16).padStart(2,'0');})); // highlight
-      s+=px(19,-27,2,5,hc);
-      if(acc.mic){s+=px(6,-25,1,5,'#282830');s+=px(5,-20,3,2,'#484858');}
-    }
-
-    // ---- NOSE & MOUTH ----
-    s+=px(14,-23,1,2,C.skinShd,0.4);
-    if(status==='green'){s+=px(13,-20,3,1,'#d06048');s+=px(13,-20,1,1,'#e07058');} // smile
-    else s+=px(13,-21,2,1,'#a06048');
-
-    // ---- NECK ----
-    s+=px(12,-19,4,2,C.skin);s+=px(12,-19,4,1,C.skinShd,0.15);
-
-    // ---- TORSO (16-bit: highlight stripe + body + shadow) ----
-    s+=px(6,-17,16,1,shirtHi); // collar highlight
-    s+=px(6,-16,16,13,shirt);
-    s+=px(6,-4,16,1,shirtShd); // bottom shadow
-    // Shirt wrinkle details
-    s+=px(10,-12,1,4,shirtShd,0.15);s+=px(16,-10,1,3,shirtHi,0.12);
-    if(acc.hoodie){
-      s+=px(12,-17,4,3,shirtHi,0.1); // hood at collar
-      s+=px(10,-9,8,2,shirtShd,0.08); // kangaroo pocket shadow
-      s+=px(10,-8,8,1,shirtHi,0.06);
-    }
-    if(acc.vest){
-      s+=px(6,-17,4,15,acc.vestCol||'#282830');s+=px(6,-17,4,1,'#484858',0.2);
-      s+=px(18,-17,4,15,acc.vestCol||'#282830');
-    }
-    // Badge
-    s+=px(17,-15,4,5,'#fff',0.12);s+=px(18,-14,2,2,'#60a8f0',0.5);s+=px(18,-14,1,1,'#fff',0.2);
-
-    // ---- ARMS (reaching to desk) ----
-    s+=px(3,-15,3,1,shirtHi); // shoulder highlight L
-    s+=px(3,-14,3,12,shirt);
-    s+=px(22,-15,3,1,shirtHi); // shoulder highlight R
-    s+=px(22,-14,3,12,shirt);
-
-    // ---- HANDS ON KEYBOARD ----
-    s+=px(2,-2,4,2,C.skin);s+=px(2,-2,4,1,C.skinHi); // highlight
-    s+=px(22,-2,4,2,C.skin);s+=px(22,-2,4,1,C.skinHi);
-    if(acc.watch){s+=px(3,-3,3,1,'#282830');s+=px(4,-4,1,1,'#60a8f0',0.7);}
-
-    // ---- HELD ITEMS ----
-    if(acc.clipboard){
-      s+=px16(23,-9,7,10,C.woodHi,C.wood,C.woodD);
-      s+=px(24,-8,5,7,'#f0f0e8');
-      s+=px(24,-7,3,1,'#30d070');s+=px(24,-5,4,1,'#f04848');s+=px(24,-3,2,1,'#f0c830');
-    }
-    if(acc.magnifier){
-      s+=`<circle cx="26" cy="-9" r="4" fill="none" stroke="#f0c830" stroke-width="1"/>`;
-      s+=`<circle cx="26" cy="-9" r="3" fill="#60a8f0" opacity="0.1"/>`;
-      s+=`<circle cx="26" cy="-9" r="1" fill="#fff" opacity="0.08"/>`;
-      s+=px(29,-6,1,5,'#f0c830');
-    }
-    if(acc.wrench){
-      s+=px16(23,-9,2,7,C.steelHi,C.steelD,C.steel);
-      s+=px(22,-9,4,2,C.steelL);
-    }
-
-    // ---- LEGS (bent, seated — 16-bit) ----
-    s+=px(8,-3,5,1,pantsHi);s+=px(8,-2,5,3,pants);
-    s+=px(15,-3,5,1,pantsHi);s+=px(15,-2,5,3,pants);
-    // Legs extending forward
-    s+=px(6,1,6,4,pants);s+=px(6,1,6,1,pantsHi);
-    s+=px(16,1,6,4,pants);s+=px(16,1,6,1,pantsHi);
-
-    // ---- SHOES (16-bit: highlight + base + sole) ----
-    const sc=acc.shoeCol||'#f0f0f0';
-    s+=px(4,5,8,1,sc);s+=px(4,6,8,1,sc.replace(/f/gi,'d')); // darker
-    s+=px(4,7,8,1,'#383838'); // sole
-    s+=px(16,5,8,1,sc);s+=px(16,6,8,1,sc.replace(/f/gi,'d'));
-    s+=px(16,7,8,1,'#383838');
-    // Lace detail
-    s+=px(6,5,1,1,'#fff',0.3);s+=px(18,5,1,1,'#fff',0.3);
-
-    // ---- CHAIR BASE (16-bit) ----
-    s+=px16(4,8,16,1,C.steelHi,C.steel,C.steelD);
-    s+=px16(9,9,6,2,C.steelL,C.steel,C.steelD); // cylinder
-    s+=px(2,11,5,1,C.steelD);s+=px(17,11,5,1,C.steelD);s+=px(9,11,6,1,C.steelD); // star base
-    // Wheels (circles with highlight)
-    s+=`<circle cx="4" cy="12" r="1.2" fill="#383838"/><circle cx="4" cy="11.5" r="0.5" fill="#505050"/>`;
-    s+=`<circle cx="20" cy="12" r="1.2" fill="#383838"/><circle cx="20" cy="11.5" r="0.5" fill="#505050"/>`;
-    s+=`<circle cx="12" cy="12" r="1.2" fill="#383838"/><circle cx="12" cy="11.5" r="0.5" fill="#505050"/>`;
-
-    // ---- 32-BIT STATUS INDICATOR (real glow) ----
-    const lc=status==='green'?C.neonGreen:status==='yellow'?'#f0d040':'#585868';
-    s+=`<circle cx="14" cy="-36" r="2.5" fill="${lc}" filter="url(#ledGlow)"/>`;
-    s+=`<circle cx="14" cy="-36" r="1" fill="#fff" opacity="0.35"/>`;
-    s+=`<circle cx="14" cy="-36" r="5" fill="${lc}" opacity="0.1"/>`;
-    if(status==='green') s+=`<circle cx="14" cy="-36" r="8" fill="${lc}" opacity="0.04" class="status-pulse"/>`;
-
-    return s;
-  }
-
-  /* ---- 16-BIT WALKING CHARACTER ---- */
-  function walkingPerson(hairCol, shirtCol, pantsCol, dir){
-    let s='';
-    const flip = dir==='left' ? 'transform="scale(-1,1)"' : '';
-    const shirtHi=shirtCol.replace(/[0-9a-f]{2}$/i,m=>{const v=Math.min(255,parseInt(m,16)+35);return v.toString(16).padStart(2,'0');});
-    s+=`<g ${flip}>`;
-    // Hair (16-bit)
-    s+=px(4,0,8,1,hairCol.replace(/[0-9a-f]{2}$/i,m=>{const v=Math.min(255,parseInt(m,16)+25);return v.toString(16).padStart(2,'0');}));
-    s+=px(4,1,8,3,hairCol);
-    // Head (16-bit: hi/mid/shd)
-    s+=px(5,3,6,1,C.skinHi);s+=px(5,4,6,5,C.skin);s+=px(5,9,6,1,C.skinShd);
-    s+=px(4,5,1,3,C.skin); // ear
-    // Eye
-    s+=px(7,5,2,2,'#181828');s+=px(7,5,1,1,'#fff',0.4);
-    // Mouth
-    s+=px(7,8,2,1,'#d06048',0.6);
-    // Body (16-bit)
-    s+=px(4,10,8,1,shirtHi);s+=px(4,11,8,6,shirtCol);s+=px(4,17,8,1,shirtCol.replace(/[0-9a-f]{2}$/i,m=>{const v=Math.max(0,parseInt(m,16)-30);return v.toString(16).padStart(2,'0');}));
-    // Arms (animated swing via CSS)
-    s+=px(2,11,2,1,shirtHi);s+=px(2,12,2,5,shirtCol);
-    s+=px(12,11,2,1,shirtHi);s+=px(12,12,2,5,shirtCol);
-    // Hands
-    s+=px(2,17,2,1,C.skin);s+=px(12,17,2,1,C.skin);
-    // Legs (walking pose)
-    s+=px(5,18,3,1,pantsCol.replace(/[0-9a-f]{2}$/i,m=>{const v=Math.min(255,parseInt(m,16)+20);return v.toString(16).padStart(2,'0');}));
-    s+=px(5,19,3,4,pantsCol);
-    s+=px(8,18,3,1,pantsCol.replace(/[0-9a-f]{2}$/i,m=>{const v=Math.min(255,parseInt(m,16)+20);return v.toString(16).padStart(2,'0');}));
-    s+=px(8,19,3,4,pantsCol);
-    // Shoes (16-bit)
-    s+=px(4,23,4,1,'#f0f0f0');s+=px(4,24,4,1,'#d0d0d0');
-    s+=px(8,23,4,1,'#f0f0f0');s+=px(8,24,4,1,'#d0d0d0');
-    s+=`</g>`;
-    // Walking shadow on floor
-    s+=`<ellipse cx="8" cy="25" rx="5" ry="1" fill="#000" opacity="0.08"/>`;
-    return s;
-  }
-
-  /* ---- LOC BADGE (lines of code counter near character) ---- */
-  function locBadge(x, y, lines){
-    let s='';
-    const label = lines >= 1000 ? (lines/1000).toFixed(1)+'k' : String(lines);
-    const bw = label.length * 3.2 + 8;
-    // Badge background
-    s+=px(x-bw/2,y,bw,7,'#181828',0.85);
-    s+=px(x-bw/2,y,bw,1,'#282840',0.6);
-    // Code icon (tiny </>)
-    s+=txt(x-bw/2+3,y+5,'</>',2,'#60a8f0','start');
-    // Count
-    s+=txt16(x+2,y+5.5,label,2.5,lines>500?'#40f8a0':lines>0?'#f0c830':'#585868');
-    // "lines" sublabel
-    s+=txt(x+2,y+9,'lines today',1.5,'#585868');
-    return s;
-  }
-
-  /* ============ BUILD SCENE ============ */
+  /* ==================== BUILD SCENE ==================== */
   let _agentLocData = null;
   let _projectsData = null;
 
-  function buildOffice(){
-    const W=600, H=240;
-    let s='';
+  function buildOffice() {
+    const W = 600, H = 240;
+    let s = '';
 
-    // ---- 32-BIT DEFS: gradients, filters, patterns ----
-    s+=`<defs>
-      <!-- Glow filters -->
-      <filter id="neonGlow"><feGaussianBlur stdDeviation="3" result="b"/>
-        <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-      </filter>
-      <filter id="neonWide"><feGaussianBlur stdDeviation="8" result="b"/>
-        <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-      </filter>
-      <filter id="softGlow"><feGaussianBlur stdDeviation="1.5" result="b"/>
-        <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-      </filter>
-      <filter id="dropShadow"><feGaussianBlur in="SourceAlpha" stdDeviation="1.5"/>
-        <feOffset dx="1" dy="2" result="s"/><feFlood flood-color="#000" flood-opacity="0.3" result="c"/>
-        <feComposite in="c" in2="s" operator="in" result="shadow"/>
-        <feMerge><feMergeNode in="shadow"/><feMergeNode in="SourceGraphic"/></feMerge>
-      </filter>
-      <filter id="furnitureShadow"><feGaussianBlur in="SourceAlpha" stdDeviation="2"/>
-        <feOffset dx="1.5" dy="3" result="s"/><feFlood flood-color="#000" flood-opacity="0.2" result="c"/>
-        <feComposite in="c" in2="s" operator="in" result="shadow"/>
-        <feMerge><feMergeNode in="shadow"/><feMergeNode in="SourceGraphic"/></feMerge>
-      </filter>
-      <filter id="monitorGlow"><feGaussianBlur stdDeviation="2" result="b"/><feFlood flood-color="#4080ff" flood-opacity="0.08" result="c"/>
-        <feComposite in="c" in2="b" operator="in" result="glow"/>
-        <feMerge><feMergeNode in="glow"/><feMergeNode in="SourceGraphic"/></feMerge>
-      </filter>
-      <filter id="ledGlow"><feGaussianBlur stdDeviation="1" result="b"/>
-        <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-      </filter>
+    // ==================== DEFS ====================
+    s += `<defs>
+      <!-- Neon glow filters (triple-layer) -->
+      <filter id="neonBloom"><feGaussianBlur stdDeviation="12"/></filter>
+      <filter id="neonMid"><feGaussianBlur stdDeviation="4"/></filter>
+      <filter id="neonCore"><feGaussianBlur stdDeviation="1.5"/></filter>
+      
+      <!-- LED glow -->
+      <filter id="ledGlow"><feGaussianBlur stdDeviation="1.5"/></filter>
+      
+      <!-- Soft blur -->
+      <filter id="softGlow"><feGaussianBlur stdDeviation="2"/></filter>
+      
       <!-- Gradients -->
       <linearGradient id="wallGrad" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#1e1e38"/><stop offset="60%" stop-color="#141428"/><stop offset="100%" stop-color="#101020"/>
+        <stop offset="0%" stop-color="${P.wall}"/>
+        <stop offset="100%" stop-color="${P.wallGrad}"/>
       </linearGradient>
+      
       <linearGradient id="floorGrad" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#222038"/><stop offset="100%" stop-color="#161424"/>
+        <stop offset="0%" stop-color="${P.floor}"/>
+        <stop offset="100%" stop-color="${P.base}"/>
       </linearGradient>
-      <linearGradient id="woodGrad" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="${C.woodHi}"/><stop offset="30%" stop-color="${C.woodL}"/>
-        <stop offset="70%" stop-color="${C.wood}"/><stop offset="100%" stop-color="${C.woodD}"/>
-      </linearGradient>
-      <linearGradient id="steelGrad" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="${C.steelHi}"/><stop offset="40%" stop-color="${C.steelL}"/>
-        <stop offset="80%" stop-color="${C.steel}"/><stop offset="100%" stop-color="${C.steelD}"/>
-      </linearGradient>
-      <linearGradient id="monitorGrad" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#3a3a48"/><stop offset="20%" stop-color="#2a2a34"/><stop offset="100%" stop-color="#181820"/>
-      </linearGradient>
-      <linearGradient id="skinGrad" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="${C.skinHi}"/><stop offset="50%" stop-color="${C.skin}"/><stop offset="100%" stop-color="${C.skinShd}"/>
-      </linearGradient>
-      <radialGradient id="lightCone" cx="50%" cy="0%" r="100%">
-        <stop offset="0%" stop-color="${C.ledWarm}" stop-opacity="0.08"/><stop offset="100%" stop-color="${C.ledWarm}" stop-opacity="0"/>
+      
+      <radialGradient id="vignette">
+        <stop offset="50%" stop-color="${P.base}" stop-opacity="0"/>
+        <stop offset="100%" stop-color="${P.base}" stop-opacity="0.4"/>
       </radialGradient>
-      <linearGradient id="glassGrad" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0%" stop-color="#fff" stop-opacity="0.08"/><stop offset="50%" stop-color="#80b8f0" stop-opacity="0.04"/><stop offset="100%" stop-color="#fff" stop-opacity="0.02"/>
-      </linearGradient>
-      <marker id="arrowhead" markerWidth="4" markerHeight="3" refX="4" refY="1.5" orient="auto">
-        <polygon points="0 0, 4 1.5, 0 3" fill="#e17055"/>
-      </marker>
     </defs>`;
 
-    // ---- 32-BIT WALLS ----
-    s+=brickWall(W, Math.floor(W*0.28));
+    // ==================== BACKGROUND: DARK BASE ====================
+    s += `<rect x="0" y="0" width="${W}" height="${H}" fill="${P.base}"/>`;
 
-    // ---- 32-BIT FLOOR (gradient + reflections) ----
-    s+=`<rect x="0" y="80" width="${W}" height="1.5" fill="url(#steelGrad)" opacity="0.5"/>`;
-    s+=`<rect x="0" y="82" width="${W}" height="158" fill="url(#floorGrad)"/>`;
-    // Subtle gradient bands for depth
-    s+=px(0,82,W,20,C.floorHi,0.06);
-    s+=px(0,160,W,40,'#000',0.04);
-    for(let i=0;i<W;i+=20){s+=px(i,82,0.5,158,C.floorL,0.06);s+=px(i+1,82,0.5,158,'#000',0.02);}
-    for(let j=82;j<240;j+=20){s+=px(0,j,W,0.5,C.floorL,0.05);s+=px(0,j+1,W,0.5,'#000',0.02);}
-    // Floor reflections (16-bit polish effect)
-    s+=px(100,85,80,1,C.floorHi,0.04);s+=px(300,90,60,1,C.floorHi,0.03);
-    // Rug (16-bit: fringe + pattern)
-    s+=px(W-172,145,69,1,C.rugD,0.3); // fringe top
-    s+=px(W-170,146,65,30,C.rug,0.22);
-    s+=px(W-168,148,61,26,C.rugL,0.1);
-    // Rug pattern (diamond)
-    for(let ry=0;ry<4;ry++) for(let rx=0;rx<5;rx++){
-      s+=px(W-165+rx*12,150+ry*6,4,2,C.rugHi,0.08);
-    }
-    s+=px(W-172,175,69,1,C.rugD,0.3); // fringe bottom
+    // ==================== WALLS ====================
+    const brickEnd = Math.floor(W * 0.28);
+    s += `<rect x="0" y="0" width="${brickEnd}" height="80" fill="url(#wallGrad)"/>`;
+    s += brickWall(brickEnd);
+    s += `<rect x="${brickEnd}" y="0" width="${W - brickEnd}" height="80" fill="url(#wallGrad)"/>`;
 
-    // ---- CEILING ----
-    s+=px(80,0,250,3,'#2a2a3a');s+=px(80,3,250,0.5,C.steelD,0.3);
-    // Sprinkler pipes
-    s+=px(200,0,1,5,C.steelD,0.3);s+=px(350,0,1,5,C.steelD,0.3);
-
-    // ---- LIGHTS ----
-    for(let lx=45;lx<W;lx+=60)s+=pendant(lx);
-
-    // ---- 32-BIT NEON SIGNS (real glow) ----
-    s+=`<g class="neon-sign" filter="url(#neonGlow)" transform="translate(14,16)">${neonSign('BERKENBOT','#a8a0ff')}</g>`;
-    s+=`<g class="neon-sign-2" filter="url(#neonGlow)" transform="translate(14,25)">${neonSmall('LABS  ·  BUILD  SHIP  REPEAT','#ff80b0')}</g>`;
-    // Wall glow from neon (vivid bloom)
-    s+=`<ellipse cx="60" cy="22" rx="70" ry="18" fill="#a8a0ff" opacity="0.12" filter="url(#neonWide)"/>`;
-    s+=`<ellipse cx="60" cy="22" rx="40" ry="10" fill="#c8c0ff" opacity="0.08"/>`;
-    s+=`<ellipse cx="80" cy="30" rx="70" ry="12" fill="#ff80b0" opacity="0.08" filter="url(#neonWide)"/>`;
-    s+=`<ellipse cx="80" cy="30" rx="40" ry="8" fill="#ffa0c0" opacity="0.06"/>`;
-    // Neon light spill onto floor
-    s+=`<ellipse cx="60" cy="82" rx="50" ry="8" fill="#a8a0ff" opacity="0.04"/>`;
-    s+=`<ellipse cx="80" cy="84" rx="50" ry="6" fill="#ff80b0" opacity="0.03"/>`;
-
-    // ---- TIME-OF-DAY LIGHTING (CST) ----
-    const now=new Date();
-    const cstOff=-6;
-    const utcH=now.getUTCHours()+now.getUTCMinutes()/60;
-    const cstH=(utcH+cstOff+24)%24;
+    // ==================== FLOOR (polished concrete with reflections) ====================
+    s += `<rect x="0" y="80" width="${W}" height="${H - 80}" fill="url(#floorGrad)"/>`;
     
-    // Sky color based on CST hour
-    let skyTop, skyBot, sunMoonY, sunMoonCol, sunMoonR, isNight, bridgeCol, waterCol, cloudOp;
-    if(cstH>=6 && cstH<8){ // sunrise
-      const t=(cstH-6)/2;
-      skyTop=`#${Math.round(20+t*100).toString(16).padStart(2,'0')}${Math.round(20+t*60).toString(16).padStart(2,'0')}${Math.round(60+t*120).toString(16).padStart(2,'0')}`;
-      skyBot='#f0a060';sunMoonY=45-t*15;sunMoonCol='#f8d040';sunMoonR=5;isNight=false;bridgeCol='#c03020';waterCol='#285898';cloudOp=0.15+t*0.1;
-    } else if(cstH>=8 && cstH<17){ // day
-      skyTop='#4090e0';skyBot='#80c0f0';sunMoonY=10+Math.abs(cstH-12.5)*3;sunMoonCol='#f8e860';sunMoonR=4;isNight=false;bridgeCol='#d04030';waterCol='#3878b8';cloudOp=0.3;
-    } else if(cstH>=17 && cstH<20){ // sunset
-      const t=(cstH-17)/3;
-      skyTop=`#${Math.round(100-t*80).toString(16).padStart(2,'0')}${Math.round(80-t*60).toString(16).padStart(2,'0')}${Math.round(180-t*120).toString(16).padStart(2,'0')}`;
-      skyBot=`#${Math.round(200-t*140).toString(16).padStart(2,'0')}${Math.round(100-t*60).toString(16).padStart(2,'0')}${Math.round(60+t*20).toString(16).padStart(2,'0')}`;
-      sunMoonY=30+t*20;sunMoonCol='#f08030';sunMoonR=5;isNight=false;bridgeCol='#a03020';waterCol='#284870';cloudOp=0.2-t*0.1;
-    } else { // night
-      skyTop='#0a0820';skyBot='#101830';sunMoonY=20;sunMoonCol='#e0e8f0';sunMoonR=3;isNight=true;bridgeCol='#601818';waterCol='#101838';cloudOp=0.05;
+    // Floor grid texture (expansion joints)
+    for (let i = 0; i < W; i += 30) {
+      s += px(i, 82, 0.5, H - 82, P.floorLight, 0.05);
+    }
+    for (let j = 82; j < H; j += 30) {
+      s += px(0, j, W, 0.5, P.floorLight, 0.04);
     }
 
-    // ---- 32-BIT PANORAMIC WINDOW ----
-    const winX=W*0.28+70, winY=4, winW=120, winH=65;
-    // Window frame (gradient metallic)
-    s+=`<rect x="${winX-3}" y="${winY-3}" width="${winW+6}" height="${winH+6}" rx="1" fill="url(#steelGrad)"/>`;
-    s+=`<rect x="${winX-1}" y="${winY-1}" width="${winW+2}" height="${winH+2}" rx="0.5" fill="#101020"/>`;
-    // Sky (proper gradient)
-    s+=`<defs><linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="${skyTop}"/><stop offset="70%" stop-color="${skyBot}"/><stop offset="100%" stop-color="${waterCol}"/>
+    // ==================== AMBIENT OCCLUSION (darker in corners) ====================
+    s += `<rect x="0" y="0" width="40" height="${H}" fill="${P.base}" opacity="0.15"/>`;
+    s += `<rect x="${W - 40}" y="0" width="40" height="${H}" fill="${P.base}" opacity="0.15"/>`;
+    s += `<rect x="0" y="${H - 40}" width="${W}" height="40" fill="${P.base}" opacity="0.08"/>`;
+
+    // ==================== CEILING ====================
+    s += px(0, 0, W, 3, '#1a1a2a');
+
+    // ==================== PENDANT LIGHTS (with floor cones) ====================
+    for (let lx = 60; lx < W - 50; lx += 80) {
+      s += pendantLight(lx, 0);
+    }
+
+    // ==================== HERO NEON SIGN ====================
+    s += `<g class="neon-sign">${heroNeonSign(14, 20, 'BERKENBOT', P.neonPurple)}</g>`;
+    s += `<g class="neon-sign-small">${smallNeonSign(14, 30, 'LABS · BUILD SHIP REPEAT', P.neonPink)}</g>`;
+    
+    // ==================== NEON WALL WASH (color bleed onto brick) ====================
+    s += `<ellipse cx="70" cy="22" rx="90" ry="20" fill="${P.neonPurple}" opacity="0.15" filter="url(#neonBloom)"/>`;
+    s += `<ellipse cx="70" cy="22" rx="60" ry="12" fill="${P.neonPurple}" opacity="0.08"/>`;
+    s += `<ellipse cx="90" cy="32" rx="80" ry="14" fill="${P.neonPink}" opacity="0.10" filter="url(#neonBloom)"/>`;
+    
+    // ==================== NEON CEILING SPILL ====================
+    s += `<ellipse cx="70" cy="2" rx="50" ry="4" fill="${P.neonPurple}" opacity="0.06"/>`;
+    
+    // ==================== NEON FLOOR REFLECTION (blurred pool) ====================
+    s += `<ellipse cx="70" cy="85" rx="70" ry="10" fill="${P.neonPurple}" opacity="0.08" filter="url(#softGlow)"/>`;
+    s += `<ellipse cx="90" cy="88" rx="60" ry="8" fill="${P.neonPink}" opacity="0.06" filter="url(#softGlow)"/>`;
+
+    // ==================== PANORAMIC WINDOW ====================
+    const winX = brickEnd + 70;
+    const winY = 4;
+    const winW = 120;
+    const winH = 65;
+    
+    // CST time-of-day
+    const now = new Date();
+    const cstOff = -6;
+    const utcH = now.getUTCHours() + now.getUTCMinutes() / 60;
+    const cstH = (utcH + cstOff + 24) % 24;
+    
+    let skyTop, skyBot, sunMoonY, sunMoonCol, isNight, bridgeCol, waterCol;
+    if (cstH >= 6 && cstH < 8) {
+      const t = (cstH - 6) / 2;
+      skyTop = '#406090';
+      skyBot = '#f0a060';
+      sunMoonY = 45 - t * 15;
+      sunMoonCol = '#f8d040';
+      isNight = false;
+      bridgeCol = '#c03020';
+      waterCol = '#285898';
+    } else if (cstH >= 8 && cstH < 17) {
+      skyTop = '#4090e0';
+      skyBot = '#80c0f0';
+      sunMoonY = 10 + Math.abs(cstH - 12.5) * 3;
+      sunMoonCol = '#f8e860';
+      isNight = false;
+      bridgeCol = '#d04030';
+      waterCol = '#3878b8';
+    } else if (cstH >= 17 && cstH < 20) {
+      const t = (cstH - 17) / 3;
+      skyTop = '#50508c';
+      skyBot = '#c06850';
+      sunMoonY = 30 + t * 20;
+      sunMoonCol = '#f08030';
+      isNight = false;
+      bridgeCol = '#a03020';
+      waterCol = '#284870';
+    } else {
+      skyTop = '#0a0820';
+      skyBot = '#101830';
+      sunMoonY = 20;
+      sunMoonCol = '#e0e8f0';
+      isNight = true;
+      bridgeCol = '#601818';
+      waterCol = '#101838';
+    }
+    
+    // Window frame
+    s += px(winX - 3, winY - 3, winW + 6, winH + 6, P.steel);
+    s += px(winX - 1, winY - 1, winW + 2, winH + 2, '#101020');
+    
+    // Sky gradient
+    s += `<defs><linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="${skyTop}"/>
+      <stop offset="70%" stop-color="${skyBot}"/>
+      <stop offset="100%" stop-color="${waterCol}"/>
     </linearGradient></defs>`;
-    s+=`<rect x="${winX}" y="${winY}" width="${winW}" height="${winH}" fill="url(#skyGrad)"/>`;
-    // Sun or moon (32-bit: radial glow)
-    const smX=winX+winW*0.75, smY=winY+sunMoonY*winH/80;
-    s+=`<circle cx="${smX}" cy="${smY}" r="${sunMoonR+6}" fill="${sunMoonCol}" opacity="0.06"/>`;
-    s+=`<circle cx="${smX}" cy="${smY}" r="${sunMoonR+3}" fill="${sunMoonCol}" opacity="0.12"/>`;
-    s+=`<circle cx="${smX}" cy="${smY}" r="${sunMoonR}" fill="${sunMoonCol}" filter="url(#softGlow)"/>`;
-    if(isNight){
-      // Stars
-      for(let st=0;st<12;st++){
-        const sx=winX+5+((st*37)%110), sy=winY+2+((st*13)%25);
-        s+=`<circle cx="${sx}" cy="${sy}" r="0.4" fill="#fff" opacity="${0.4+Math.random()*0.4}" class="star-twinkle" style="animation-delay:${st*0.5}s"/>`;
+    s += `<rect x="${winX}" y="${winY}" width="${winW}" height="${winH}" fill="url(#skyGrad)"/>`;
+    
+    // Sun/moon
+    const smX = winX + winW * 0.75;
+    const smY = winY + sunMoonY * winH / 80;
+    s += `<circle cx="${smX}" cy="${smY}" r="8" fill="${sunMoonCol}" opacity="0.06"/>`;
+    s += `<circle cx="${smX}" cy="${smY}" r="5" fill="${sunMoonCol}" opacity="0.3" filter="url(#softGlow)"/>`;
+    s += `<circle cx="${smX}" cy="${smY}" r="3.5" fill="${sunMoonCol}"/>`;
+    
+    if (isNight) {
+      for (let st = 0; st < 15; st++) {
+        const sx = winX + 5 + ((st * 37) % 110);
+        const sy = winY + 2 + ((st * 13) % 25);
+        s += `<circle cx="${sx}" cy="${sy}" r="0.4" fill="${P.white}" opacity="0.5" class="star-twinkle" style="animation-delay:${st * 0.5}s"/>`;
       }
-      // Moon crescent shadow
-      s+=`<circle cx="${winX+winW*0.75+1.5}" cy="${winY+sunMoonY*winH/80-0.5}" r="2.5" fill="${skyTop}"/>`;
+      s += `<circle cx="${smX + 1.5}" cy="${smY - 0.5}" r="3" fill="${skyTop}"/>`;
     }
-    // Clouds (32-bit: soft blurred)
-    s+=`<g class="cloud-drift" opacity="${cloudOp}" filter="url(#softGlow)">`;
-    s+=`<ellipse cx="${winX+25}" cy="${winY+10}" rx="14" ry="3.5" fill="#fff" opacity="0.7"/>`;
-    s+=`<ellipse cx="${winX+21}" cy="${winY+9}" rx="8" ry="3" fill="#fff" opacity="0.5"/>`;
-    s+=`<ellipse cx="${winX+30}" cy="${winY+11}" rx="6" ry="2" fill="#fff" opacity="0.6"/>`;
-    s+=`<ellipse cx="${winX+78}" cy="${winY+14}" rx="12" ry="3" fill="#fff" opacity="0.6"/>`;
-    s+=`<ellipse cx="${winX+82}" cy="${winY+13}" rx="7" ry="2.5" fill="#fff" opacity="0.4"/>`;
-    s+=`</g>`;
-    // Water (32-bit gradient)
-    s+=`<defs><linearGradient id="waterGrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="${waterCol}"/><stop offset="100%" stop-color="${waterCol}" stop-opacity="0.6"/>
-    </linearGradient></defs>`;
-    s+=`<rect x="${winX}" y="${winY+winH/2}" width="${winW}" height="${winH/2}" fill="url(#waterGrad)"/>`;
-    // Water shimmer
-    for(let wl=0;wl<8;wl++){
-      s+=`<rect x="${winX+5+wl*14}" y="${winY+winH/2+3+wl%3*5}" width="${8+wl%4}" height="0.5" fill="#fff" opacity="0.06" class="water-shimmer" style="animation-delay:${wl*0.4}s"/>`;
-    }
+    
+    // Clouds
+    s += `<g opacity="0.25" filter="url(#softGlow)">`;
+    s += `<ellipse cx="${winX + 25}" cy="${winY + 10}" rx="14" ry="3.5" fill="${P.white}" opacity="0.7"/>`;
+    s += `<ellipse cx="${winX + 78}" cy="${winY + 14}" rx="12" ry="3" fill="${P.white}" opacity="0.6"/>`;
+    s += `</g>`;
+    
+    // Water
+    s += `<rect x="${winX}" y="${winY + winH / 2}" width="${winW}" height="${winH / 2}" fill="${waterCol}"/>`;
+    
     // Golden Gate Bridge
-    const bY=winY+winH/2-8; // bridge deck Y
-    // Towers
-    s+=px16(winX+30,bY-22,4,30,bridgeCol,bridgeCol,'#400808');
-    s+=px16(winX+80,bY-22,4,30,bridgeCol,bridgeCol,'#400808');
-    // Tower tops
-    s+=px(winX+29,bY-22,6,2,bridgeCol);s+=px(winX+79,bY-22,6,2,bridgeCol);
-    // Road deck
-    s+=px(winX+10,bY,100,3,bridgeCol);
-    s+=px(winX+10,bY,100,1,bridgeCol.replace('0','4')); // highlight
-    // Cables (main span catenary)
-    s+=`<path d="M${winX+32},${bY-20} Q${winX+56},${bY-5} ${winX+82},${bY-20}" stroke="${bridgeCol}" stroke-width="0.8" fill="none"/>`;
-    // Suspender cables
-    for(let c=0;c<10;c++){
-      const cx=winX+35+c*5;
-      const cableTop=bY-20+Math.pow((c-4.5)/4.5,2)*15;
-      s+=`<line x1="${cx}" y1="${cableTop}" x2="${cx}" y2="${bY}" stroke="${bridgeCol}" stroke-width="0.3" opacity="0.6"/>`;
+    const bY = winY + winH / 2 - 8;
+    s += px(winX + 30, bY - 22, 4, 30, bridgeCol);
+    s += px(winX + 80, bY - 22, 4, 30, bridgeCol);
+    s += px(winX + 29, bY - 22, 6, 2, bridgeCol);
+    s += px(winX + 79, bY - 22, 6, 2, bridgeCol);
+    s += px(winX + 10, bY, 100, 3, bridgeCol);
+    s += `<path d="M${winX + 32},${bY - 20} Q${winX + 56},${bY - 5} ${winX + 82},${bY - 20}" stroke="${bridgeCol}" stroke-width="0.8" fill="none"/>`;
+    for (let c = 0; c < 10; c++) {
+      const cx = winX + 35 + c * 5;
+      const cableTop = bY - 20 + Math.pow((c - 4.5) / 4.5, 2) * 15;
+      s += `<line x1="${cx}" y1="${cableTop}" x2="${cx}" y2="${bY}" stroke="${bridgeCol}" stroke-width="0.3" opacity="0.6"/>`;
     }
-    // Hills/headlands
-    s+=`<path d="M${winX},${bY+3} Q${winX+15},${bY-8} ${winX+28},${bY+3}" fill="#1a3820" opacity="0.7"/>`;
-    s+=`<path d="M${winX+86},${bY+3} Q${winX+100},${bY-6} ${winX+winW},${bY+3}" fill="#1a3820" opacity="0.6"/>`;
-    // Night bridge lights
-    if(isNight){
-      for(let bl=0;bl<12;bl++){
-        s+=`<circle cx="${winX+15+bl*8}" cy="${bY+1}" r="0.5" fill="#f8d040" opacity="0.7" class="bridge-light" style="animation-delay:${bl*0.2}s"/>`;
-      }
-    }
+    
     // Window dividers
-    s+=px(winX+winW/3,winY,1,winH,C.steelD,0.5);
-    s+=px(winX+winW*2/3,winY,1,winH,C.steelD,0.5);
-    s+=px(winX,winY+winH/2,winW,1,C.steelD,0.3);
-    // Window glass reflection (32-bit: diagonal gradient overlay)
-    s+=`<rect x="${winX}" y="${winY}" width="${winW}" height="${winH}" fill="url(#glassGrad)"/>`;
-    s+=`<rect x="${winX+3}" y="${winY+2}" width="2" height="${winH-4}" rx="1" fill="#fff" opacity="0.06"/>`;
-    s+=`<rect x="${winX+8}" y="${winY+4}" width="1" height="${winH-8}" rx="0.5" fill="#fff" opacity="0.03"/>`;
-    // Window divider reflections
-    s+=`<rect x="${winX+winW/3-.5}" y="${winY}" width="1" height="${winH}" fill="#fff" opacity="0.03"/>`;
-    s+=`<rect x="${winX+winW*2/3-.5}" y="${winY}" width="1" height="${winH}" fill="#fff" opacity="0.03"/>`;
-
-    // 32-BIT: Ambient light cast from window onto floor (gradient fade)
-    if(!isNight){
-      s+=`<defs><linearGradient id="floorLight" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="${sunMoonCol}" stop-opacity="0.04"/><stop offset="100%" stop-color="${sunMoonCol}" stop-opacity="0"/>
-      </linearGradient></defs>`;
-      s+=`<polygon points="${winX-5},${82} ${winX+winW+5},${82} ${winX+winW+50},${200} ${winX-30},${200}" fill="url(#floorLight)"/>`;
+    s += px(winX + winW / 3, winY, 1, winH, P.steelDark, 0.5);
+    s += px(winX + winW * 2 / 3, winY, 1, winH, P.steelDark, 0.5);
+    
+    // Window reflection
+    s += px(winX + 3, winY + 2, 2, winH - 4, P.white, 0.06);
+    s += px(winX + 8, winY + 4, 1, winH - 8, P.white, 0.03);
+    
+    // ==================== WINDOW LIGHT TRAPEZOID ON FLOOR ====================
+    if (!isNight) {
+      s += `<polygon points="${winX - 5},82 ${winX + winW + 5},82 ${winX + winW + 50},180 ${winX - 30},180" fill="${sunMoonCol}" opacity="0.04"/>`;
     }
-    // Subtle monitor ambient (no overlays)
-    s+=`<ellipse cx="200" cy="90" rx="180" ry="15" fill="#4080ff" opacity="0.012"/>`;
 
-    // ---- CLOCK ----
-    s+=wallClock(winX-12, 12);
-
-    // ---- WHITEBOARD (project board, data-driven) ----
+    // ==================== WHITEBOARD ====================
     const projItems = (_projectsData && _projectsData.items) || [];
-    s+=`<g transform="translate(${W*0.28+8},8)">${whiteboard(projItems)}</g>`;
+    s += `<g transform="translate(${brickEnd + 8},8)">${whiteboard(projItems)}</g>`;
 
-    // ---- BOOKSHELF ----
-    s+=`<g transform="translate(${winX+winW+8},14)">${bookshelf()}</g>`;
+    // ==================== BOOKSHELF ====================
+    s += `<g transform="translate(${winX + winW + 8},14)">${bookshelf()}</g>`;
 
-    // ---- GLASS CONF ROOM ----
-    s+=`<g filter="url(#furnitureShadow)" transform="translate(${W-70},15)">${glassRoom(60,68)}</g>`;
+    // ==================== GLASS CONFERENCE ROOM ====================
+    s += `<g transform="translate(${W - 70},15)">${glassRoom(60, 68)}</g>`;
 
-    // ---- COFFEE STATION (back wall, left side) ----
-    s+=`<g filter="url(#dropShadow)" transform="translate(6,16)">${coffeeStation()}</g>`;
+    // ==================== COFFEE STATION ====================
+    s += `<g transform="translate(6,16)">${coffeeStation()}</g>`;
 
-    // ---- PING PONG (lounge) ----
-    s+=`<g filter="url(#furnitureShadow)" transform="translate(${W-160},130)">${pingPong()}</g>`;
+    // ==================== PING PONG ====================
+    s += `<g transform="translate(${W - 160},130)">${pingPong()}</g>`;
 
-    // ---- PLANTS ----
-    s+=`<g transform="translate(48,50)">${bigPlant('fiddle')}</g>`;
-    s+=`<g transform="translate(${W-85},56)">${bigPlant('monstera')}</g>`;
-    s+=`<g transform="translate(${W/2+30},54)">${bigPlant('snake')}</g>`;
-    s+=`<g transform="translate(${W/2-50},54)">${bigPlant('fiddle')}</g>`;
-    s+=`<g transform="translate(160,120)">${bigPlant('monstera')}</g>`;
+    // ==================== PLANTS ====================
+    s += `<g transform="translate(48,50)">${bigPlant('fiddle')}</g>`;
+    s += `<g transform="translate(${W - 85},56)">${bigPlant('monstera')}</g>`;
+    s += `<g transform="translate(${W / 2 + 30},54)">${bigPlant('snake')}</g>`;
+    s += `<g transform="translate(${W / 2 - 50},54)">${bigPlant('fiddle')}</g>`;
 
-    // ---- SERVER RACK (RELAY's domain) ----
-    const rackX=W-220;
-    s+=`<g filter="url(#furnitureShadow)">`;
-    s+=`<g transform="translate(${rackX},38)" class="server-blink">${serverRack()}</g>`;
-    s+=`<g transform="translate(${rackX+20},38)">${serverRack()}</g>`;
-    s+=`<g transform="translate(${rackX+40},38)">${serverRack()}</g>`;
-    s+=`</g>`;
-    s+=px(rackX-2,36,64,2,C.steelD,0.4);
+    // ==================== SERVER RACKS ====================
+    const rackX = W - 220;
+    s += `<g transform="translate(${rackX},38)" class="server-blink">${serverRack()}</g>`;
+    s += `<g transform="translate(${rackX + 20},38)">${serverRack()}</g>`;
+    s += `<g transform="translate(${rackX + 40},38)">${serverRack()}</g>`;
 
-    // ---- AGENT WORKSTATIONS (more spread out for taller scene) ----
+    // ==================== AGENT WORKSTATIONS ====================
     const stations = [
-      {x:65,  y:80},   // FORGE - front left
-      {x:185, y:80},   // ANVIL - front center
-      {x:305, y:80},   // SCOUT - front right
-      {x:100, y:135},  // RELAY - back row left
-      {x:250, y:135},  // PULSE - back row right
+      { x: 65, y: 80 },   // FORGE - front left
+      { x: 185, y: 80 },  // ANVIL - front center
+      { x: 305, y: 80 },  // SCOUT - front right
+      { x: 100, y: 135 }, // RELAY - back row left
+      { x: 250, y: 135 }, // PULSE - back row right
     ];
 
-    AGENTS.forEach((ag,i)=>{
-      const st=stations[i];
-      const bx=st.x, by=st.y;
+    AGENTS.forEach((ag, i) => {
+      const st = stations[i];
+      const bx = st.x;
+      const by = st.y;
 
-      // Desk (with drop shadow)
-      s+=`<g filter="url(#furnitureShadow)" transform="translate(${bx},${by})">${desk(44)}</g>`;
-      // Monitors on desk (with glow)
-      s+=`<g filter="url(#monitorGlow)" transform="translate(${bx+7},${by-14})">${dualMon(ag.status==='green',ag.screen,i)}</g>`;
-      // Desk accessories
-      s+=`<g transform="translate(${bx+36},${by-3})">${deskStuff(ag.stuff)}</g>`;
-      // Seated character WITH chair (hands at desk height)
-      s+=`<g id="agent-${i}" transform="translate(${bx+10},${by+2})">${seatedAgent(ag, i)}</g>`;
+      // Desk
+      s += `<g transform="translate(${bx},${by})">${desk(44)}</g>`;
+      
+      // Monitors with glow
+      s += `<g transform="translate(${bx + 7},${by - 14})">${dualMonitors(ag.status === 'green', ag.screen, i)}</g>`;
+      
+      // Seated character
+      s += `<g id="agent-${i}" transform="translate(${bx + 10},${by + 2})">${seatedAgent(ag, i)}</g>`;
 
-      // ---- LABELS below workstation (16-bit drop shadow) ----
-      s+=txt16(bx+22,by+32,ag.name,3.5,'#e8f0ff');
-      s+=txt16(bx+22,by+37,ag.role,2.2,'#90a0b0');
-      // LOC badge (floating above character's head)
+      // Labels
+      s += txt16(bx + 22, by + 32, ag.name, 3.5, '#e8f0ff');
+      s += txt16(bx + 22, by + 37, ag.role, 2.2, '#90a0b0');
+      
+      // LOC badge
       const agLines = (_agentLocData && _agentLocData.agents && _agentLocData.agents[ag.name]) || 0;
-      s+=locBadge(bx+22, by-22, agLines);
-      s+=projectTags(ag.projects,bx-2,by+39,50);
+      s += locBadge(bx + 22, by - 22, agLines);
+      
+      // Project tags
+      s += projectTags(ag.projects, bx - 2, by + 39, 50);
     });
 
-    // ---- WALKING PEOPLE removed per request ----
+    // ==================== PENDANT LIGHT FLOOR REFLECTIONS (blurred dots) ====================
+    for (let lx = 60; lx < W - 50; lx += 80) {
+      s += `<ellipse cx="${lx + 2}" cy="180" rx="8" ry="2" fill="${P.warmLight}" opacity="0.06" filter="url(#softGlow)"/>`;
+    }
 
-    // ---- 32-BIT AMBIENT DETAILS ----
-    // Sneakers (with shadow)
-    s+=`<g filter="url(#dropShadow)">`;
-    s+=`<rect x="${W-128}" y="143" width="4" height="2" rx="0.5" fill="#e04040"/>`;
-    s+=`<rect x="${W-123}" y="143" width="4" height="2" rx="0.5" fill="#2878b0"/>`;
-    s+=`</g>`;
-    // Pizza box
-    s+=`<g filter="url(#dropShadow)">`;
-    s+=`<rect x="${W-52}" y="52" width="8" height="6" rx="0.5" fill="url(#woodGrad)"/>`;
-    s+=`<rect x="${W-51}" y="53" width="6" height="4" rx="0.3" fill="#e04040" opacity="0.25"/>`;
-    s+=`</g>`;
-    // Post-it (with slight shadow)
-    s+=`<rect x="192" y="66" width="4" height="3" rx="0.3" fill="#fff0a0" filter="url(#dropShadow)"/>`;
-    // Skateboard
-    s+=`<g filter="url(#dropShadow)"><rect x="4" y="72" width="2" height="8" rx="1" fill="#e04040"/>`;
-    s+=`<circle cx="5" cy="73.5" r="0.8" fill="#f0c830"/><circle cx="5" cy="79" r="0.8" fill="#f0c830"/></g>`;
-    // Drone removed per request
+    // ==================== FLOATING DUST PARTICLES ====================
+    s += dustParticles(25);
 
-    return {svg:s, width:W, height:H};
+    // ==================== SLIGHT FLOOR FOG (gradient overlay) ====================
+    s += `<rect x="0" y="${H - 60}" width="${W}" height="60" fill="${P.base}" opacity="0.08"/>`;
+
+    // ==================== VIGNETTE (edges darken) ====================
+    s += `<rect x="0" y="0" width="${W}" height="${H}" fill="url(#vignette)"/>`;
+
+    return { svg: s, width: W, height: H };
   }
 
-  /* ============ INIT ============ */
-  function init(){
-    const container=document.getElementById('agentOffice');
-    if(!container)return;
+  /* ==================== INIT ==================== */
+  function init() {
+    const container = document.getElementById('agentOffice');
+    if (!container) return;
 
-    const {svg,width,height}=buildOffice();
-    const fullH=height+50;
+    const { svg, width, height } = buildOffice();
 
-    // Pinch-to-zoom wrapper
-    container.innerHTML=`
+    container.innerHTML = `
       <div id="officeZoomWrap" style="overflow:hidden;touch-action:none;position:relative;width:100%;cursor:grab;">
         <svg xmlns="http://www.w3.org/2000/svg" id="officeSvg"
-             viewBox="0 0 ${width} ${fullH}"
+             viewBox="0 0 ${width} ${height}"
              style="display:block;width:100%;height:auto;">
           ${svg}
         </svg>
       </div>`;
 
-    // ---- PINCH-TO-ZOOM + PAN (mobile & desktop) ----
-    const wrap=document.getElementById('officeZoomWrap');
-    const svgEl=document.getElementById('officeSvg');
-    let oScale=1, oTx=0, oTy=0, lastDist=0, lastMid={x:0,y:0};
-    let dragging=false, dsx=0, dsy=0;
+    // ==================== PINCH-TO-ZOOM + PAN ====================
+    const wrap = document.getElementById('officeZoomWrap');
+    const svgEl = document.getElementById('officeSvg');
+    let oScale = 1, oTx = 0, oTy = 0, lastDist = 0;
+    let dragging = false, dsx = 0, dsy = 0;
 
-    function clampTransform(){
-      const maxTx=0, maxTy=0;
-      const minTx=-(oScale-1)*wrap.clientWidth;
-      const minTy=-(oScale-1)*wrap.clientHeight;
-      oTx=Math.max(minTx,Math.min(maxTx,oTx));
-      oTy=Math.max(minTy,Math.min(maxTy,oTy));
+    function clampTransform() {
+      const maxTx = 0, maxTy = 0;
+      const minTx = -(oScale - 1) * wrap.clientWidth;
+      const minTy = -(oScale - 1) * wrap.clientHeight;
+      oTx = Math.max(minTx, Math.min(maxTx, oTx));
+      oTy = Math.max(minTy, Math.min(maxTy, oTy));
     }
-    function applyTransform(){
+    
+    function applyTransform() {
       clampTransform();
-      svgEl.style.transform=`translate(${oTx}px,${oTy}px) scale(${oScale})`;
-      svgEl.style.transformOrigin='0 0';
+      svgEl.style.transform = `translate(${oTx}px,${oTy}px) scale(${oScale})`;
+      svgEl.style.transformOrigin = '0 0';
     }
 
-    // Touch: pinch zoom + pan
-    wrap.addEventListener('touchstart',(e)=>{
-      if(e.touches.length===2){
-        const dx=e.touches[0].clientX-e.touches[1].clientX;
-        const dy=e.touches[0].clientY-e.touches[1].clientY;
-        lastDist=Math.sqrt(dx*dx+dy*dy);
-        lastMid={x:(e.touches[0].clientX+e.touches[1].clientX)/2, y:(e.touches[0].clientY+e.touches[1].clientY)/2};
-      } else if(e.touches.length===1 && oScale>1){
-        dragging=true;
-        dsx=e.touches[0].clientX-oTx;
-        dsy=e.touches[0].clientY-oTy;
+    wrap.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 2) {
+        const dx = e.touches[0].clientX - e.touches[1].clientX;
+        const dy = e.touches[0].clientY - e.touches[1].clientY;
+        lastDist = Math.sqrt(dx * dx + dy * dy);
+      } else if (e.touches.length === 1 && oScale > 1) {
+        dragging = true;
+        dsx = e.touches[0].clientX - oTx;
+        dsy = e.touches[0].clientY - oTy;
       }
-    },{passive:true});
+    }, { passive: true });
 
-    wrap.addEventListener('touchmove',(e)=>{
-      if(e.touches.length===2){
+    wrap.addEventListener('touchmove', (e) => {
+      if (e.touches.length === 2) {
         e.preventDefault();
-        const dx=e.touches[0].clientX-e.touches[1].clientX;
-        const dy=e.touches[0].clientY-e.touches[1].clientY;
-        const dist=Math.sqrt(dx*dx+dy*dy);
-        if(lastDist>0){
-          const newScale=Math.max(1,Math.min(5,oScale*(dist/lastDist)));
-          const mid={x:(e.touches[0].clientX+e.touches[1].clientX)/2, y:(e.touches[0].clientY+e.touches[1].clientY)/2};
-          const rect=wrap.getBoundingClientRect();
-          const cx=mid.x-rect.left, cy=mid.y-rect.top;
-          const ratio=newScale/oScale;
-          oTx=cx-(cx-oTx)*ratio;
-          oTy=cy-(cy-oTy)*ratio;
-          oScale=newScale;
+        const dx = e.touches[0].clientX - e.touches[1].clientX;
+        const dy = e.touches[0].clientY - e.touches[1].clientY;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (lastDist > 0) {
+          const newScale = Math.max(1, Math.min(5, oScale * (dist / lastDist)));
+          const mid = { x: (e.touches[0].clientX + e.touches[1].clientX) / 2, y: (e.touches[0].clientY + e.touches[1].clientY) / 2 };
+          const rect = wrap.getBoundingClientRect();
+          const cx = mid.x - rect.left, cy = mid.y - rect.top;
+          const ratio = newScale / oScale;
+          oTx = cx - (cx - oTx) * ratio;
+          oTy = cy - (cy - oTy) * ratio;
+          oScale = newScale;
           applyTransform();
         }
-        lastDist=dist;
-      } else if(e.touches.length===1 && dragging){
-        oTx=e.touches[0].clientX-dsx;
-        oTy=e.touches[0].clientY-dsy;
+        lastDist = dist;
+      } else if (e.touches.length === 1 && dragging) {
+        oTx = e.touches[0].clientX - dsx;
+        oTy = e.touches[0].clientY - dsy;
         applyTransform();
       }
-    },{passive:false});
+    }, { passive: false });
 
-    wrap.addEventListener('touchend',()=>{dragging=false;lastDist=0;});
+    wrap.addEventListener('touchend', () => { dragging = false; lastDist = 0; });
 
-    // Mouse wheel zoom
-    wrap.addEventListener('wheel',(e)=>{
+    wrap.addEventListener('wheel', (e) => {
       e.preventDefault();
-      const factor=1+Math.min(Math.abs(e.deltaY),100)*0.002;
-      const delta=e.deltaY>0?1/factor:factor;
-      const newScale=Math.max(1,Math.min(5,oScale*delta));
-      const rect=wrap.getBoundingClientRect();
-      const cx=e.clientX-rect.left, cy=e.clientY-rect.top;
-      const ratio=newScale/oScale;
-      oTx=cx-(cx-oTx)*ratio;
-      oTy=cy-(cy-oTy)*ratio;
-      oScale=newScale;
+      const factor = 1 + Math.min(Math.abs(e.deltaY), 100) * 0.002;
+      const delta = e.deltaY > 0 ? 1 / factor : factor;
+      const newScale = Math.max(1, Math.min(5, oScale * delta));
+      const rect = wrap.getBoundingClientRect();
+      const cx = e.clientX - rect.left, cy = e.clientY - rect.top;
+      const ratio = newScale / oScale;
+      oTx = cx - (cx - oTx) * ratio;
+      oTy = cy - (cy - oTy) * ratio;
+      oScale = newScale;
       applyTransform();
-    },{passive:false});
+    }, { passive: false });
 
-    // Mouse drag pan
-    wrap.addEventListener('mousedown',(e)=>{
-      if(oScale>1){dragging=true;dsx=e.clientX-oTx;dsy=e.clientY-oTy;wrap.style.cursor='grabbing';}
+    wrap.addEventListener('mousedown', (e) => {
+      if (oScale > 1) { dragging = true; dsx = e.clientX - oTx; dsy = e.clientY - oTy; wrap.style.cursor = 'grabbing'; }
     });
-    wrap.addEventListener('mousemove',(e)=>{
-      if(dragging){oTx=e.clientX-dsx;oTy=e.clientY-dsy;applyTransform();}
+    
+    wrap.addEventListener('mousemove', (e) => {
+      if (dragging) { oTx = e.clientX - dsx; oTy = e.clientY - dsy; applyTransform(); }
     });
-    wrap.addEventListener('mouseup',()=>{dragging=false;wrap.style.cursor=oScale>1?'grab':'default';});
-    wrap.addEventListener('mouseleave',()=>{dragging=false;});
+    
+    wrap.addEventListener('mouseup', () => { dragging = false; wrap.style.cursor = oScale > 1 ? 'grab' : 'default'; });
+    wrap.addEventListener('mouseleave', () => { dragging = false; });
 
-    // Double-tap/click reset
-    wrap.addEventListener('dblclick',()=>{oScale=1;oTx=0;oTy=0;applyTransform();wrap.style.cursor='default';});
+    wrap.addEventListener('dblclick', () => { oScale = 1; oTx = 0; oTy = 0; applyTransform(); wrap.style.cursor = 'default'; });
 
-    const style=document.createElement('style');
-    style.textContent=`
+    // ==================== ANIMATIONS CSS ====================
+    const style = document.createElement('style');
+    style.textContent = `
       @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-      .office-section { padding: 16px !important; }
-      .agent-office-wrap { overflow: hidden; }
-      #agentOffice svg{shape-rendering:geometricPrecision;}
-      @keyframes typing{0%,100%{transform:translateY(0)}15%{transform:translateY(-0.5px)}30%{transform:translateY(0.3px)}50%{transform:translateY(-0.4px)}70%{transform:translateY(0.2px)}85%{transform:translateY(-0.2px)}}
-      @keyframes idle{0%,100%{transform:translateY(0)}50%{transform:translateY(1px)}}
-      @keyframes neonPulse{0%,100%{opacity:.9}50%{opacity:.5}}
-      @keyframes neonPulse2{0%,100%{opacity:.85}30%{opacity:.45}70%{opacity:.7}}
-      @keyframes serverBlink{0%,85%{opacity:1}90%{opacity:.5}95%{opacity:.85}100%{opacity:1}}
-      @keyframes cursorBlink{0%,49%{opacity:1}50%,100%{opacity:0}}
-      @keyframes statusPulse{0%,100%{r:5;opacity:.08}50%{r:8;opacity:.03}}
-      @keyframes steamFloat{0%{opacity:.35;transform:translateY(0)}100%{opacity:0;transform:translateY(-4px)}}
-      @keyframes heartbeatDash{0%{stroke-dashoffset:0}100%{stroke-dashoffset:-20}}
-      @keyframes walkRight{0%{transform:translateX(0)}100%{transform:translateX(80px)}}
-      @keyframes walkLeft{0%{transform:translateX(0)}100%{transform:translateX(-60px)}}
-      @keyframes headBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-0.5px)}}
-      @keyframes codeScroll{0%{transform:translateY(0)}100%{transform:translateY(-2px)}}
-      @keyframes diffFlash{0%,100%{opacity:1}50%{opacity:0.7}}
-      @keyframes ciSpin{0%{fill:#f0c830}50%{fill:#40f8a0}100%{fill:#f0c830}}
-      @keyframes loadingBar{0%{width:0}50%{width:11}80%{width:11}100%{width:0}}
-      @keyframes notesFlicker{0%,90%{opacity:1}95%{opacity:0.6}100%{opacity:1}}
-      @keyframes barPulse{0%{height:2;y:8}50%{height:7;y:3}100%{height:2;y:8}}
-      @keyframes gaugeSpin{0%{stroke-dashoffset:0}100%{stroke-dashoffset:18}}
-      @keyframes logScroll{0%{transform:translateY(0)}100%{transform:translateY(-3px)}}
-      @keyframes statusBlink{0%,80%{opacity:0.8}85%{opacity:0.3}90%{opacity:0.9}100%{opacity:0.8}}
-      @keyframes starTwinkle{0%,100%{opacity:0.3}50%{opacity:0.9}}
-      @keyframes cloudDrift{0%{transform:translateX(0)}100%{transform:translateX(15px)}}
-      @keyframes waterShimmer{0%,100%{opacity:0.04}50%{opacity:0.1}}
-      @keyframes bridgeLight{0%,100%{opacity:0.5}50%{opacity:0.9}}
-      .neon-sign{animation:neonPulse 3s ease-in-out infinite}
-      .neon-sign-2{animation:neonPulse2 4s ease-in-out infinite}
-      .server-blink{animation:serverBlink 1.5s steps(2) infinite}
-      .cursor-blink{animation:cursorBlink 1s steps(1) infinite}
-      .status-pulse{animation:statusPulse 2s ease-in-out infinite}
-      .steam{animation:steamFloat 3s ease-out infinite}
-      .heartbeat-line{stroke-dasharray:20;animation:heartbeatDash 2s linear infinite}
-      .walk-right{animation:walkRight 8s ease-in-out infinite alternate}
-      .walk-left{animation:walkLeft 6s ease-in-out infinite alternate}
-      .code-scroll{animation:codeScroll 3s steps(2) infinite alternate}
-      .term-type{animation:notesFlicker 4s steps(1) infinite}
-      .diff-flash{animation:diffFlash 2s ease-in-out infinite}
-      .ci-spin rect{animation:ciSpin 3s ease-in-out infinite}
-      .loading-bar{animation:loadingBar 4s ease-in-out infinite}
-      .notes-flicker{animation:notesFlicker 5s steps(1) infinite}
-      .bar-pulse{animation:barPulse 2s ease-in-out infinite}
-      .gauge-spin{animation:gaugeSpin 4s linear infinite}
-      .log-scroll{animation:logScroll 5s steps(3) infinite}
-      .status-blink{animation:statusBlink 3s ease-in-out infinite}
-      .star-twinkle{animation:starTwinkle 2s ease-in-out infinite}
-      .cloud-drift{animation:cloudDrift 20s ease-in-out infinite alternate}
-      .water-shimmer{animation:waterShimmer 3s ease-in-out infinite}
-      .bridge-light{animation:bridgeLight 2s ease-in-out infinite}
-      ${AGENTS.map((a,i)=>{
-        if(a.status==='green')return`#agent-${i}{animation:typing .6s ease-in-out infinite}`;
-        if(a.status==='yellow')return`#agent-${i}{animation:idle 2.5s ease-in-out infinite}`;
-        return`#agent-${i}{opacity:.35}`;
+      
+      /* Neon sign breathing */
+      @keyframes neonBreathing {
+        0%, 100% { opacity: 0.95; }
+        50% { opacity: 0.85; }
+      }
+      
+      /* Cursor blink */
+      @keyframes cursorBlink {
+        0%, 49% { opacity: 1; }
+        50%, 100% { opacity: 0; }
+      }
+      
+      /* Status pulse */
+      @keyframes statusPulse {
+        0%, 100% { r: 7; opacity: 0.08; }
+        50% { r: 10; opacity: 0.03; }
+      }
+      
+      /* Steam float */
+      @keyframes steamFloat {
+        0% { opacity: 0.35; transform: translateY(0); }
+        100% { opacity: 0; transform: translateY(-6px); }
+      }
+      
+      /* Agent typing */
+      @keyframes typing {
+        0%, 100% { transform: translateY(0); }
+        25% { transform: translateY(-0.5px); }
+        50% { transform: translateY(0.3px); }
+        75% { transform: translateY(-0.3px); }
+      }
+      
+      /* Code scroll */
+      @keyframes codeScroll {
+        0% { transform: translateY(0); }
+        100% { transform: translateY(-2px); }
+      }
+      
+      /* Diff flash */
+      @keyframes diffFlash {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.7; }
+      }
+      
+      /* Loading bar */
+      @keyframes loadingBar {
+        0% { width: 0; }
+        50% { width: 10; }
+        80% { width: 10; }
+        100% { width: 0; }
+      }
+      
+      /* Notes flicker */
+      @keyframes notesFlicker {
+        0%, 90% { opacity: 1; }
+        95% { opacity: 0.6; }
+        100% { opacity: 1; }
+      }
+      
+      /* Bar pulse */
+      @keyframes barPulse {
+        0%, 100% { height: 2; y: 7; }
+        50% { height: 6; y: 3; }
+      }
+      
+      /* Log scroll */
+      @keyframes logScroll {
+        0% { transform: translateY(0); }
+        100% { transform: translateY(-3px); }
+      }
+      
+      /* Heartbeat */
+      @keyframes heartbeatDash {
+        0% { stroke-dashoffset: 0; }
+        100% { stroke-dashoffset: -20; }
+      }
+      
+      /* Status blink */
+      @keyframes statusBlink {
+        0%, 80% { opacity: 0.8; }
+        85% { opacity: 0.3; }
+        90% { opacity: 0.9; }
+        100% { opacity: 0.8; }
+      }
+      
+      /* Star twinkle */
+      @keyframes starTwinkle {
+        0%, 100% { opacity: 0.3; }
+        50% { opacity: 0.9; }
+      }
+      
+      /* Server blink */
+      @keyframes serverBlink {
+        0%, 85% { opacity: 1; }
+        90% { opacity: 0.5; }
+        95% { opacity: 0.85; }
+        100% { opacity: 1; }
+      }
+      
+      /* Dust mote drift */
+      @keyframes dustDrift {
+        0% { transform: translateY(0) translateX(0); opacity: 0.15; }
+        50% { transform: translateY(-30px) translateX(5px); opacity: 0.25; }
+        100% { transform: translateY(-60px) translateX(-5px); opacity: 0; }
+      }
+      
+      /* Apply animations */
+      .neon-sign { animation: neonBreathing 4s ease-in-out infinite; }
+      .neon-sign-small { animation: neonBreathing 4.5s ease-in-out infinite; }
+      .cursor-blink { animation: cursorBlink 1s steps(1) infinite; }
+      .status-pulse { animation: statusPulse 2.5s ease-in-out infinite; }
+      .steam { animation: steamFloat 3s ease-out infinite; }
+      .code-scroll { animation: codeScroll 3s steps(2) infinite alternate; }
+      .term-type { animation: notesFlicker 4s steps(1) infinite; }
+      .diff-flash { animation: diffFlash 2s ease-in-out infinite; }
+      .loading-bar { animation: loadingBar 4s ease-in-out infinite; }
+      .notes-flicker { animation: notesFlicker 5s steps(1) infinite; }
+      .bar-pulse { animation: barPulse 2s ease-in-out infinite; }
+      .log-scroll { animation: logScroll 5s steps(3) infinite; }
+      .heartbeat-line { stroke-dasharray: 20; animation: heartbeatDash 2s linear infinite; }
+      .status-blink { animation: statusBlink 3s ease-in-out infinite; }
+      .star-twinkle { animation: starTwinkle 2s ease-in-out infinite; }
+      .server-blink { animation: serverBlink 1.5s steps(2) infinite; }
+      .dust-mote { animation: dustDrift 12s ease-in-out infinite; }
+      
+      ${AGENTS.map((a, i) => {
+        if (a.status === 'green') return `#agent-${i} { animation: typing 0.6s ease-in-out infinite; }`;
+        if (a.status === 'yellow') return `#agent-${i} { animation: typing 2s ease-in-out infinite; }`;
+        return `#agent-${i} { opacity: 0.35; }`;
       }).join('\n')}
     `;
     document.head.appendChild(style);
   }
 
-  async function loadAndInit(){
+  /* ==================== LOAD AND INIT ==================== */
+  async function loadAndInit() {
     const base = window.DASH_BASE || (() => {
       const p = window.location.pathname || '/';
       return p.includes('/BERKENBOT_DASHBOARD') ? '/BERKENBOT_DASHBOARD/' : '/';
     })();
     const v = Date.now();
-    // Load agent LOC stats + projects data
-    try{
-      const r = await fetch(new URL('data/agent_stats.json', `${window.location.origin}${base}`).toString()+`?v=${v}`, {cache:'no-store'});
-      if(r.ok) _agentLocData = await r.json();
-    }catch(e){}
-    try{
-      const r2 = await fetch(new URL('data/projects.json', `${window.location.origin}${base}`).toString()+`?v=${v}`, {cache:'no-store'});
-      if(r2.ok) _projectsData = await r2.json();
-    }catch(e){}
+    
+    try {
+      const r = await fetch(new URL('data/agent_stats.json', `${window.location.origin}${base}`).toString() + `?v=${v}`, { cache: 'no-store' });
+      if (r.ok) _agentLocData = await r.json();
+    } catch (e) { }
+    
+    try {
+      const r2 = await fetch(new URL('data/projects.json', `${window.location.origin}${base}`).toString() + `?v=${v}`, { cache: 'no-store' });
+      if (r2.ok) _projectsData = await r2.json();
+    } catch (e) { }
+    
     init();
   }
 
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',loadAndInit);
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', loadAndInit);
   else loadAndInit();
 })();
