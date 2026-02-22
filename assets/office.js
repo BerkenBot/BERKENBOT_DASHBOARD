@@ -415,55 +415,111 @@
     return s;
   }
 
-  /* ---- WHITEBOARD (detailed) ---- */
-  function whiteboard(){
+  /* ---- WHITEBOARD (data-driven from projects) ---- */
+  function whiteboard(projects){
+    const bW=55, bH=50;
     let s='';
-    s+=px(0,0,32,22,C.boardFrame);
-    s+=px(1,1,30,20,C.board);
-    // Architecture diagram
-    s+=px(3,3,6,4,'#74b9ff',0.4);s+=txt(6,6,'API',2,'#2d3436');
-    s+=px(12,3,6,4,'#a29bfe',0.4);s+=txt(15,6,'LLM',2,'#2d3436');
-    s+=px(21,3,8,4,'#2ecc71',0.4);s+=txt(25,6,'DEPLOY',1.8,'#2d3436');
-    // Arrows
-    s+=`<line x1="9" y1="5" x2="12" y2="5" stroke="#e17055" stroke-width="0.5" marker-end="url(#arrowhead)"/>`;
-    s+=`<line x1="18" y1="5" x2="21" y2="5" stroke="#e17055" stroke-width="0.5"/>`;
-    // Sprint board
-    s+=px(3,9,6,2,'#f1c40f',0.4);s+=px(3,11,6,2,'#2ecc71',0.4);s+=px(3,13,6,2,'#e74c3c',0.3);
-    // Notes
-    s+=px(12,9,4,3,'#ffeaa7');s+=px(17,9,4,3,'#a29bfe',0.3);
-    s+=px(12,13,6,3,'#74b9ff',0.3);s+=px(19,13,8,3,'#fdcb6e',0.2);
-    // Sticky notes
-    s+=px(22,9,3,3,'#ff7675',0.5);s+=px(26,10,3,3,'#55efc4',0.5);
-    // Marker tray
-    s+=px(2,21,28,1,C.steelD);
-    s+=px(5,20,3,1,'#e74c3c');s+=px(9,20,3,1,'#0984e3');s+=px(13,20,3,1,'#2ecc71');s+=px(17,20,3,1,'#2d3436');
+    // Frame (16-bit)
+    s+=px16(0,0,bW,bH,C.steelL,C.boardFrame,C.steelD);
+    s+=px(1,1,bW-2,bH-2,C.board);
+    // Header
+    s+=px(2,2,bW-4,5,'#282840',0.08);
+    s+=txt(bW/2,6,'ACTIVE PROJECTS',2.2,'#282840');
+    s+=px(2,7,bW-4,0.5,'#c0c0c8');
+
+    // Project list
+    const statusColors={green:'#2ecc71',yellow:'#f0c830',red:'#f04848',gray:'#888'};
+    const items=(projects||[]).slice(0,8);
+    items.forEach((p,i)=>{
+      const y=9+i*5;
+      // Status dot
+      const sc=statusColors[p.status]||'#888';
+      s+=`<circle cx="5" cy="${y+2}" r="1.5" fill="${sc}"/>`;
+      // Project name
+      s+=txt(8,y+3,p.name||'?',1.8,'#282840','start');
+      // Progress bar
+      const barW=16;
+      s+=px(32,y+1,barW,2,'#e0e0e0');
+      s+=px(32,y+1,Math.round(barW*(p.progress||0)/100),2,sc);
+      // Percentage
+      s+=txt(50,y+3,(p.progress||0)+'%',1.5,'#484858','start');
+    });
+
+    // Marker tray (16-bit)
+    s+=px16(2,bH-2,bW-4,2,C.steelL,C.steelD,C.steel);
+    s+=px(6,bH-3,3,1,'#e04040');s+=px(11,bH-3,3,1,'#2080e0');s+=px(16,bH-3,3,1,'#20c070');s+=px(21,bH-3,3,1,'#282830');
     return s;
   }
 
-  /* ---- COFFEE BAR / KITCHEN ---- */
-  function coffeeBar(){
+  /* ---- COFFEE STATION (back wall mounted) ---- */
+  function coffeeStation(){
+    const w=45, h=55;
     let s='';
-    // Counter
-    s+=px(0,0,34,3,C.woodL);s+=px(0,1,34,1,'#c4955e');
-    s+=px(0,3,34,12,C.woodD);
-    s+=px(1,4,15,10,C.wood);s+=px(18,4,15,10,C.wood);
-    // Espresso machine
-    s+=px(3,-10,10,10,C.steelD);
-    s+=px(4,-9,8,6,C.steel);
-    s+=px(4,-10,3,2,'#444');
-    s+=px(6,-4,2,4,'#444'); // portafilter
-    s+=px(5,-3,4,1,C.steelL);
+    // Back panel / shelving unit
+    s+=px16(0,0,w,h,C.woodHi,C.woodD,C.woodDk);
+    s+=px(1,1,w-2,h-2,C.wood);
+
+    // Top shelf
+    s+=px16(2,8,w-4,2,C.woodHi,C.woodL,C.woodD);
+    // Mugs on top shelf
+    const mugColors=['#f0f0f0','#e04040','#2080e0','#282830','#f0c830'];
+    mugColors.forEach((c,i)=>{
+      s+=px(4+i*8,3,3,5,c);s+=px(7+i*8,5,1,2,c); // handle
+      s+=px(4+i*8,3,3,1,'#fff',0.15); // rim highlight
+    });
+
+    // Middle shelf
+    s+=px16(2,22,w-4,2,C.woodHi,C.woodL,C.woodD);
+
+    // Espresso machine (16-bit, centered)
+    s+=px16(4,10,14,12,C.steelHi,C.steelD,C.steel);
+    s+=px(5,11,12,8,C.steel);s+=px(5,11,12,1,C.steelHi); // body highlight
+    s+=px(6,19,4,3,'#282830'); // group head
+    s+=px(7,20,2,1,C.steelL); // portafilter
+    s+=px(5,9,3,2,'#282830'); // buttons
+    s+=`<circle cx="7" cy="10" r="0.7" fill="#40f8a0"/>`; // power LED
     // Drip tray
-    s+=px(4,-1,6,1,'#444');
-    // Cups stack
-    s+=px(16,-4,3,4,C.cup);s+=px(16,-4,3,1,C.cupD);
-    s+=px(20,-3,3,3,C.cup);
-    s+=px(24,-5,3,5,C.cup);s+=px(24,-5,3,1,C.cupD);
-    // Fruit bowl
-    s+=px(28,-3,4,3,C.steelL,0.3);
-    s+=px(29,-4,1,1,'#e74c3c');s+=px(30,-4,1,1,'#f1c40f');s+=px(29,-3,2,1,'#2ecc71');
-    // Sink
-    s+=px(14,0,6,2,'#aaa',0.3);
+    s+=px(5,22,10,1,'#484848');
+    // Steam
+    s+=`<path d="M10,10 Q11,7 10,5" stroke="#fff" stroke-width="0.3" fill="none" opacity="0.15" class="steam"/>`;
+    s+=`<path d="M12,10 Q13,6 11,4" stroke="#fff" stroke-width="0.3" fill="none" opacity="0.1" class="steam" style="animation-delay:1s"/>`;
+
+    // Grinder
+    s+=px16(20,12,8,10,C.steelHi,'#484858','#282830');
+    s+=px(21,10,6,2,'#383840'); // hopper
+    s+=px(22,9,4,1,'#484858'); // hopper top
+    s+=`<circle cx="24" cy="15" r="1.5" fill="#282830"/>`; // dial
+    s+=`<circle cx="24" cy="15" r="0.5" fill="${C.steelL}"/>`; // dial dot
+
+    // Kettle
+    s+=px(32,14,6,8,C.steelL);s+=px(32,14,6,1,C.steelHi); // highlight
+    s+=px(38,17,2,2,C.steelD); // handle
+    s+=px(32,13,3,2,C.steelD); // spout
+
+    // Bottom shelf items
+    s+=px16(2,36,w-4,2,C.woodHi,C.woodL,C.woodD);
+
+    // Bean bags
+    s+=px(4,24,7,12,'#402010');s+=px(4,24,7,1,'#583018'); // bag 1
+    s+=txt(7,31,'BEANS',1.5,'#a08060');
+    s+=px(13,24,7,12,'#302818');s+=px(13,24,7,1,'#484030');
+    s+=txt(16,31,'DARK',1.5,'#a09870');
+
+    // Sugar & supplies
+    s+=px(24,25,4,8,'#f0f0e8');s+=txt(26,30,'S',1.5,'#888'); // sugar
+    s+=px(30,26,5,7,'#f0f0e8');s+=txt(32,31,'☕',2,'#604020'); // tea box
+    s+=px(37,27,5,6,C.glass,0.3); // water pitcher
+    s+=px(37,27,5,1,'#fff',0.1);
+
+    // Snack basket on bottom
+    s+=px(4,38,12,6,C.potTerra,0.5);
+    s+=px(5,37,2,2,'#f0c830');s+=px(8,37,2,2,'#e04040');s+=px(11,37,2,2,'#20c070'); // fruit
+    // Cookies/snacks
+    s+=px(20,38,8,5,'#d4a060');s+=px(20,38,8,1,'#e0b070');
+
+    // "FUEL UP" sign
+    s+=txt(w/2,h-3,'☕ FUEL UP',2.5,'#a08060');
+
     return s;
   }
 
@@ -850,6 +906,7 @@
 
   /* ============ BUILD SCENE ============ */
   let _agentLocData = null;
+  let _projectsData = null;
 
   function buildOffice(){
     const W=600, H=240;
@@ -999,8 +1056,9 @@
     // ---- CLOCK ----
     s+=wallClock(winX-12, 12);
 
-    // ---- WHITEBOARD ----
-    s+=`<g transform="translate(${W*0.28+8},12)">${whiteboard()}</g>`;
+    // ---- WHITEBOARD (project board, data-driven) ----
+    const projItems = (_projectsData && _projectsData.items) || [];
+    s+=`<g transform="translate(${W*0.28+8},8)">${whiteboard(projItems)}</g>`;
 
     // ---- BOOKSHELF ----
     s+=`<g transform="translate(${winX+winW+8},14)">${bookshelf()}</g>`;
@@ -1008,8 +1066,8 @@
     // ---- GLASS CONF ROOM ----
     s+=`<g transform="translate(${W-70},15)">${glassRoom(60,68)}</g>`;
 
-    // ---- COFFEE BAR ----
-    s+=`<g transform="translate(8,62)">${coffeeBar()}</g>`;
+    // ---- COFFEE STATION (back wall, left side) ----
+    s+=`<g transform="translate(6,16)">${coffeeStation()}</g>`;
 
     // ---- PING PONG (lounge) ----
     s+=`<g transform="translate(${W-160},130)">${pingPong()}</g>`;
@@ -1248,16 +1306,20 @@
   }
 
   async function loadAndInit(){
-    // Load agent LOC stats
+    const base = window.DASH_BASE || (() => {
+      const p = window.location.pathname || '/';
+      return p.includes('/BERKENBOT_DASHBOARD') ? '/BERKENBOT_DASHBOARD/' : '/';
+    })();
+    const v = Date.now();
+    // Load agent LOC stats + projects data
     try{
-      const base = window.DASH_BASE || (() => {
-        const p = window.location.pathname || '/';
-        return p.includes('/BERKENBOT_DASHBOARD') ? '/BERKENBOT_DASHBOARD/' : '/';
-      })();
-      const url = new URL('data/agent_stats.json', `${window.location.origin}${base}`).toString();
-      const r = await fetch(`${url}?v=${Date.now()}`, {cache:'no-store'});
+      const r = await fetch(new URL('data/agent_stats.json', `${window.location.origin}${base}`).toString()+`?v=${v}`, {cache:'no-store'});
       if(r.ok) _agentLocData = await r.json();
-    }catch(e){console.log('agent_stats not available yet');}
+    }catch(e){}
+    try{
+      const r2 = await fetch(new URL('data/projects.json', `${window.location.origin}${base}`).toString()+`?v=${v}`, {cache:'no-store'});
+      if(r2.ok) _projectsData = await r2.json();
+    }catch(e){}
     init();
   }
 
