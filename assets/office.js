@@ -1402,130 +1402,125 @@
       <stop offset="0%" stop-color="${waterCol}"/><stop offset="100%" stop-color="${waterCol}" stop-opacity="0.6"/>
     </linearGradient></defs>`;
 
-    // Parallax bleed — oversized content so shifting never shows gaps
-    const pad=20;
+    // Parallax: scene is built at expanded size, window clips into center
+    // "s" prefix = scene coords; the scene is 40px wider and 30px taller than the window
+    const sX=winX-20, sY=winY-15, sW=winW+40, sH=winH+30;
+    // Scene center offsets (scene coords → window center)
+    const scx=sX+sW/2, scy=sY+sH/2;
 
     // === PARALLAX LAYER 0: SKY (farthest — slowest) ===
     s+=`<g clip-path="url(#winClip)"><g id="parallax-sky">`;
-    s+=`<rect x="${winX-pad}" y="${winY-pad}" width="${winW+pad*2}" height="${winH+pad*2}" fill="url(#skyGrad)"/>`;
-    // Sun or moon
-    const smX=winX+winW*0.75, smY=winY+sunMoonY*winH/80;
-    s+=`<circle cx="${smX}" cy="${smY}" r="${sunMoonR+6}" fill="${sunMoonCol}" opacity="0.06"/>`;
-    s+=`<circle cx="${smX}" cy="${smY}" r="${sunMoonR+3}" fill="${sunMoonCol}" opacity="0.12"/>`;
+    s+=`<rect x="${sX}" y="${sY}" width="${sW}" height="${sH}" fill="url(#skyGrad)"/>`;
+    // Sun or moon (placed in scene coords)
+    const smX=sX+sW*0.7, smY=sY+sunMoonY*sH/80;
+    s+=`<circle cx="${smX}" cy="${smY}" r="${sunMoonR+8}" fill="${sunMoonCol}" opacity="0.06"/>`;
+    s+=`<circle cx="${smX}" cy="${smY}" r="${sunMoonR+4}" fill="${sunMoonCol}" opacity="0.12"/>`;
     s+=`<circle cx="${smX}" cy="${smY}" r="${sunMoonR}" fill="${sunMoonCol}" filter="url(#softGlow)"/>`;
     if(isNight){
-      for(let st=0;st<12;st++){
-        const sx=winX+5+((st*37)%110), sy=winY+2+((st*13)%25);
+      for(let st=0;st<18;st++){
+        const sx=sX+5+((st*37)%(sW-10)), sy=sY+2+((st*13)%(sH/2-5));
         s+=`<circle cx="${sx}" cy="${sy}" r="0.4" fill="#fff" opacity="${0.4+Math.random()*0.4}" class="star-twinkle" style="animation-delay:${st*0.5}s"/>`;
       }
-      s+=`<circle cx="${winX+winW*0.75+1.5}" cy="${winY+sunMoonY*winH/80-0.5}" r="2.5" fill="${skyTop}"/>`;
+      s+=`<circle cx="${smX+1.5}" cy="${smY-0.5}" r="2.5" fill="${skyTop}"/>`;
     }
-    // Clouds
+    // Clouds (spread across wider scene)
     s+=`<g class="cloud-drift" opacity="${cloudOp}" filter="url(#softGlow)">`;
-    s+=`<ellipse cx="${winX+25}" cy="${winY+10}" rx="14" ry="3.5" fill="#fff" opacity="0.7"/>`;
-    s+=`<ellipse cx="${winX+21}" cy="${winY+9}" rx="8" ry="3" fill="#fff" opacity="0.5"/>`;
-    s+=`<ellipse cx="${winX+30}" cy="${winY+11}" rx="6" ry="2" fill="#fff" opacity="0.6"/>`;
-    s+=`<ellipse cx="${winX+78}" cy="${winY+14}" rx="12" ry="3" fill="#fff" opacity="0.6"/>`;
-    s+=`<ellipse cx="${winX+82}" cy="${winY+13}" rx="7" ry="2.5" fill="#fff" opacity="0.4"/>`;
+    s+=`<ellipse cx="${sX+30}" cy="${sY+12}" rx="16" ry="4" fill="#fff" opacity="0.7"/>`;
+    s+=`<ellipse cx="${sX+25}" cy="${sY+11}" rx="9" ry="3.5" fill="#fff" opacity="0.5"/>`;
+    s+=`<ellipse cx="${sX+36}" cy="${sY+13}" rx="7" ry="2.5" fill="#fff" opacity="0.6"/>`;
+    s+=`<ellipse cx="${sX+sW-30}" cy="${sY+16}" rx="14" ry="3.5" fill="#fff" opacity="0.6"/>`;
+    s+=`<ellipse cx="${sX+sW-25}" cy="${sY+15}" rx="8" ry="3" fill="#fff" opacity="0.4"/>`;
+    s+=`<ellipse cx="${sX+sW/2}" cy="${sY+9}" rx="10" ry="2.5" fill="#fff" opacity="0.3"/>`;
     s+=`</g>`;
-    // Seagull (flies across every ~20s)
+    // Seagulls
     s+=`<g class="seagull-fly">`;
     s+=`<path d="M0,0 Q-2,-2 -4,0" stroke="#fff" stroke-width="0.4" fill="none" opacity="0.7"/>`;
     s+=`<path d="M0,0 Q2,-2 4,0" stroke="#fff" stroke-width="0.4" fill="none" opacity="0.7"/>`;
     s+=`<circle cx="0" cy="0.3" r="0.4" fill="#fff" opacity="0.6"/>`;
     s+=`</g>`;
-    // Second seagull (offset timing, different altitude)
     s+=`<g class="seagull-fly-2">`;
     s+=`<path d="M0,0 Q-1.5,-1.5 -3,0" stroke="#e8e8e8" stroke-width="0.3" fill="none" opacity="0.5"/>`;
     s+=`<path d="M0,0 Q1.5,-1.5 3,0" stroke="#e8e8e8" stroke-width="0.3" fill="none" opacity="0.5"/>`;
     s+=`<circle cx="0" cy="0.2" r="0.3" fill="#e8e8e8" opacity="0.4"/>`;
     s+=`</g>`;
-    s+=`</g></g>`; // end parallax-sky + clip wrapper
+    s+=`</g></g>`; // end parallax-sky
 
     // === PARALLAX LAYER 1: HILLS + BRIDGE (mid — medium speed) ===
     s+=`<g clip-path="url(#winClip)"><g id="parallax-bridge">`;
-    // Bridge layer background fill (prevent gaps)
-    s+=`<rect x="${winX-pad}" y="${winY-pad}" width="${winW+pad*2}" height="${winH+pad*2}" fill="url(#skyGrad)"/>`;
-    const bY=winY+winH/2-8;
-    // Water fill behind bridge (oversized)
-    s+=`<rect x="${winX-pad}" y="${winY+winH/2-5}" width="${winW+pad*2}" height="${winH/2+pad}" fill="url(#waterGrad)"/>`;
-    // Hills/headlands (extended wider)
-    s+=`<path d="M${winX-pad},${bY+3} Q${winX+15},${bY-10} ${winX+28},${bY+3} L${winX-pad},${bY+3}" fill="#1a3820" opacity="0.7"/>`;
-    s+=`<path d="M${winX+86},${bY+3} Q${winX+100},${bY-8} ${winX+winW+pad},${bY+3} L${winX+winW+pad},${bY+3}" fill="#1a3820" opacity="0.6"/>`;
-    // Far headland
-    s+=`<path d="M${winX+40},${bY+3} Q${winX+60},${bY-4} ${winX+85},${bY+3}" fill="#1a3820" opacity="0.3"/>`;
-    // Towers
-    s+=px16(winX+30,bY-22,4,30,bridgeCol,bridgeCol,'#400808');
-    s+=px16(winX+80,bY-22,4,30,bridgeCol,bridgeCol,'#400808');
-    s+=px(winX+29,bY-22,6,2,bridgeCol);s+=px(winX+79,bY-22,6,2,bridgeCol);
-    // Road deck (extended for parallax bleed)
-    s+=px(winX-pad,bY,winW+pad*2,3,bridgeCol);
-    s+=px(winX-pad,bY,winW+pad*2,1,bridgeCol.replace('0','4'));
-    // Cables
-    s+=`<path d="M${winX+32},${bY-20} Q${winX+56},${bY-5} ${winX+82},${bY-20}" stroke="${bridgeCol}" stroke-width="0.8" fill="none"/>`;
-    for(let c=0;c<10;c++){
-      const cx=winX+35+c*5;
-      const cableTop=bY-20+Math.pow((c-4.5)/4.5,2)*15;
-      s+=`<line x1="${cx}" y1="${cableTop}" x2="${cx}" y2="${bY}" stroke="${bridgeCol}" stroke-width="0.3" opacity="0.6"/>`;
+    // Background fills (full expanded scene)
+    s+=`<rect x="${sX}" y="${sY}" width="${sW}" height="${sH}" fill="url(#skyGrad)"/>`;
+    const bY=sY+sH*0.45; // bridge deck at ~45% of scene height
+    s+=`<rect x="${sX}" y="${bY+5}" width="${sW}" height="${sH-bY+sY-5+20}" fill="url(#waterGrad)"/>`;
+    // Hills/headlands (wide, natural shapes)
+    s+=`<path d="M${sX},${bY+5} Q${sX+25},${bY-10} ${sX+45},${bY+5}" fill="#1a3820" opacity="0.7"/>`;
+    s+=`<path d="M${sX+sW-55},${bY+5} Q${sX+sW-30},${bY-8} ${sX+sW},${bY+5}" fill="#1a3820" opacity="0.6"/>`;
+    s+=`<path d="M${sX+sW/3},${bY+5} Q${sX+sW/2},${bY-4} ${sX+sW*0.6},${bY+5}" fill="#1a3820" opacity="0.3"/>`;
+    // Bridge towers (positioned in expanded scene)
+    const twr1=sX+sW*0.3, twr2=sX+sW*0.65;
+    s+=px16(twr1,bY-24,4,32,bridgeCol,bridgeCol,'#400808');
+    s+=px16(twr2,bY-24,4,32,bridgeCol,bridgeCol,'#400808');
+    s+=px(twr1-1,bY-24,6,2,bridgeCol);s+=px(twr2-1,bY-24,6,2,bridgeCol);
+    // Road deck (full scene width)
+    s+=px(sX,bY,sW,3,bridgeCol);
+    s+=px(sX,bY,sW,1,bridgeCol.replace('0','4'));
+    // Main cables (catenary between towers)
+    s+=`<path d="M${twr1+2},${bY-22} Q${(twr1+twr2)/2+1},${bY-6} ${twr2+2},${bY-22}" stroke="${bridgeCol}" stroke-width="0.8" fill="none"/>`;
+    // Left approach cable
+    s+=`<path d="M${sX},${bY-8} Q${(sX+twr1)/2},${bY-3} ${twr1+2},${bY-22}" stroke="${bridgeCol}" stroke-width="0.6" fill="none" opacity="0.7"/>`;
+    // Right approach cable
+    s+=`<path d="M${twr2+2},${bY-22} Q${(twr2+sX+sW)/2},${bY-3} ${sX+sW},${bY-8}" stroke="${bridgeCol}" stroke-width="0.6" fill="none" opacity="0.7"/>`;
+    // Suspender cables (between towers)
+    for(let c=0;c<12;c++){
+      const cx=twr1+4+c*((twr2-twr1-4)/11);
+      const cableTop=bY-22+Math.pow((c-5.5)/5.5,2)*16;
+      s+=`<line x1="${cx}" y1="${cableTop}" x2="${cx}" y2="${bY}" stroke="${bridgeCol}" stroke-width="0.3" opacity="0.5"/>`;
     }
-    // ---- CARS ON BRIDGE (animated, tiny pixel cars) ----
-    // Left-to-right lane (top of deck)
+    // Cars on bridge
     s+=`<g class="car-right-1"><rect x="0" y="${bY}" width="3" height="1.2" rx="0.3" fill="#fff"/><rect x="0.5" y="${bY-0.3}" width="1.5" height="0.5" rx="0.2" fill="#c0d8f0" opacity="0.6"/></g>`;
     s+=`<g class="car-right-2"><rect x="0" y="${bY}" width="2.5" height="1.2" rx="0.3" fill="#f0c830"/><rect x="0.3" y="${bY-0.3}" width="1.2" height="0.5" rx="0.2" fill="#c0d8f0" opacity="0.5"/></g>`;
     s+=`<g class="car-right-3"><rect x="0" y="${bY}" width="2" height="1" rx="0.2" fill="#e74c3c"/></g>`;
-    // Right-to-left lane (bottom of deck)
     s+=`<g class="car-left-1"><rect x="0" y="${bY+1.5}" width="3" height="1.2" rx="0.3" fill="#b0b0b8"/><rect x="0.8" y="${bY+1.2}" width="1.5" height="0.5" rx="0.2" fill="#c0d8f0" opacity="0.5"/></g>`;
     s+=`<g class="car-left-2"><rect x="0" y="${bY+1.5}" width="2.5" height="1" rx="0.3" fill="#3498db"/></g>`;
-    // Night: car headlights/taillights
     if(isNight){
-      for(let bl=0;bl<12;bl++){
-        s+=`<circle cx="${winX+15+bl*8}" cy="${bY+1}" r="0.5" fill="#f8d040" opacity="0.7" class="bridge-light" style="animation-delay:${bl*0.2}s"/>`;
+      for(let bl=0;bl<15;bl++){
+        s+=`<circle cx="${sX+10+bl*((sW-20)/14)}" cy="${bY+1}" r="0.5" fill="#f8d040" opacity="0.7" class="bridge-light" style="animation-delay:${bl*0.2}s"/>`;
       }
     }
-    s+=`</g></g>`; // end parallax-bridge + clip wrapper
+    s+=`</g></g>`; // end parallax-bridge
 
     // === PARALLAX LAYER 2: WATER + BOATS (nearest — fastest) ===
     s+=`<g clip-path="url(#winClip)"><g id="parallax-water">`;
-    s+=`<rect x="${winX-pad}" y="${winY+winH/2-pad}" width="${winW+pad*2}" height="${winH/2+pad*2}" fill="url(#waterGrad)"/>`;
-    // Water shimmer
-    for(let wl=0;wl<8;wl++){
-      s+=`<rect x="${winX+5+wl*14}" y="${winY+winH/2+3+wl%3*5}" width="${8+wl%4}" height="0.5" fill="#fff" opacity="0.06" class="water-shimmer" style="animation-delay:${wl*0.4}s"/>`;
+    s+=`<rect x="${sX}" y="${bY+3}" width="${sW}" height="${sH}" fill="url(#waterGrad)"/>`;
+    // Water shimmer (spread wider)
+    for(let wl=0;wl<12;wl++){
+      s+=`<rect x="${sX+5+wl*((sW-10)/11)}" y="${bY+6+wl%4*5}" width="${6+wl%5}" height="0.5" fill="#fff" opacity="0.06" class="water-shimmer" style="animation-delay:${wl*0.3}s"/>`;
     }
-    // ---- BOATS (animated, drifting across the bay) ----
-    // Sailboat (slow drift right)
+    // Boats
     s+=`<g class="boat-drift-1">`;
-    s+=`<rect x="0" y="0" width="5" height="1.5" rx="0.5" fill="#f0ece0"/>`;  // hull
-    s+=`<rect x="0" y="-0.2" width="5" height="0.5" rx="0.3" fill="#d4a060"/>`;  // deck
-    s+=`<line x1="2" y1="-0.5" x2="2" y2="-5" stroke="#b0a090" stroke-width="0.3"/>`;  // mast
-    s+=`<polygon points="2,-5 2,-1 5,-2" fill="#fff" opacity="0.7"/>`;  // sail
-    s+=`<rect x="0" y="1.5" width="5" height="0.3" fill="#fff" opacity="0.04"/>`;  // wake
+    s+=`<rect x="0" y="0" width="5" height="1.5" rx="0.5" fill="#f0ece0"/>`;
+    s+=`<rect x="0" y="-0.2" width="5" height="0.5" rx="0.3" fill="#d4a060"/>`;
+    s+=`<line x1="2" y1="-0.5" x2="2" y2="-5" stroke="#b0a090" stroke-width="0.3"/>`;
+    s+=`<polygon points="2,-5 2,-1 5,-2" fill="#fff" opacity="0.7"/>`;
+    s+=`<rect x="0" y="1.5" width="5" height="0.3" fill="#fff" opacity="0.04"/>`;
     s+=`</g>`;
-    // Cargo/ferry (slow drift left)
     s+=`<g class="boat-drift-2">`;
-    s+=`<rect x="0" y="0" width="8" height="2" rx="0.5" fill="#484858"/>`;  // hull
-    s+=`<rect x="1" y="-1" width="3" height="1.5" rx="0.3" fill="#586068"/>`;  // cabin
-    s+=`<rect x="5" y="-0.5" width="2" height="0.8" rx="0.2" fill="#404850"/>`;  // container
-    s+=`<rect x="2" y="-0.5" width="1" height="0.5" fill="#e74c3c" opacity="0.5"/>`;  // flag
-    s+=`<rect x="0" y="2" width="8" height="0.3" fill="#fff" opacity="0.03"/>`;  // wake
+    s+=`<rect x="0" y="0" width="8" height="2" rx="0.5" fill="#484858"/>`;
+    s+=`<rect x="1" y="-1" width="3" height="1.5" rx="0.3" fill="#586068"/>`;
+    s+=`<rect x="5" y="-0.5" width="2" height="0.8" rx="0.2" fill="#404850"/>`;
+    s+=`<rect x="2" y="-0.5" width="1" height="0.5" fill="#e74c3c" opacity="0.5"/>`;
+    s+=`<rect x="0" y="2" width="8" height="0.3" fill="#fff" opacity="0.03"/>`;
     s+=`</g>`;
-    // Small speedboat (faster)
     s+=`<g class="boat-drift-3">`;
     s+=`<rect x="0" y="0" width="3" height="1" rx="0.5" fill="#f0f0f0"/>`;
-    s+=`<rect x="0" y="1" width="4" height="0.4" fill="#fff" opacity="0.06"/>`;  // wake spray
+    s+=`<rect x="0" y="1" width="4" height="0.4" fill="#fff" opacity="0.06"/>`;
     s+=`</g>`;
-    s+=`</g></g>`; // end parallax-water + clip wrapper
+    s+=`</g></g>`; // end parallax-water
 
     // === WINDOW FRAME OVERLAY (on top of all parallax layers) ===
-    // Window dividers
-    s+=px(winX+winW/3,winY,1,winH,C.steelD,0.5);
-    s+=px(winX+winW*2/3,winY,1,winH,C.steelD,0.5);
-    s+=px(winX,winY+winH/2,winW,1,C.steelD,0.3);
-    // Window glass reflection
+    // Single pane glass — no dividers/seams
     s+=`<rect x="${winX}" y="${winY}" width="${winW}" height="${winH}" fill="url(#glassGrad)"/>`;
     s+=`<rect x="${winX+3}" y="${winY+2}" width="2" height="${winH-4}" rx="1" fill="#fff" opacity="0.06"/>`;
-    s+=`<rect x="${winX+8}" y="${winY+4}" width="1" height="${winH-8}" rx="0.5" fill="#fff" opacity="0.03"/>`;
-    s+=`<rect x="${winX+winW/3-.5}" y="${winY}" width="1" height="${winH}" fill="#fff" opacity="0.03"/>`;
-    s+=`<rect x="${winX+winW*2/3-.5}" y="${winY}" width="1" height="${winH}" fill="#fff" opacity="0.03"/>`;
+    s+=`<rect x="${winX+winW-6}" y="${winY+5}" width="1" height="${winH-10}" rx="0.5" fill="#fff" opacity="0.03"/>`;
 
     // 32-BIT: Ambient light cast from window onto floor (gradient fade)
     if(!isNight){
@@ -1789,14 +1784,13 @@
       @keyframes cloudDrift{0%{transform:translateX(0)}100%{transform:translateX(15px)}}
       @keyframes waterShimmer{0%,100%{opacity:0.04}50%{opacity:0.1}}
       @keyframes bridgeLight{0%,100%{opacity:0.5}50%{opacity:0.9}}
-      @keyframes carRight{0%{transform:translateX(${winX+8}px)}100%{transform:translateX(${winX+110}px)}}
-      @keyframes carLeft{0%{transform:translateX(${winX+108}px)}100%{transform:translateX(${winX+5}px)}}
-      @keyframes boatDrift1{0%{transform:translate(${winX-5}px,${winY+winH/2+8}px)}100%{transform:translate(${winX+winW+5}px,${winY+winH/2+6}px)}}
-      @keyframes boatDrift2{0%{transform:translate(${winX+winW+5}px,${winY+winH/2+16}px)}100%{transform:translate(${winX-10}px,${winY+winH/2+18}px)}}
-      @keyframes boatDrift3{0%{transform:translate(${winX-3}px,${winY+winH/2+22}px)}100%{transform:translate(${winX+winW}px,${winY+winH/2+20}px)}}
-      @keyframes seagullFly{0%{transform:translate(${winX-10}px,${winY+8}px);opacity:0}5%{opacity:0.8}50%{transform:translate(${winX+winW/2}px,${winY+5}px);opacity:0.8}95%{opacity:0.8}100%{transform:translate(${winX+winW+10}px,${winY+12}px);opacity:0}}
-      @keyframes seagullFly2{0%{transform:translate(${winX+winW+8}px,${winY+18}px);opacity:0}5%{opacity:0.6}50%{transform:translate(${winX+winW/2-10}px,${winY+15}px);opacity:0.6}95%{opacity:0.6}100%{transform:translate(${winX-8}px,${winY+20}px);opacity:0}}
-      @keyframes wingFlap{0%,100%{d:path("M0,0 Q-2,-2 -4,0")}50%{d:path("M0,0 Q-2,0.5 -4,0")}}
+      @keyframes carRight{0%{transform:translateX(${winX-25}px)}100%{transform:translateX(${winX+winW+15}px)}}
+      @keyframes carLeft{0%{transform:translateX(${winX+winW+15}px)}100%{transform:translateX(${winX-25}px)}}
+      @keyframes boatDrift1{0%{transform:translate(${winX-25}px,${winY+winH/2+8}px)}100%{transform:translate(${winX+winW+20}px,${winY+winH/2+5}px)}}
+      @keyframes boatDrift2{0%{transform:translate(${winX+winW+20}px,${winY+winH/2+16}px)}100%{transform:translate(${winX-25}px,${winY+winH/2+18}px)}}
+      @keyframes boatDrift3{0%{transform:translate(${winX-15}px,${winY+winH/2+22}px)}100%{transform:translate(${winX+winW+15}px,${winY+winH/2+20}px)}}
+      @keyframes seagullFly{0%{transform:translate(${winX-20}px,${winY+8}px);opacity:0}5%{opacity:0.8}50%{transform:translate(${winX+winW/2}px,${winY+3}px);opacity:0.8}95%{opacity:0.8}100%{transform:translate(${winX+winW+20}px,${winY+12}px);opacity:0}}
+      @keyframes seagullFly2{0%{transform:translate(${winX+winW+15}px,${winY+18}px);opacity:0}5%{opacity:0.6}50%{transform:translate(${winX+winW/2-10}px,${winY+14}px);opacity:0.6}95%{opacity:0.6}100%{transform:translate(${winX-15}px,${winY+20}px);opacity:0}}
       .neon-sign{animation:neonPulse 3s ease-in-out infinite}
       .neon-sign-2{animation:neonPulse2 4s ease-in-out infinite}
       .server-blink{animation:serverBlink 1.5s steps(2) infinite}
