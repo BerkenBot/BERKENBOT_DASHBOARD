@@ -1,10 +1,13 @@
 {
-  "date": "2026-02-22",
+  "date": "2026-02-23",
   "agents": {
+    "BERKEN_BOT": 32,
     "FORGE": 0,
     "ANVIL": 0,
     "SCOUT": 0,
-    "RELAY": 228,
-    "PULSE": 228
+    "CREATIVE": 32,
+    "CRON": 32,
+    "SENTINEL": 32,
+    "FLOAT": 0
   }
 }
