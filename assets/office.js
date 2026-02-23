@@ -1403,7 +1403,7 @@
     </linearGradient></defs>`;
 
     // === PARALLAX LAYER 0: SKY (farthest — slowest) ===
-    s+=`<g id="parallax-sky" clip-path="url(#winClip)">`;
+    s+=`<g clip-path="url(#winClip)"><g id="parallax-sky">`;
     s+=`<rect x="${winX}" y="${winY}" width="${winW}" height="${winH}" fill="url(#skyGrad)"/>`;
     // Sun or moon
     const smX=winX+winW*0.75, smY=winY+sunMoonY*winH/80;
@@ -1437,10 +1437,10 @@
     s+=`<path d="M0,0 Q1.5,-1.5 3,0" stroke="#e8e8e8" stroke-width="0.3" fill="none" opacity="0.5"/>`;
     s+=`<circle cx="0" cy="0.2" r="0.3" fill="#e8e8e8" opacity="0.4"/>`;
     s+=`</g>`;
-    s+=`</g>`; // end parallax-sky
+    s+=`</g></g>`; // end parallax-sky + clip wrapper
 
     // === PARALLAX LAYER 1: HILLS + BRIDGE (mid — medium speed) ===
-    s+=`<g id="parallax-bridge" clip-path="url(#winClip)">`;
+    s+=`<g clip-path="url(#winClip)"><g id="parallax-bridge">`;
     const bY=winY+winH/2-8;
     // Hills/headlands (behind bridge)
     s+=`<path d="M${winX-5},${bY+3} Q${winX+15},${bY-10} ${winX+28},${bY+3}" fill="#1a3820" opacity="0.7"/>`;
@@ -1475,10 +1475,10 @@
         s+=`<circle cx="${winX+15+bl*8}" cy="${bY+1}" r="0.5" fill="#f8d040" opacity="0.7" class="bridge-light" style="animation-delay:${bl*0.2}s"/>`;
       }
     }
-    s+=`</g>`; // end parallax-bridge
+    s+=`</g></g>`; // end parallax-bridge + clip wrapper
 
     // === PARALLAX LAYER 2: WATER + BOATS (nearest — fastest) ===
-    s+=`<g id="parallax-water" clip-path="url(#winClip)">`;
+    s+=`<g clip-path="url(#winClip)"><g id="parallax-water">`;
     s+=`<rect x="${winX}" y="${winY+winH/2}" width="${winW}" height="${winH/2}" fill="url(#waterGrad)"/>`;
     // Water shimmer
     for(let wl=0;wl<8;wl++){
@@ -1506,7 +1506,7 @@
     s+=`<rect x="0" y="0" width="3" height="1" rx="0.5" fill="#f0f0f0"/>`;
     s+=`<rect x="0" y="1" width="4" height="0.4" fill="#fff" opacity="0.06"/>`;  // wake spray
     s+=`</g>`;
-    s+=`</g>`; // end parallax-water
+    s+=`</g></g>`; // end parallax-water + clip wrapper
 
     // === WINDOW FRAME OVERLAY (on top of all parallax layers) ===
     // Window dividers
@@ -1748,7 +1748,7 @@
       .office-section { padding: 16px !important; }
       .agent-office-wrap { overflow: hidden; }
       #agentOffice svg{shape-rendering:geometricPrecision;}
-      #parallax-sky,#parallax-bridge,#parallax-water{transition:transform 0.15s ease-out;}
+      #parallax-sky,#parallax-bridge,#parallax-water{will-change:transform;}
       @keyframes typing{0%,100%{transform:translateY(0)}15%{transform:translateY(-0.5px)}30%{transform:translateY(0.3px)}50%{transform:translateY(-0.4px)}70%{transform:translateY(0.2px)}85%{transform:translateY(-0.2px)}}
       @keyframes idle{0%,100%{transform:translateY(0)}50%{transform:translateY(1px)}}
       @keyframes neonPulse{0%,100%{opacity:.9}50%{opacity:.5}}
