@@ -1393,26 +1393,31 @@
     // Window frame (gradient metallic)
     s+=`<rect x="${winX-3}" y="${winY-3}" width="${winW+6}" height="${winH+6}" rx="1" fill="url(#steelGrad)"/>`;
     s+=`<rect x="${winX-1}" y="${winY-1}" width="${winW+2}" height="${winH+2}" rx="0.5" fill="#101020"/>`;
-    // Sky (proper gradient)
-    s+=`<defs><linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+    // Clip path for window contents
+    s+=`<defs><clipPath id="winClip"><rect x="${winX}" y="${winY}" width="${winW}" height="${winH}"/></clipPath>
+    <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0%" stop-color="${skyTop}"/><stop offset="70%" stop-color="${skyBot}"/><stop offset="100%" stop-color="${waterCol}"/>
+    </linearGradient>
+    <linearGradient id="waterGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="${waterCol}"/><stop offset="100%" stop-color="${waterCol}" stop-opacity="0.6"/>
     </linearGradient></defs>`;
+
+    // === PARALLAX LAYER 0: SKY (farthest — slowest) ===
+    s+=`<g id="parallax-sky" clip-path="url(#winClip)">`;
     s+=`<rect x="${winX}" y="${winY}" width="${winW}" height="${winH}" fill="url(#skyGrad)"/>`;
-    // Sun or moon (32-bit: radial glow)
+    // Sun or moon
     const smX=winX+winW*0.75, smY=winY+sunMoonY*winH/80;
     s+=`<circle cx="${smX}" cy="${smY}" r="${sunMoonR+6}" fill="${sunMoonCol}" opacity="0.06"/>`;
     s+=`<circle cx="${smX}" cy="${smY}" r="${sunMoonR+3}" fill="${sunMoonCol}" opacity="0.12"/>`;
     s+=`<circle cx="${smX}" cy="${smY}" r="${sunMoonR}" fill="${sunMoonCol}" filter="url(#softGlow)"/>`;
     if(isNight){
-      // Stars
       for(let st=0;st<12;st++){
         const sx=winX+5+((st*37)%110), sy=winY+2+((st*13)%25);
         s+=`<circle cx="${sx}" cy="${sy}" r="0.4" fill="#fff" opacity="${0.4+Math.random()*0.4}" class="star-twinkle" style="animation-delay:${st*0.5}s"/>`;
       }
-      // Moon crescent shadow
       s+=`<circle cx="${winX+winW*0.75+1.5}" cy="${winY+sunMoonY*winH/80-0.5}" r="2.5" fill="${skyTop}"/>`;
     }
-    // Clouds (32-bit: soft blurred)
+    // Clouds
     s+=`<g class="cloud-drift" opacity="${cloudOp}" filter="url(#softGlow)">`;
     s+=`<ellipse cx="${winX+25}" cy="${winY+10}" rx="14" ry="3.5" fill="#fff" opacity="0.7"/>`;
     s+=`<ellipse cx="${winX+21}" cy="${winY+9}" rx="8" ry="3" fill="#fff" opacity="0.5"/>`;
@@ -1420,51 +1425,98 @@
     s+=`<ellipse cx="${winX+78}" cy="${winY+14}" rx="12" ry="3" fill="#fff" opacity="0.6"/>`;
     s+=`<ellipse cx="${winX+82}" cy="${winY+13}" rx="7" ry="2.5" fill="#fff" opacity="0.4"/>`;
     s+=`</g>`;
-    // Water (32-bit gradient)
-    s+=`<defs><linearGradient id="waterGrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="${waterCol}"/><stop offset="100%" stop-color="${waterCol}" stop-opacity="0.6"/>
-    </linearGradient></defs>`;
-    s+=`<rect x="${winX}" y="${winY+winH/2}" width="${winW}" height="${winH/2}" fill="url(#waterGrad)"/>`;
-    // Water shimmer
-    for(let wl=0;wl<8;wl++){
-      s+=`<rect x="${winX+5+wl*14}" y="${winY+winH/2+3+wl%3*5}" width="${8+wl%4}" height="0.5" fill="#fff" opacity="0.06" class="water-shimmer" style="animation-delay:${wl*0.4}s"/>`;
-    }
-    // Golden Gate Bridge
-    const bY=winY+winH/2-8; // bridge deck Y
+    // Seagull (flies across every ~20s)
+    s+=`<g class="seagull-fly">`;
+    s+=`<path d="M0,0 Q-2,-2 -4,0" stroke="#fff" stroke-width="0.4" fill="none" opacity="0.7"/>`;
+    s+=`<path d="M0,0 Q2,-2 4,0" stroke="#fff" stroke-width="0.4" fill="none" opacity="0.7"/>`;
+    s+=`<circle cx="0" cy="0.3" r="0.4" fill="#fff" opacity="0.6"/>`;
+    s+=`</g>`;
+    // Second seagull (offset timing, different altitude)
+    s+=`<g class="seagull-fly-2">`;
+    s+=`<path d="M0,0 Q-1.5,-1.5 -3,0" stroke="#e8e8e8" stroke-width="0.3" fill="none" opacity="0.5"/>`;
+    s+=`<path d="M0,0 Q1.5,-1.5 3,0" stroke="#e8e8e8" stroke-width="0.3" fill="none" opacity="0.5"/>`;
+    s+=`<circle cx="0" cy="0.2" r="0.3" fill="#e8e8e8" opacity="0.4"/>`;
+    s+=`</g>`;
+    s+=`</g>`; // end parallax-sky
+
+    // === PARALLAX LAYER 1: HILLS + BRIDGE (mid — medium speed) ===
+    s+=`<g id="parallax-bridge" clip-path="url(#winClip)">`;
+    const bY=winY+winH/2-8;
+    // Hills/headlands (behind bridge)
+    s+=`<path d="M${winX-5},${bY+3} Q${winX+15},${bY-10} ${winX+28},${bY+3}" fill="#1a3820" opacity="0.7"/>`;
+    s+=`<path d="M${winX+86},${bY+3} Q${winX+100},${bY-8} ${winX+winW+5},${bY+3}" fill="#1a3820" opacity="0.6"/>`;
+    // Far headland (very background)
+    s+=`<path d="M${winX+40},${bY+3} Q${winX+60},${bY-4} ${winX+85},${bY+3}" fill="#1a3820" opacity="0.3"/>`;
     // Towers
     s+=px16(winX+30,bY-22,4,30,bridgeCol,bridgeCol,'#400808');
     s+=px16(winX+80,bY-22,4,30,bridgeCol,bridgeCol,'#400808');
-    // Tower tops
     s+=px(winX+29,bY-22,6,2,bridgeCol);s+=px(winX+79,bY-22,6,2,bridgeCol);
     // Road deck
     s+=px(winX+10,bY,100,3,bridgeCol);
-    s+=px(winX+10,bY,100,1,bridgeCol.replace('0','4')); // highlight
-    // Cables (main span catenary)
+    s+=px(winX+10,bY,100,1,bridgeCol.replace('0','4'));
+    // Cables
     s+=`<path d="M${winX+32},${bY-20} Q${winX+56},${bY-5} ${winX+82},${bY-20}" stroke="${bridgeCol}" stroke-width="0.8" fill="none"/>`;
-    // Suspender cables
     for(let c=0;c<10;c++){
       const cx=winX+35+c*5;
       const cableTop=bY-20+Math.pow((c-4.5)/4.5,2)*15;
       s+=`<line x1="${cx}" y1="${cableTop}" x2="${cx}" y2="${bY}" stroke="${bridgeCol}" stroke-width="0.3" opacity="0.6"/>`;
     }
-    // Hills/headlands
-    s+=`<path d="M${winX},${bY+3} Q${winX+15},${bY-8} ${winX+28},${bY+3}" fill="#1a3820" opacity="0.7"/>`;
-    s+=`<path d="M${winX+86},${bY+3} Q${winX+100},${bY-6} ${winX+winW},${bY+3}" fill="#1a3820" opacity="0.6"/>`;
-    // Night bridge lights
+    // ---- CARS ON BRIDGE (animated, tiny pixel cars) ----
+    // Left-to-right lane (top of deck)
+    s+=`<g class="car-right-1"><rect x="0" y="${bY}" width="3" height="1.2" rx="0.3" fill="#fff"/><rect x="0.5" y="${bY-0.3}" width="1.5" height="0.5" rx="0.2" fill="#c0d8f0" opacity="0.6"/></g>`;
+    s+=`<g class="car-right-2"><rect x="0" y="${bY}" width="2.5" height="1.2" rx="0.3" fill="#f0c830"/><rect x="0.3" y="${bY-0.3}" width="1.2" height="0.5" rx="0.2" fill="#c0d8f0" opacity="0.5"/></g>`;
+    s+=`<g class="car-right-3"><rect x="0" y="${bY}" width="2" height="1" rx="0.2" fill="#e74c3c"/></g>`;
+    // Right-to-left lane (bottom of deck)
+    s+=`<g class="car-left-1"><rect x="0" y="${bY+1.5}" width="3" height="1.2" rx="0.3" fill="#b0b0b8"/><rect x="0.8" y="${bY+1.2}" width="1.5" height="0.5" rx="0.2" fill="#c0d8f0" opacity="0.5"/></g>`;
+    s+=`<g class="car-left-2"><rect x="0" y="${bY+1.5}" width="2.5" height="1" rx="0.3" fill="#3498db"/></g>`;
+    // Night: car headlights/taillights
     if(isNight){
       for(let bl=0;bl<12;bl++){
         s+=`<circle cx="${winX+15+bl*8}" cy="${bY+1}" r="0.5" fill="#f8d040" opacity="0.7" class="bridge-light" style="animation-delay:${bl*0.2}s"/>`;
       }
     }
+    s+=`</g>`; // end parallax-bridge
+
+    // === PARALLAX LAYER 2: WATER + BOATS (nearest — fastest) ===
+    s+=`<g id="parallax-water" clip-path="url(#winClip)">`;
+    s+=`<rect x="${winX}" y="${winY+winH/2}" width="${winW}" height="${winH/2}" fill="url(#waterGrad)"/>`;
+    // Water shimmer
+    for(let wl=0;wl<8;wl++){
+      s+=`<rect x="${winX+5+wl*14}" y="${winY+winH/2+3+wl%3*5}" width="${8+wl%4}" height="0.5" fill="#fff" opacity="0.06" class="water-shimmer" style="animation-delay:${wl*0.4}s"/>`;
+    }
+    // ---- BOATS (animated, drifting across the bay) ----
+    // Sailboat (slow drift right)
+    s+=`<g class="boat-drift-1">`;
+    s+=`<rect x="0" y="0" width="5" height="1.5" rx="0.5" fill="#f0ece0"/>`;  // hull
+    s+=`<rect x="0" y="-0.2" width="5" height="0.5" rx="0.3" fill="#d4a060"/>`;  // deck
+    s+=`<line x1="2" y1="-0.5" x2="2" y2="-5" stroke="#b0a090" stroke-width="0.3"/>`;  // mast
+    s+=`<polygon points="2,-5 2,-1 5,-2" fill="#fff" opacity="0.7"/>`;  // sail
+    s+=`<rect x="0" y="1.5" width="5" height="0.3" fill="#fff" opacity="0.04"/>`;  // wake
+    s+=`</g>`;
+    // Cargo/ferry (slow drift left)
+    s+=`<g class="boat-drift-2">`;
+    s+=`<rect x="0" y="0" width="8" height="2" rx="0.5" fill="#484858"/>`;  // hull
+    s+=`<rect x="1" y="-1" width="3" height="1.5" rx="0.3" fill="#586068"/>`;  // cabin
+    s+=`<rect x="5" y="-0.5" width="2" height="0.8" rx="0.2" fill="#404850"/>`;  // container
+    s+=`<rect x="2" y="-0.5" width="1" height="0.5" fill="#e74c3c" opacity="0.5"/>`;  // flag
+    s+=`<rect x="0" y="2" width="8" height="0.3" fill="#fff" opacity="0.03"/>`;  // wake
+    s+=`</g>`;
+    // Small speedboat (faster)
+    s+=`<g class="boat-drift-3">`;
+    s+=`<rect x="0" y="0" width="3" height="1" rx="0.5" fill="#f0f0f0"/>`;
+    s+=`<rect x="0" y="1" width="4" height="0.4" fill="#fff" opacity="0.06"/>`;  // wake spray
+    s+=`</g>`;
+    s+=`</g>`; // end parallax-water
+
+    // === WINDOW FRAME OVERLAY (on top of all parallax layers) ===
     // Window dividers
     s+=px(winX+winW/3,winY,1,winH,C.steelD,0.5);
     s+=px(winX+winW*2/3,winY,1,winH,C.steelD,0.5);
     s+=px(winX,winY+winH/2,winW,1,C.steelD,0.3);
-    // Window glass reflection (32-bit: diagonal gradient overlay)
+    // Window glass reflection
     s+=`<rect x="${winX}" y="${winY}" width="${winW}" height="${winH}" fill="url(#glassGrad)"/>`;
     s+=`<rect x="${winX+3}" y="${winY+2}" width="2" height="${winH-4}" rx="1" fill="#fff" opacity="0.06"/>`;
     s+=`<rect x="${winX+8}" y="${winY+4}" width="1" height="${winH-8}" rx="0.5" fill="#fff" opacity="0.03"/>`;
-    // Window divider reflections
     s+=`<rect x="${winX+winW/3-.5}" y="${winY}" width="1" height="${winH}" fill="#fff" opacity="0.03"/>`;
     s+=`<rect x="${winX+winW*2/3-.5}" y="${winY}" width="1" height="${winH}" fill="#fff" opacity="0.03"/>`;
 
@@ -1566,7 +1618,7 @@
     s+=`<g filter="url(#dropShadow)"><rect x="4" y="250" width="2" height="8" rx="1" fill="#e04040"/>`;
     s+=`<circle cx="5" cy="251.5" r="0.8" fill="#f0c830"/><circle cx="5" cy="257" r="0.8" fill="#f0c830"/></g>`;
 
-    return {svg:s, width:W, height:H};
+    return {svg:s, width:W, height:H, winX, winY, winW, winH};
   }
 
   /* ============ INIT ============ */
@@ -1574,7 +1626,7 @@
     const container=document.getElementById('agentOffice');
     if(!container)return;
 
-    const {svg,width,height}=buildOffice();
+    const {svg,width,height,winX,winY,winW,winH}=buildOffice();
     const fullH=height+50;
 
     // Pinch-to-zoom wrapper
@@ -1604,6 +1656,18 @@
       clampTransform();
       svgEl.style.transform=`translate(${oTx}px,${oTy}px) scale(${oScale})`;
       svgEl.style.transformOrigin='0 0';
+      // Parallax: shift window layers at different rates when zoomed/panned
+      // Convert pixel offset to SVG-space offset (divide by scale and viewBox ratio)
+      const vbW=${width}, wrapW=wrap.clientWidth||1;
+      const svgPerPx=vbW/(wrapW*oScale);
+      const pxX=oTx*svgPerPx, pxY=oTy*svgPerPx;
+      const zFactor=(oScale-1)*0.15; // parallax intensity scales with zoom
+      const skyEl=document.getElementById('parallax-sky');
+      const bridgeEl=document.getElementById('parallax-bridge');
+      const waterEl=document.getElementById('parallax-water');
+      if(skyEl) skyEl.style.transform=`translate(${-pxX*0.02+zFactor*1.5}px,${-pxY*0.015}px)`;
+      if(bridgeEl) bridgeEl.style.transform=`translate(${-pxX*0.05+zFactor*0.8}px,${-pxY*0.03}px)`;
+      if(waterEl) waterEl.style.transform=`translate(${-pxX*0.08+zFactor*0.3}px,${-pxY*0.05}px)`;
     }
 
     // Touch: pinch zoom + pan
@@ -1681,6 +1745,7 @@
       .office-section { padding: 16px !important; }
       .agent-office-wrap { overflow: hidden; }
       #agentOffice svg{shape-rendering:geometricPrecision;}
+      #parallax-sky,#parallax-bridge,#parallax-water{transition:transform 0.15s ease-out;}
       @keyframes typing{0%,100%{transform:translateY(0)}15%{transform:translateY(-0.5px)}30%{transform:translateY(0.3px)}50%{transform:translateY(-0.4px)}70%{transform:translateY(0.2px)}85%{transform:translateY(-0.2px)}}
       @keyframes idle{0%,100%{transform:translateY(0)}50%{transform:translateY(1px)}}
       @keyframes neonPulse{0%,100%{opacity:.9}50%{opacity:.5}}
@@ -1714,6 +1779,14 @@
       @keyframes cloudDrift{0%{transform:translateX(0)}100%{transform:translateX(15px)}}
       @keyframes waterShimmer{0%,100%{opacity:0.04}50%{opacity:0.1}}
       @keyframes bridgeLight{0%,100%{opacity:0.5}50%{opacity:0.9}}
+      @keyframes carRight{0%{transform:translateX(${winX+8}px)}100%{transform:translateX(${winX+110}px)}}
+      @keyframes carLeft{0%{transform:translateX(${winX+108}px)}100%{transform:translateX(${winX+5}px)}}
+      @keyframes boatDrift1{0%{transform:translate(${winX-5}px,${winY+winH/2+8}px)}100%{transform:translate(${winX+winW+5}px,${winY+winH/2+6}px)}}
+      @keyframes boatDrift2{0%{transform:translate(${winX+winW+5}px,${winY+winH/2+16}px)}100%{transform:translate(${winX-10}px,${winY+winH/2+18}px)}}
+      @keyframes boatDrift3{0%{transform:translate(${winX-3}px,${winY+winH/2+22}px)}100%{transform:translate(${winX+winW}px,${winY+winH/2+20}px)}}
+      @keyframes seagullFly{0%{transform:translate(${winX-10}px,${winY+8}px);opacity:0}5%{opacity:0.8}50%{transform:translate(${winX+winW/2}px,${winY+5}px);opacity:0.8}95%{opacity:0.8}100%{transform:translate(${winX+winW+10}px,${winY+12}px);opacity:0}}
+      @keyframes seagullFly2{0%{transform:translate(${winX+winW+8}px,${winY+18}px);opacity:0}5%{opacity:0.6}50%{transform:translate(${winX+winW/2-10}px,${winY+15}px);opacity:0.6}95%{opacity:0.6}100%{transform:translate(${winX-8}px,${winY+20}px);opacity:0}}
+      @keyframes wingFlap{0%,100%{d:path("M0,0 Q-2,-2 -4,0")}50%{d:path("M0,0 Q-2,0.5 -4,0")}}
       .neon-sign{animation:neonPulse 3s ease-in-out infinite}
       .neon-sign-2{animation:neonPulse2 4s ease-in-out infinite}
       .server-blink{animation:serverBlink 1.5s steps(2) infinite}
@@ -1745,6 +1818,16 @@
       .cloud-drift{animation:cloudDrift 20s ease-in-out infinite alternate}
       .water-shimmer{animation:waterShimmer 3s ease-in-out infinite}
       .bridge-light{animation:bridgeLight 2s ease-in-out infinite}
+      .car-right-1{animation:carRight 6s linear infinite}
+      .car-right-2{animation:carRight 6s linear infinite 2.5s}
+      .car-right-3{animation:carRight 5s linear infinite 4s}
+      .car-left-1{animation:carLeft 7s linear infinite 1s}
+      .car-left-2{animation:carLeft 6s linear infinite 3.5s}
+      .boat-drift-1{animation:boatDrift1 45s linear infinite}
+      .boat-drift-2{animation:boatDrift2 55s linear infinite 10s}
+      .boat-drift-3{animation:boatDrift3 25s linear infinite 5s}
+      .seagull-fly{animation:seagullFly 18s linear infinite}
+      .seagull-fly-2{animation:seagullFly2 22s linear infinite 9s}
       ${AGENTS.map((a,i)=>{
         if(a.status==='green')return`#agent-${i}{animation:typing .6s ease-in-out infinite}`;
         if(a.status==='yellow')return`#agent-${i}{animation:idle 2.5s ease-in-out infinite}`;
