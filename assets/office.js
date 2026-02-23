@@ -1322,46 +1322,31 @@
       </marker>
     </defs>`;
 
-    // ---- 32-BIT WALLS ----
+    // ======== OFFICE DEPTH LAYERS (for room parallax) ========
+    // Floor + walls are static (no parallax — they're the base)
     s+=brickWall(W, Math.floor(W*0.28));
-
-    // ---- 32-BIT FLOOR (gradient + reflections) ----
     s+=`<rect x="0" y="80" width="${W}" height="1.5" fill="url(#steelGrad)" opacity="0.5"/>`;
     s+=`<rect x="0" y="82" width="${W}" height="198" fill="url(#floorGrad)"/>`;
-    // Subtle gradient bands for depth
     s+=px(0,82,W,20,C.floorHi,0.06);
     s+=px(0,200,W,80,'#000',0.04);
     for(let i=0;i<W;i+=20){s+=px(i,82,0.5,198,C.floorL,0.06);s+=px(i+1,82,0.5,198,'#000',0.02);}
     for(let j=82;j<280;j+=20){s+=px(0,j,W,0.5,C.floorL,0.05);s+=px(0,j+1,W,0.5,'#000',0.02);}
-    // Floor reflections (16-bit polish effect)
     s+=px(100,85,80,1,C.floorHi,0.04);s+=px(300,90,60,1,C.floorHi,0.03);
-    // Rug (16-bit: fringe + pattern)
-    s+=px(W-172,195,69,1,C.rugD,0.3); // fringe top
-    s+=px(W-170,196,65,30,C.rug,0.22);
-    s+=px(W-168,198,61,26,C.rugL,0.1);
-    // Rug pattern (diamond)
-    for(let ry=0;ry<4;ry++) for(let rx=0;rx<5;rx++){
-      s+=px(W-165+rx*12,200+ry*6,4,2,C.rugHi,0.08);
-    }
-    s+=px(W-172,225,69,1,C.rugD,0.3); // fringe bottom
 
-    // ---- CEILING ----
+    // == DEPTH 0: BACK WALL (farthest — moves least) ==
+    s+=`<g id="office-depth-0">`;
+    // Ceiling
     s+=px(80,0,250,3,'#2a2a3a');s+=px(80,3,250,0.5,C.steelD,0.3);
-    // Sprinkler pipes
     s+=px(200,0,1,5,C.steelD,0.3);s+=px(350,0,1,5,C.steelD,0.3);
-
-    // ---- LIGHTS ----
+    // Lights
     for(let lx=45;lx<W;lx+=60)s+=pendant(lx);
-
-    // ---- 32-BIT NEON SIGNS (real glow) ----
+    // Neon signs
     s+=`<g class="neon-sign" filter="url(#neonGlow)" transform="translate(14,16)">${neonSign('BERKENBOT','#a8a0ff')}</g>`;
     s+=`<g class="neon-sign-2" filter="url(#neonGlow)" transform="translate(14,25)">${neonSmall('LABS  ·  BUILD  SHIP  REPEAT','#ff80b0')}</g>`;
-    // Wall glow from neon (vivid bloom)
     s+=`<ellipse cx="60" cy="22" rx="70" ry="18" fill="#a8a0ff" opacity="0.12" filter="url(#neonWide)"/>`;
     s+=`<ellipse cx="60" cy="22" rx="40" ry="10" fill="#c8c0ff" opacity="0.08"/>`;
     s+=`<ellipse cx="80" cy="30" rx="70" ry="12" fill="#ff80b0" opacity="0.08" filter="url(#neonWide)"/>`;
     s+=`<ellipse cx="80" cy="30" rx="40" ry="8" fill="#ffa0c0" opacity="0.06"/>`;
-    // Neon light spill onto floor
     s+=`<ellipse cx="60" cy="82" rx="50" ry="8" fill="#a8a0ff" opacity="0.04"/>`;
     s+=`<ellipse cx="80" cy="84" rx="50" ry="6" fill="#ff80b0" opacity="0.03"/>`;
 
@@ -1591,33 +1576,16 @@
 
     // ---- CLOCK ----
     s+=wallClock(winX-12, 12);
-
-    // ---- WHITEBOARD (project board, data-driven) ----
+    // ---- WHITEBOARD ----
     const projItems = (_projectsData && _projectsData.items) || [];
     s+=`<g transform="translate(${W*0.28+8},8)">${whiteboard(projItems)}</g>`;
-
     // ---- BOOKSHELF ----
     s+=`<g transform="translate(${winX+winW+8},14)">${bookshelf()}</g>`;
-
-    // ---- GLASS CORNER OFFICE (BERKEN_BOT) ----
+    // ---- GLASS CORNER OFFICE ----
     s+=`<g filter="url(#furnitureShadow)" transform="translate(${W-80},10)">${glassRoom(70,75)}</g>`;
-
-    // ---- COFFEE STATION (back wall, left side) ----
+    // ---- COFFEE STATION ----
     s+=`<g filter="url(#dropShadow)" transform="translate(6,16)">${coffeeStation()}</g>`;
-
-    // ---- PING PONG (lounge) ----
-    s+=`<g filter="url(#furnitureShadow)" transform="translate(${W-160},190)">${pingPong()}</g>`;
-
-    // ---- PLANTS ----
-    s+=`<g transform="translate(48,50)">${bigPlant('fiddle')}</g>`;
-    s+=`<g transform="translate(${W-90},56)">${bigPlant('monstera')}</g>`;
-    s+=`<g transform="translate(${W/2+30},54)">${bigPlant('snake')}</g>`;
-    s+=`<g transform="translate(${W/2-50},54)">${bigPlant('fiddle')}</g>`;
-    s+=`<g transform="translate(40,130)">${bigPlant('monstera')}</g>`;
-    s+=`<g transform="translate(360,130)">${bigPlant('snake')}</g>`;
-    s+=`<g transform="translate(120,190)">${bigPlant('fiddle')}</g>`;
-
-    // ---- SERVER RACK (RELAY's domain) ----
+    // ---- SERVER RACK ----
     const rackX=W-220;
     s+=`<g filter="url(#furnitureShadow)">`;
     s+=`<g transform="translate(${rackX},38)" class="server-blink">${serverRack()}</g>`;
@@ -1625,57 +1593,97 @@
     s+=`<g transform="translate(${rackX+40},38)">${serverRack()}</g>`;
     s+=`</g>`;
     s+=px(rackX-2,36,64,2,C.steelD,0.4);
-
-    // ---- AGENT WORKSTATIONS (more spread out for taller scene) ----
-    const stations = [
-      {x:455, y:52},   // BERKEN_BOT - corner office (inside glass room)
-      {x:55,  y:90},   // FORGE - front row left
-      {x:165, y:90},   // ANVIL - front row center
-      {x:280, y:90},   // SCOUT - front row right
-      {x:55,  y:150},  // CREATIVE - mid row left
-      {x:165, y:150},  // CRON - mid row center
-      {x:280, y:150},  // SENTINEL - mid row right
-      {x:165, y:205},  // FLOAT - back row center (flex desk)
-    ];
-
-    AGENTS.forEach((ag,i)=>{
-      const st=stations[i];
-      const bx=st.x, by=st.y;
-
-      // Desk (with drop shadow)
-      s+=`<g filter="url(#furnitureShadow)" transform="translate(${bx},${by})">${desk(44)}</g>`;
-      // Monitors on desk (with glow)
-      s+=`<g filter="url(#monitorGlow)" transform="translate(${bx+7},${by-14})">${dualMon(ag.status==='green',ag.screen,i)}</g>`;
-      // Desk accessories
-      s+=`<g transform="translate(${bx+36},${by-3})">${deskStuff(ag.stuff)}</g>`;
-      // Seated character WITH chair (hands at desk height)
-      s+=`<g id="agent-${i}" transform="translate(${bx+10},${by+2})">${seatedAgent(ag, i)}</g>`;
-
-      // ---- LABELS below workstation (16-bit drop shadow) ----
-      s+=txt16(bx+22,by+32,ag.name,3.5,'#e8f0ff');
-      s+=txt16(bx+22,by+37,ag.role,2.2,'#90a0b0');
-      // LOC badge (floating above character's head)
-      const agLines = (_agentLocData && _agentLocData.agents && _agentLocData.agents[ag.name]) || 0;
-      s+=locBadge(bx+22, by-22, agLines);
-      s+=projectTags(ag.projects,bx-2,by+39,50);
-    });
-
-    // ---- WALKING PEOPLE removed per request ----
-
-    // ---- 32-BIT AMBIENT DETAILS ----
-    // Sneakers (near lounge)
-    s+=`<g filter="url(#dropShadow)">`;
-    s+=`<rect x="${W-128}" y="215" width="4" height="2" rx="0.5" fill="#e04040"/>`;
-    s+=`<rect x="${W-123}" y="215" width="4" height="2" rx="0.5" fill="#2878b0"/>`;
-    s+=`</g>`;
-    // Pizza box (on conference room area)
+    // Wall-level plants
+    s+=`<g transform="translate(48,50)">${bigPlant('fiddle')}</g>`;
+    s+=`<g transform="translate(${W-90},56)">${bigPlant('monstera')}</g>`;
+    s+=`<g transform="translate(${W/2+30},54)">${bigPlant('snake')}</g>`;
+    s+=`<g transform="translate(${W/2-50},54)">${bigPlant('fiddle')}</g>`;
+    // Pizza box near glass office
     s+=`<g filter="url(#dropShadow)">`;
     s+=`<rect x="${W-52}" y="52" width="8" height="6" rx="0.5" fill="url(#woodGrad)"/>`;
     s+=`<rect x="${W-51}" y="53" width="6" height="4" rx="0.3" fill="#e04040" opacity="0.25"/>`;
     s+=`</g>`;
-    // Skateboard (near back)
+    // BERKEN_BOT workstation (inside glass office, same depth as wall)
+    const bb=AGENTS[0], bbs={x:455,y:52};
+    s+=`<g filter="url(#furnitureShadow)" transform="translate(${bbs.x},${bbs.y})">${desk(44)}</g>`;
+    s+=`<g filter="url(#monitorGlow)" transform="translate(${bbs.x+7},${bbs.y-14})">${dualMon(bb.status==='green',bb.screen,0)}</g>`;
+    s+=`<g transform="translate(${bbs.x+36},${bbs.y-3})">${deskStuff(bb.stuff)}</g>`;
+    s+=`<g id="agent-0" transform="translate(${bbs.x+10},${bbs.y+2})">${seatedAgent(bb, 0)}</g>`;
+    s+=txt16(bbs.x+22,bbs.y+32,bb.name,3.5,'#e8f0ff');
+    s+=txt16(bbs.x+22,bbs.y+37,bb.role,2.2,'#90a0b0');
+    const bbLines=(_agentLocData&&_agentLocData.agents&&_agentLocData.agents[bb.name])||0;
+    s+=locBadge(bbs.x+22,bbs.y-22,bbLines);
+    s+=projectTags(bb.projects,bbs.x-2,bbs.y+39,50);
+    s+=`</g>`; // END DEPTH 0
+
+    // == DEPTH 1: FRONT ROW (y~90) ==
+    s+=`<g id="office-depth-1">`;
+    [1,2,3].forEach(i=>{
+      const ag=AGENTS[i], bx=[0,55,165,280][i], by=90;
+      s+=`<g filter="url(#furnitureShadow)" transform="translate(${bx},${by})">${desk(44)}</g>`;
+      s+=`<g filter="url(#monitorGlow)" transform="translate(${bx+7},${by-14})">${dualMon(ag.status==='green',ag.screen,i)}</g>`;
+      s+=`<g transform="translate(${bx+36},${by-3})">${deskStuff(ag.stuff)}</g>`;
+      s+=`<g id="agent-${i}" transform="translate(${bx+10},${by+2})">${seatedAgent(ag, i)}</g>`;
+      s+=txt16(bx+22,by+32,ag.name,3.5,'#e8f0ff');
+      s+=txt16(bx+22,by+37,ag.role,2.2,'#90a0b0');
+      const agLines=(_agentLocData&&_agentLocData.agents&&_agentLocData.agents[ag.name])||0;
+      s+=locBadge(bx+22,by-22,agLines);
+      s+=projectTags(ag.projects,bx-2,by+39,50);
+    });
+    s+=`</g>`; // END DEPTH 1
+
+    // == DEPTH 2: MID ROW (y~150) ==
+    s+=`<g id="office-depth-2">`;
+    // Mid-row plants
+    s+=`<g transform="translate(40,130)">${bigPlant('monstera')}</g>`;
+    s+=`<g transform="translate(360,130)">${bigPlant('snake')}</g>`;
+    [4,5,6].forEach(i=>{
+      const ag=AGENTS[i], bx=[0,0,0,0,55,165,280][i], by=150;
+      s+=`<g filter="url(#furnitureShadow)" transform="translate(${bx},${by})">${desk(44)}</g>`;
+      s+=`<g filter="url(#monitorGlow)" transform="translate(${bx+7},${by-14})">${dualMon(ag.status==='green',ag.screen,i)}</g>`;
+      s+=`<g transform="translate(${bx+36},${by-3})">${deskStuff(ag.stuff)}</g>`;
+      s+=`<g id="agent-${i}" transform="translate(${bx+10},${by+2})">${seatedAgent(ag, i)}</g>`;
+      s+=txt16(bx+22,by+32,ag.name,3.5,'#e8f0ff');
+      s+=txt16(bx+22,by+37,ag.role,2.2,'#90a0b0');
+      const agLines=(_agentLocData&&_agentLocData.agents&&_agentLocData.agents[ag.name])||0;
+      s+=locBadge(bx+22,by-22,agLines);
+      s+=projectTags(ag.projects,bx-2,by+39,50);
+    });
+    s+=`</g>`; // END DEPTH 2
+
+    // == DEPTH 3: BACK ROW + LOUNGE (y~190-210, nearest — moves most) ==
+    s+=`<g id="office-depth-3">`;
+    // Rug
+    s+=px(W-172,195,69,1,C.rugD,0.3);
+    s+=px(W-170,196,65,30,C.rug,0.22);
+    s+=px(W-168,198,61,26,C.rugL,0.1);
+    for(let ry=0;ry<4;ry++) for(let rx=0;rx<5;rx++){
+      s+=px(W-165+rx*12,200+ry*6,4,2,C.rugHi,0.08);
+    }
+    s+=px(W-172,225,69,1,C.rugD,0.3);
+    // Ping pong
+    s+=`<g filter="url(#furnitureShadow)" transform="translate(${W-160},190)">${pingPong()}</g>`;
+    // Back plant
+    s+=`<g transform="translate(120,190)">${bigPlant('fiddle')}</g>`;
+    // FLOAT workstation
+    const fl=AGENTS[7], flx=165, fly=205;
+    s+=`<g filter="url(#furnitureShadow)" transform="translate(${flx},${fly})">${desk(44)}</g>`;
+    s+=`<g filter="url(#monitorGlow)" transform="translate(${flx+7},${fly-14})">${dualMon(fl.status==='green',fl.screen,7)}</g>`;
+    s+=`<g transform="translate(${flx+36},${fly-3})">${deskStuff(fl.stuff)}</g>`;
+    s+=`<g id="agent-7" transform="translate(${flx+10},${fly+2})">${seatedAgent(fl, 7)}</g>`;
+    s+=txt16(flx+22,fly+32,fl.name,3.5,'#e8f0ff');
+    s+=txt16(flx+22,fly+37,fl.role,2.2,'#90a0b0');
+    const flLines=(_agentLocData&&_agentLocData.agents&&_agentLocData.agents[fl.name])||0;
+    s+=locBadge(flx+22,fly-22,flLines);
+    s+=projectTags(fl.projects,flx-2,fly+39,50);
+    // Ambient details
+    s+=`<g filter="url(#dropShadow)">`;
+    s+=`<rect x="${W-128}" y="215" width="4" height="2" rx="0.5" fill="#e04040"/>`;
+    s+=`<rect x="${W-123}" y="215" width="4" height="2" rx="0.5" fill="#2878b0"/>`;
+    s+=`</g>`;
     s+=`<g filter="url(#dropShadow)"><rect x="4" y="250" width="2" height="8" rx="1" fill="#e04040"/>`;
     s+=`<circle cx="5" cy="251.5" r="0.8" fill="#f0c830"/><circle cx="5" cy="257" r="0.8" fill="#f0c830"/></g>`;
+    s+=`</g>`; // END DEPTH 3
 
     return {svg:s, width:W, height:H, winX, winY, winW, winH};
   }
@@ -1721,19 +1729,33 @@
       const svgPerPx=vbW/(wrapW*oScale);
       const pxX=oTx*svgPerPx, pxY=oTy*svgPerPx;
       const zFactor=(oScale-1)*0.15;
+      // ---- Window parallax layers ----
       const skyEl=document.getElementById('parallax-sky');
       const bridgeEl=document.getElementById('parallax-bridge');
       const waterEl=document.getElementById('parallax-water');
       const buildEl=document.getElementById('parallax-buildings');
-      // Layer speeds: sky=barely, bridge=subtle, water=moderate, buildings=intense
-      const px0=(-pxX*0.015+zFactor*0.8), py0=(-pxY*0.01);
-      const px1=(-pxX*0.04+zFactor*1.5), py1=(-pxY*0.025);
-      const px2=(-pxX*0.07+zFactor*2.5), py2=(-pxY*0.04);
-      const px3=(-pxX*0.14+zFactor*4.0), py3=(-pxY*0.08);
-      if(skyEl) skyEl.style.transform='translate('+px0+'px,'+py0+'px)';
-      if(bridgeEl) bridgeEl.style.transform='translate('+px1+'px,'+py1+'px)';
-      if(waterEl) waterEl.style.transform='translate('+px2+'px,'+py2+'px)';
-      if(buildEl) buildEl.style.transform='translate('+px3+'px,'+py3+'px)';
+      const wp0=(-pxX*0.015+zFactor*0.8), wy0=(-pxY*0.01);
+      const wp1=(-pxX*0.04+zFactor*1.5), wy1=(-pxY*0.025);
+      const wp2=(-pxX*0.07+zFactor*2.5), wy2=(-pxY*0.04);
+      const wp3=(-pxX*0.14+zFactor*4.0), wy3=(-pxY*0.08);
+      if(skyEl) skyEl.style.transform='translate('+wp0+'px,'+wy0+'px)';
+      if(bridgeEl) bridgeEl.style.transform='translate('+wp1+'px,'+wy1+'px)';
+      if(waterEl) waterEl.style.transform='translate('+wp2+'px,'+wy2+'px)';
+      if(buildEl) buildEl.style.transform='translate('+wp3+'px,'+wy3+'px)';
+      // ---- Office room parallax layers ----
+      const od0=document.getElementById('office-depth-0');
+      const od1=document.getElementById('office-depth-1');
+      const od2=document.getElementById('office-depth-2');
+      const od3=document.getElementById('office-depth-3');
+      // Back wall moves opposite (appears farther), front rows move with (appear closer)
+      const ox0=(pxX*0.012), oy0=(pxY*0.008);
+      const ox1=(-pxX*0.02), oy1=(-pxY*0.012);
+      const ox2=(-pxX*0.04), oy2=(-pxY*0.025);
+      const ox3=(-pxX*0.065), oy3=(-pxY*0.04);
+      if(od0) od0.style.transform='translate('+ox0+'px,'+oy0+'px)';
+      if(od1) od1.style.transform='translate('+ox1+'px,'+oy1+'px)';
+      if(od2) od2.style.transform='translate('+ox2+'px,'+oy2+'px)';
+      if(od3) od3.style.transform='translate('+ox3+'px,'+oy3+'px)';
     }
 
     // Touch: pinch zoom + pan
@@ -1811,7 +1833,7 @@
       .office-section { padding: 16px !important; }
       .agent-office-wrap { overflow: hidden; }
       #agentOffice svg{shape-rendering:geometricPrecision;}
-      #parallax-sky,#parallax-bridge,#parallax-water,#parallax-buildings{will-change:transform;}
+      #parallax-sky,#parallax-bridge,#parallax-water,#parallax-buildings,#office-depth-0,#office-depth-1,#office-depth-2,#office-depth-3{will-change:transform;}
       @keyframes typing{0%,100%{transform:translateY(0)}15%{transform:translateY(-0.5px)}30%{transform:translateY(0.3px)}50%{transform:translateY(-0.4px)}70%{transform:translateY(0.2px)}85%{transform:translateY(-0.2px)}}
       @keyframes idle{0%,100%{transform:translateY(0)}50%{transform:translateY(1px)}}
       @keyframes neonPulse{0%,100%{opacity:.9}50%{opacity:.5}}
