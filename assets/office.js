@@ -1516,6 +1516,63 @@
     s+=`</g>`;
     s+=`</g></g>`; // end parallax-water
 
+    // === PARALLAX LAYER 3: FOREGROUND BUILDINGS (closest — most intense parallax) ===
+    s+=`<g clip-path="url(#winClip)"><g id="parallax-buildings">`;
+    const fbY=winY+winH; // bottom of window
+    // City skyline silhouettes — just the tops visible at bottom of window
+    // Building cluster left
+    s+=px(sX,fbY-18,8,22,'#0a0e1a');s+=px(sX,fbY-18,8,1,'#1a2040',0.4); // tall dark tower
+    s+=px(sX+1,fbY-20,2,1,'#283050');s+=px(sX+5,fbY-20,2,1,'#283050'); // rooftop details
+    s+=px(sX+9,fbY-12,10,16,'#101828');s+=px(sX+9,fbY-12,10,1,'#1e2848',0.3);
+    s+=px(sX+20,fbY-15,7,19,'#0e1424');s+=px(sX+20,fbY-15,7,1,'#1a2040',0.3);
+    s+=px(sX+28,fbY-9,6,13,'#141c30');
+    // Building windows (lit)
+    for(let bw=0;bw<3;bw++){for(let bh=0;bh<4;bh++){
+      const lit=Math.random()>0.4;
+      if(lit) s+=`<rect x="${sX+2+bw*2}" y="${fbY-16+bh*3}" width="1" height="1.5" fill="#f8d060" opacity="${0.15+Math.random()*0.2}"/>`;
+    }}
+    for(let bw=0;bw<4;bw++){for(let bh=0;bh<3;bh++){
+      const lit=Math.random()>0.5;
+      if(lit) s+=`<rect x="${sX+10+bw*2}" y="${fbY-10+bh*3}" width="1" height="1.5" fill="#4080c0" opacity="${0.1+Math.random()*0.15}"/>`;
+    }}
+    for(let bw=0;bw<3;bw++){for(let bh=0;bh<3;bh++){
+      const lit=Math.random()>0.45;
+      if(lit) s+=`<rect x="${sX+21+bw*2}" y="${fbY-13+bh*3}" width="1" height="1.5" fill="#f8d060" opacity="${0.12+Math.random()*0.18}"/>`;
+    }}
+
+    // Building cluster center
+    s+=px(sX+sW/2-15,fbY-22,6,26,'#080c18');s+=px(sX+sW/2-15,fbY-22,6,1,'#1a2848',0.3);
+    s+=px(sX+sW/2-14,fbY-24,1,3,'#283858',0.5); // antenna
+    s+=px(sX+sW/2-8,fbY-14,9,18,'#0e1424');s+=px(sX+sW/2-8,fbY-14,9,1,'#1e2848',0.3);
+    s+=px(sX+sW/2+2,fbY-10,7,14,'#101828');
+    s+=px(sX+sW/2+10,fbY-17,5,21,'#0a1020');s+=px(sX+sW/2+10,fbY-17,5,1,'#1a2040',0.4);
+    // Center windows
+    for(let bw=0;bw<2;bw++){for(let bh=0;bh<5;bh++){
+      const lit=Math.random()>0.35;
+      if(lit) s+=`<rect x="${sX+sW/2-14+bw*2}" y="${fbY-20+bh*3}" width="1" height="1.5" fill="#f8d060" opacity="${0.12+Math.random()*0.2}"/>`;
+    }}
+    for(let bw=0;bw<3;bw++){for(let bh=0;bh<3;bh++){
+      const lit=Math.random()>0.5;
+      if(lit) s+=`<rect x="${sX+sW/2-7+bw*2.5}" y="${fbY-12+bh*3}" width="1" height="1.5" fill="#4080c0" opacity="${0.1+Math.random()*0.15}"/>`;
+    }}
+
+    // Building cluster right
+    s+=px(sX+sW-35,fbY-20,8,24,'#0a0e1a');s+=px(sX+sW-35,fbY-20,8,1,'#1a2040',0.4);
+    s+=px(sX+sW-34,fbY-22,2,3,'#283858',0.4); // antenna
+    s+=px(sX+sW-26,fbY-13,10,17,'#101828');s+=px(sX+sW-26,fbY-13,10,1,'#1e2848',0.3);
+    s+=px(sX+sW-15,fbY-16,7,20,'#0e1424');
+    s+=px(sX+sW-7,fbY-10,9,14,'#141c30');
+    // Right windows
+    for(let bw=0;bw<3;bw++){for(let bh=0;bh<5;bh++){
+      const lit=Math.random()>0.4;
+      if(lit) s+=`<rect x="${sX+sW-34+bw*2}" y="${fbY-18+bh*3}" width="1" height="1.5" fill="#f8d060" opacity="${0.15+Math.random()*0.2}"/>`;
+    }}
+    for(let bw=0;bw<4;bw++){for(let bh=0;bh<3;bh++){
+      const lit=Math.random()>0.5;
+      if(lit) s+=`<rect x="${sX+sW-25+bw*2.5}" y="${fbY-11+bh*3}" width="1" height="1.5" fill="#4080c0" opacity="${0.1+Math.random()*0.12}"/>`;
+    }}
+    s+=`</g></g>`; // end parallax-buildings
+
     // === WINDOW FRAME OVERLAY (on top of all parallax layers) ===
     // Single pane glass — no dividers/seams
     s+=`<rect x="${winX}" y="${winY}" width="${winW}" height="${winH}" fill="url(#glassGrad)"/>`;
@@ -1667,12 +1724,16 @@
       const skyEl=document.getElementById('parallax-sky');
       const bridgeEl=document.getElementById('parallax-bridge');
       const waterEl=document.getElementById('parallax-water');
-      const px0=(-pxX*0.02+zFactor*1.5), py0=(-pxY*0.015);
-      const px1=(-pxX*0.05+zFactor*0.8), py1=(-pxY*0.03);
-      const px2=(-pxX*0.08+zFactor*0.3), py2=(-pxY*0.05);
+      const buildEl=document.getElementById('parallax-buildings');
+      // Layer speeds: sky=barely, bridge=subtle, water=moderate, buildings=intense
+      const px0=(-pxX*0.015+zFactor*0.8), py0=(-pxY*0.01);
+      const px1=(-pxX*0.04+zFactor*1.5), py1=(-pxY*0.025);
+      const px2=(-pxX*0.07+zFactor*2.5), py2=(-pxY*0.04);
+      const px3=(-pxX*0.14+zFactor*4.0), py3=(-pxY*0.08);
       if(skyEl) skyEl.style.transform='translate('+px0+'px,'+py0+'px)';
       if(bridgeEl) bridgeEl.style.transform='translate('+px1+'px,'+py1+'px)';
       if(waterEl) waterEl.style.transform='translate('+px2+'px,'+py2+'px)';
+      if(buildEl) buildEl.style.transform='translate('+px3+'px,'+py3+'px)';
     }
 
     // Touch: pinch zoom + pan
@@ -1750,7 +1811,7 @@
       .office-section { padding: 16px !important; }
       .agent-office-wrap { overflow: hidden; }
       #agentOffice svg{shape-rendering:geometricPrecision;}
-      #parallax-sky,#parallax-bridge,#parallax-water{will-change:transform;}
+      #parallax-sky,#parallax-bridge,#parallax-water,#parallax-buildings{will-change:transform;}
       @keyframes typing{0%,100%{transform:translateY(0)}15%{transform:translateY(-0.5px)}30%{transform:translateY(0.3px)}50%{transform:translateY(-0.4px)}70%{transform:translateY(0.2px)}85%{transform:translateY(-0.2px)}}
       @keyframes idle{0%,100%{transform:translateY(0)}50%{transform:translateY(1px)}}
       @keyframes neonPulse{0%,100%{opacity:.9}50%{opacity:.5}}
