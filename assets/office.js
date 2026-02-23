@@ -1658,16 +1658,19 @@
       svgEl.style.transformOrigin='0 0';
       // Parallax: shift window layers at different rates when zoomed/panned
       // Convert pixel offset to SVG-space offset (divide by scale and viewBox ratio)
-      const vbW=${width}, wrapW=wrap.clientWidth||1;
+      const vbW=width, wrapW=wrap.clientWidth||1;
       const svgPerPx=vbW/(wrapW*oScale);
       const pxX=oTx*svgPerPx, pxY=oTy*svgPerPx;
-      const zFactor=(oScale-1)*0.15; // parallax intensity scales with zoom
+      const zFactor=(oScale-1)*0.15;
       const skyEl=document.getElementById('parallax-sky');
       const bridgeEl=document.getElementById('parallax-bridge');
       const waterEl=document.getElementById('parallax-water');
-      if(skyEl) skyEl.style.transform=`translate(${-pxX*0.02+zFactor*1.5}px,${-pxY*0.015}px)`;
-      if(bridgeEl) bridgeEl.style.transform=`translate(${-pxX*0.05+zFactor*0.8}px,${-pxY*0.03}px)`;
-      if(waterEl) waterEl.style.transform=`translate(${-pxX*0.08+zFactor*0.3}px,${-pxY*0.05}px)`;
+      const px0=(-pxX*0.02+zFactor*1.5), py0=(-pxY*0.015);
+      const px1=(-pxX*0.05+zFactor*0.8), py1=(-pxY*0.03);
+      const px2=(-pxX*0.08+zFactor*0.3), py2=(-pxY*0.05);
+      if(skyEl) skyEl.style.transform='translate('+px0+'px,'+py0+'px)';
+      if(bridgeEl) bridgeEl.style.transform='translate('+px1+'px,'+py1+'px)';
+      if(waterEl) waterEl.style.transform='translate('+px2+'px,'+py2+'px)';
     }
 
     // Touch: pinch zoom + pan
