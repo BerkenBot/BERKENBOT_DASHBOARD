@@ -1402,9 +1402,12 @@
       <stop offset="0%" stop-color="${waterCol}"/><stop offset="100%" stop-color="${waterCol}" stop-opacity="0.6"/>
     </linearGradient></defs>`;
 
+    // Parallax bleed — oversized content so shifting never shows gaps
+    const pad=20;
+
     // === PARALLAX LAYER 0: SKY (farthest — slowest) ===
     s+=`<g clip-path="url(#winClip)"><g id="parallax-sky">`;
-    s+=`<rect x="${winX}" y="${winY}" width="${winW}" height="${winH}" fill="url(#skyGrad)"/>`;
+    s+=`<rect x="${winX-pad}" y="${winY-pad}" width="${winW+pad*2}" height="${winH+pad*2}" fill="url(#skyGrad)"/>`;
     // Sun or moon
     const smX=winX+winW*0.75, smY=winY+sunMoonY*winH/80;
     s+=`<circle cx="${smX}" cy="${smY}" r="${sunMoonR+6}" fill="${sunMoonCol}" opacity="0.06"/>`;
@@ -1441,19 +1444,23 @@
 
     // === PARALLAX LAYER 1: HILLS + BRIDGE (mid — medium speed) ===
     s+=`<g clip-path="url(#winClip)"><g id="parallax-bridge">`;
+    // Bridge layer background fill (prevent gaps)
+    s+=`<rect x="${winX-pad}" y="${winY-pad}" width="${winW+pad*2}" height="${winH+pad*2}" fill="url(#skyGrad)"/>`;
     const bY=winY+winH/2-8;
-    // Hills/headlands (behind bridge)
-    s+=`<path d="M${winX-5},${bY+3} Q${winX+15},${bY-10} ${winX+28},${bY+3}" fill="#1a3820" opacity="0.7"/>`;
-    s+=`<path d="M${winX+86},${bY+3} Q${winX+100},${bY-8} ${winX+winW+5},${bY+3}" fill="#1a3820" opacity="0.6"/>`;
-    // Far headland (very background)
+    // Water fill behind bridge (oversized)
+    s+=`<rect x="${winX-pad}" y="${winY+winH/2-5}" width="${winW+pad*2}" height="${winH/2+pad}" fill="url(#waterGrad)"/>`;
+    // Hills/headlands (extended wider)
+    s+=`<path d="M${winX-pad},${bY+3} Q${winX+15},${bY-10} ${winX+28},${bY+3} L${winX-pad},${bY+3}" fill="#1a3820" opacity="0.7"/>`;
+    s+=`<path d="M${winX+86},${bY+3} Q${winX+100},${bY-8} ${winX+winW+pad},${bY+3} L${winX+winW+pad},${bY+3}" fill="#1a3820" opacity="0.6"/>`;
+    // Far headland
     s+=`<path d="M${winX+40},${bY+3} Q${winX+60},${bY-4} ${winX+85},${bY+3}" fill="#1a3820" opacity="0.3"/>`;
     // Towers
     s+=px16(winX+30,bY-22,4,30,bridgeCol,bridgeCol,'#400808');
     s+=px16(winX+80,bY-22,4,30,bridgeCol,bridgeCol,'#400808');
     s+=px(winX+29,bY-22,6,2,bridgeCol);s+=px(winX+79,bY-22,6,2,bridgeCol);
-    // Road deck
-    s+=px(winX+10,bY,100,3,bridgeCol);
-    s+=px(winX+10,bY,100,1,bridgeCol.replace('0','4'));
+    // Road deck (extended for parallax bleed)
+    s+=px(winX-pad,bY,winW+pad*2,3,bridgeCol);
+    s+=px(winX-pad,bY,winW+pad*2,1,bridgeCol.replace('0','4'));
     // Cables
     s+=`<path d="M${winX+32},${bY-20} Q${winX+56},${bY-5} ${winX+82},${bY-20}" stroke="${bridgeCol}" stroke-width="0.8" fill="none"/>`;
     for(let c=0;c<10;c++){
@@ -1479,7 +1486,7 @@
 
     // === PARALLAX LAYER 2: WATER + BOATS (nearest — fastest) ===
     s+=`<g clip-path="url(#winClip)"><g id="parallax-water">`;
-    s+=`<rect x="${winX}" y="${winY+winH/2}" width="${winW}" height="${winH/2}" fill="url(#waterGrad)"/>`;
+    s+=`<rect x="${winX-pad}" y="${winY+winH/2-pad}" width="${winW+pad*2}" height="${winH/2+pad*2}" fill="url(#waterGrad)"/>`;
     // Water shimmer
     for(let wl=0;wl<8;wl++){
       s+=`<rect x="${winX+5+wl*14}" y="${winY+winH/2+3+wl%3*5}" width="${8+wl%4}" height="0.5" fill="#fff" opacity="0.06" class="water-shimmer" style="animation-delay:${wl*0.4}s"/>`;
