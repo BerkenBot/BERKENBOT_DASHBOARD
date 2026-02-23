@@ -249,6 +249,38 @@
         s+=`<rect x="${17+(i%4)*2.5}" y="${2+Math.floor(i/4)*3}" width="2" height="2" fill="${c}" opacity="0.8" class="status-blink" style="animation-delay:${i*0.3}s"/>`;
       });
       s+=`</g>`;
+    } else if(content==='orchestrate'){
+      // BERKEN_BOT: Task delegation view — agent status grid + message feed
+      s+=`<g id="${sid}-L">`;
+      // Agent list with status dots
+      const agNames=['FRG','ANV','SCT','CRE','CRN','SNT','FLT'];
+      const agCols=['#e74c3c','#2ecc71','#3498db','#fab1a0','#55efc4','#636e72','#74b9ff'];
+      agNames.forEach((n,l)=>{
+        s+=`<circle cx="3" cy="${2+l*1.2}" r="0.5" fill="${agCols[l]}" class="status-blink" style="animation-delay:${l*0.4}s"/>`;
+        s+=px(5,1.5+l*1.2,4,0.7,agCols[l],0.4);
+      });
+      s+=`</g>`;
+      s+=`<g id="${sid}-R" class="log-scroll">`;
+      // Task feed
+      const taskCols=['#ffd700','#40f8a0','#74b9ff','#ffd700','#40f8a0','#fd79a8','#55efc4','#ffd700'];
+      taskCols.forEach((c,l)=>s+=px(17,2+l,5+l%4,1,c,0.5));
+      s+=`</g>`;
+    } else if(content==='creative'){
+      // CREATIVE: Color palette + waveform (voice/TTS)
+      s+=`<g id="${sid}-L">`;
+      // Color swatches grid
+      const swatches=['#e74c3c','#3498db','#2ecc71','#f1c40f','#9b59b6','#e67e22','#1abc9c','#e84393'];
+      swatches.forEach((c,i)=>{
+        s+=`<rect x="${2+(i%4)*2.5}" y="${2+Math.floor(i/4)*3}" width="2" height="2" fill="${c}" opacity="0.8"/>`;
+      });
+      s+=`</g>`;
+      s+=`<g id="${sid}-R">`;
+      // Audio waveform
+      for(let w=0;w<10;w++){
+        s+=`<rect x="${17+w}" y="${6-w%3*2}" width="0.8" height="${2+w%4*1.5}" fill="#fd79a8" opacity="0.7" class="bar-pulse" style="animation-delay:${w*0.12}s"/>`;
+      }
+      s+=txt(22,3,'♪',2.5,'#fd79a8');
+      s+=`</g>`;
     }
     return s;
   }
@@ -724,14 +756,45 @@
       s+=`<path d="M1,1 Q4,0 3,3 Q2,5 5,3" stroke="#f0c020" stroke-width="0.4" fill="none"/>`;
       // USB stick
       s+=px(6,2,3,1.5,C.steelL);s+=px(6,2,3,0.5,C.steelHi);s+=px(6.5,3.5,2,0.5,'#4080f0');
-    } else if(type==='pulse'){
-      // Coffee cup (16-bit)
-      s+=px(0,1,3,1,C.cupHi);s+=px(0,2,3,1,C.cup);s+=px(0,3,3,1,C.cupD);
-      s+=px(3,2,1,1,C.cupD); // handle
-      s+=px(0,1,0.5,3,'#fff',0.08); // highlight
-      // Steam (double wisp)
-      s+=`<path d="M1,-1 Q2,-3 1,-5" stroke="#d0d8e0" stroke-width="0.3" fill="none" opacity="0.25" class="steam"/>`;
-      s+=`<path d="M2,0 Q3,-2 2,-4" stroke="#d0d8e0" stroke-width="0.25" fill="none" opacity="0.15" class="steam" style="animation-delay:1.5s"/>`;
+    } else if(type==='boss'){
+      // Executive coffee mug (gold rim)
+      s+=px(0,0,3,1,'#daa520');s+=px(0,1,3,2,C.cup);s+=px(0,3,3,1,C.cupD);
+      s+=px(3,1,1,1,C.cupD);
+      s+=`<path d="M1,-1 Q1.5,-3 1,-4" stroke="#d0d8e0" stroke-width="0.3" fill="none" opacity="0.2" class="steam"/>`;
+      // Nameplate
+      s+=px(6,0,10,3,'#282830');s+=px(6,0,10,1,'#daa520',0.4);
+      s+=txt(11,2.5,'BOSS',1.5,'#daa520','middle');
+    } else if(type==='creative'){
+      // Paint palette
+      s+=`<ellipse cx="4" cy="2" rx="4" ry="2.5" fill="#d4a574"/>`;
+      s+=`<circle cx="2" cy="1.5" r="0.8" fill="#e74c3c"/>`;
+      s+=`<circle cx="4" cy="0.8" r="0.8" fill="#3498db"/>`;
+      s+=`<circle cx="6" cy="1.5" r="0.8" fill="#f1c40f"/>`;
+      s+=`<circle cx="3" cy="3" r="0.6" fill="#2ecc71"/>`;
+      // Stylus
+      s+=px(9,0,0.5,4,'#636e72');s+=px(9,0,0.5,1,'#e74c3c');
+    } else if(type==='cron'){
+      // Tiny clock
+      s+=`<circle cx="2" cy="2" r="2.5" fill="#282830"/>`;
+      s+=`<circle cx="2" cy="2" r="2" fill="#101828"/>`;
+      s+=`<line x1="2" y1="2" x2="2" y2="0.5" stroke="#55efc4" stroke-width="0.4"/>`;
+      s+=`<line x1="2" y1="2" x2="3.2" y2="2.5" stroke="#fff" stroke-width="0.3"/>`;
+      // Schedule printout
+      s+=px(6,0,6,4,'#f0f0e8');
+      for(let l=0;l<3;l++) s+=px(7,1+l,4,0.5,'#55efc4',0.5);
+    } else if(type==='sentinel'){
+      // Shield icon (metal)
+      s+=`<path d="M2,0 L5,0 L5,3 L3.5,4.5 L2,3 Z" fill="${C.steelD}"/>`;
+      s+=`<path d="M2.5,0.5 L4.5,0.5 L4.5,2.8 L3.5,3.8 L2.5,2.8 Z" fill="#ff7675" opacity="0.3"/>`;
+      // Lock
+      s+=px(7,1,3,2,'#282830');s+=`<path d="M7.5,1 Q8.5,-0.5 9.5,1" stroke="#636e72" stroke-width="0.5" fill="none"/>`;
+    } else if(type==='float'){
+      // Modular cube toy
+      s+=px(0,0,3,3,'#74b9ff',0.6);s+=px(1,1,1,1,'#fff',0.15);
+      s+=px(4,1,3,3,'#a29bfe',0.6);s+=px(5,2,1,1,'#fff',0.15);
+      s+=px(2,3,3,2,'#55efc4',0.5);
+      // "FLEX" post-it
+      s+=px(8,0,5,3,'#fff0a0');s+=txt(10.5,2,'FLEX',1.5,'#636e72','middle');
     }
     return s;
   }
@@ -771,7 +834,16 @@
   /* ============ AGENTS DATA ============ */
   const AGENTS = [
     {
-      name:'FORGE', role:'Lead Engineer',
+      name:'BERKEN_BOT', role:'Orchestrator',
+      projects:['ALL_PROJECTS'],
+      status:'green', screen:'orchestrate', stuff:'boss',
+      // Robot: gold/chrome executive bot, tall regal head, holographic dual-eye, command core
+      bot:{body:'#b8860b',bodyHi:'#daa520',bodyShd:'#8b6914',
+           head:'tall',eyeColor:'#ffd700',eyeStyle:'holo',
+           antenna:true,ears:'fins',detail:'command',accent:'#ffd700'},
+    },
+    {
+      name:'FORGE', role:'Lead Engineer α',
       projects:['SCALARA','GH_INTEL','LOCAL_TTS','LORA_GEN','C64'],
       status:'green', screen:'code', stuff:'forge',
       // Robot: heavy industrial bot, red chassis, visor eyes, welding sparks
@@ -780,17 +852,17 @@
            antenna:false,ears:'vents',detail:'sparks',accent:'#e74c3c'},
     },
     {
-      name:'ANVIL', role:'QA Lead',
+      name:'ANVIL', role:'Lead Engineer β',
       projects:['SCALARA','GH_INTEL','LOCAL_TTS','LORA_GEN','C64'],
       status:'green', screen:'review', stuff:'anvil',
-      // Robot: precise inspector bot, green chassis, dual-lens eyes, clipboard arm
+      // Robot: precise inspector bot, green chassis, dual-lens eyes, scanner
       bot:{body:'#27ae60',bodyHi:'#2ecc71',bodyShd:'#1e8449',
            head:'round',eyeColor:'#2ecc71',eyeStyle:'lenses',
            antenna:true,ears:'discs',detail:'scanner',accent:'#2ecc71'},
     },
     {
-      name:'SCOUT', role:'Research Lead',
-      projects:['COMPUTE_BUDGET','LOCAL_TTS','LORA_GEN'],
+      name:'SCOUT', role:'Research Analyst',
+      projects:['LOCAL_TTS','LORA_GEN'],
       status:'green', screen:'research', stuff:'scout',
       // Robot: sleek explorer bot, blue chassis, single large eye, radar dish
       bot:{body:'#2980b9',bodyHi:'#3498db',bodyShd:'#1a5276',
@@ -798,22 +870,40 @@
            antenna:true,ears:'none',detail:'radar',accent:'#3498db'},
     },
     {
-      name:'RELAY', role:'DevOps Engineer',
-      projects:['DATA_AUDIT','COMPUTE_BUDGET','OPS_INFRA'],
-      status:'green', screen:'ops', stuff:'relay',
-      // Robot: tank-like ops bot, pink/magenta chassis, LED array eyes, cable arms
-      bot:{body:'#c0267e',bodyHi:'#fd79a8',bodyShd:'#8e1d5e',
-           head:'box',eyeColor:'#fd79a8',eyeStyle:'ledbar',
-           antenna:false,ears:'speakers',detail:'cables',accent:'#fd79a8'},
+      name:'CREATIVE', role:'Creative Director',
+      projects:['MORNING_REPORT','TTS','COMFYUI'],
+      status:'green', screen:'creative', stuff:'creative',
+      // Robot: artistic bot, coral/salmon chassis, expressive round eyes, palette core
+      bot:{body:'#e17055',bodyHi:'#fab1a0',bodyShd:'#c0392b',
+           head:'round',eyeColor:'#fd79a8',eyeStyle:'lenses',
+           antenna:false,ears:'discs',detail:'palette',accent:'#fd79a8'},
     },
     {
-      name:'PULSE', role:'SRE / Monitor',
-      projects:['COMPUTE_BUDGET','OPS_INFRA'],
-      status:'green', screen:'monitor', stuff:'pulse',
-      // Robot: elegant monitor bot, purple chassis, holographic visor, heartbeat chest
-      bot:{body:'#6c5ce7',bodyHi:'#a29bfe',bodyShd:'#4834d4',
-           head:'tall',eyeColor:'#a29bfe',eyeStyle:'holo',
-           antenna:true,ears:'fins',detail:'heartbeat',accent:'#a29bfe'},
+      name:'CRON', role:'Ops Manager',
+      projects:['CRON_JOBS','HEARTBEAT'],
+      status:'green', screen:'ops', stuff:'cron',
+      // Robot: clockwork bot, teal chassis, LED bar eyes, gears detail
+      bot:{body:'#00b894',bodyHi:'#55efc4',bodyShd:'#00896a',
+           head:'box',eyeColor:'#55efc4',eyeStyle:'ledbar',
+           antenna:false,ears:'speakers',detail:'gears',accent:'#55efc4'},
+    },
+    {
+      name:'SENTINEL', role:'Security & Infra',
+      projects:['WATCHDOG','SECURITY','INFRA'],
+      status:'green', screen:'monitor', stuff:'sentinel',
+      // Robot: armored security bot, dark steel chassis, visor, shield core
+      bot:{body:'#2d3436',bodyHi:'#636e72',bodyShd:'#1a1a2e',
+           head:'square',eyeColor:'#ff7675',eyeStyle:'visor',
+           antenna:false,ears:'vents',detail:'shield',accent:'#ff7675'},
+    },
+    {
+      name:'FLOAT', role:'Flex Agent',
+      projects:['OVERFLOW'],
+      status:'yellow', screen:'research', stuff:'float',
+      // Robot: modular/transforming bot, silver chassis, cyclops eye, morph detail
+      bot:{body:'#636e72',bodyHi:'#b2bec3',bodyShd:'#2d3436',
+           head:'dome',eyeColor:'#74b9ff',eyeStyle:'cyclops',
+           antenna:true,ears:'none',detail:'morph',accent:'#74b9ff'},
     },
   ];
 
@@ -1016,6 +1106,29 @@
       // Heartbeat display on chest
       s+=px(10,-10,8,3,metalDk);
       s+=`<path d="M10,-9 L12,-9 L13,-10.5 L14,-7.5 L15,-10 L16,-9 L18,-9" stroke="${b.accent}" stroke-width="0.6" fill="none" class="heartbeat-line"/>`;
+    } else if(b.detail==='command'){
+      // Command star / orchestrator core
+      s+=`<circle cx="14" cy="-9" r="2.5" fill="${metalDk}"/>`;
+      s+=`<polygon points="14,-12 15,-9.5 17.5,-9.5 15.5,-8 16.5,-5.5 14,-7 11.5,-5.5 12.5,-8 10.5,-9.5 13,-9.5" fill="${b.accent}" opacity="0.7"/>`;
+      s+=`<circle cx="14" cy="-9" r="1" fill="#fff" opacity="0.3" class="core-glow"/>`;
+    } else if(b.detail==='palette'){
+      // Creative color dots on chest
+      const dots=['#e74c3c','#3498db','#f1c40f','#2ecc71'];
+      dots.forEach((c,d)=>s+=`<circle cx="${11+d*2}" cy="-9" r="1" fill="${c}" opacity="0.6"/>`);
+    } else if(b.detail==='gears'){
+      // Clockwork gears
+      s+=`<circle cx="13" cy="-9" r="2" fill="${metalDk}" stroke="${b.accent}" stroke-width="0.4" class="gauge-spin"/>`;
+      s+=`<circle cx="16" cy="-8" r="1.5" fill="${metalDk}" stroke="${b.accent}" stroke-width="0.3" class="gauge-spin" style="animation-direction:reverse"/>`;
+      s+=`<circle cx="13" cy="-9" r="0.5" fill="${b.accent}"/>`;
+    } else if(b.detail==='shield'){
+      // Security shield emblem
+      s+=`<path d="M12,-12 L16,-12 L16,-8 L14,-6 L12,-8 Z" fill="${metalDk}" stroke="${b.accent}" stroke-width="0.5"/>`;
+      s+=`<path d="M13,-11 L15,-11 L15,-8.5 L14,-7 L13,-8.5 Z" fill="${b.accent}" opacity="0.2"/>`;
+    } else if(b.detail==='morph'){
+      // Modular/shape-shifting indicator
+      s+=px(11,-11,2,2,b.accent,0.4);
+      s+=`<circle cx="15" cy="-9" r="1.2" fill="${b.accent}" opacity="0.4"/>`;
+      s+=`<polygon points="12,-7 14,-7 13,-5" fill="${b.accent}" opacity="0.3"/>`;
     }
 
     // Company badge LED
@@ -1145,7 +1258,7 @@
   let _projectsData = null;
 
   function buildOffice(){
-    const W=600, H=240;
+    const W=600, H=280;
     let s='';
 
     // ---- 32-BIT DEFS: gradients, filters, patterns ----
@@ -1214,23 +1327,23 @@
 
     // ---- 32-BIT FLOOR (gradient + reflections) ----
     s+=`<rect x="0" y="80" width="${W}" height="1.5" fill="url(#steelGrad)" opacity="0.5"/>`;
-    s+=`<rect x="0" y="82" width="${W}" height="158" fill="url(#floorGrad)"/>`;
+    s+=`<rect x="0" y="82" width="${W}" height="198" fill="url(#floorGrad)"/>`;
     // Subtle gradient bands for depth
     s+=px(0,82,W,20,C.floorHi,0.06);
-    s+=px(0,160,W,40,'#000',0.04);
-    for(let i=0;i<W;i+=20){s+=px(i,82,0.5,158,C.floorL,0.06);s+=px(i+1,82,0.5,158,'#000',0.02);}
-    for(let j=82;j<240;j+=20){s+=px(0,j,W,0.5,C.floorL,0.05);s+=px(0,j+1,W,0.5,'#000',0.02);}
+    s+=px(0,200,W,80,'#000',0.04);
+    for(let i=0;i<W;i+=20){s+=px(i,82,0.5,198,C.floorL,0.06);s+=px(i+1,82,0.5,198,'#000',0.02);}
+    for(let j=82;j<280;j+=20){s+=px(0,j,W,0.5,C.floorL,0.05);s+=px(0,j+1,W,0.5,'#000',0.02);}
     // Floor reflections (16-bit polish effect)
     s+=px(100,85,80,1,C.floorHi,0.04);s+=px(300,90,60,1,C.floorHi,0.03);
     // Rug (16-bit: fringe + pattern)
-    s+=px(W-172,145,69,1,C.rugD,0.3); // fringe top
-    s+=px(W-170,146,65,30,C.rug,0.22);
-    s+=px(W-168,148,61,26,C.rugL,0.1);
+    s+=px(W-172,195,69,1,C.rugD,0.3); // fringe top
+    s+=px(W-170,196,65,30,C.rug,0.22);
+    s+=px(W-168,198,61,26,C.rugL,0.1);
     // Rug pattern (diamond)
     for(let ry=0;ry<4;ry++) for(let rx=0;rx<5;rx++){
-      s+=px(W-165+rx*12,150+ry*6,4,2,C.rugHi,0.08);
+      s+=px(W-165+rx*12,200+ry*6,4,2,C.rugHi,0.08);
     }
-    s+=px(W-172,175,69,1,C.rugD,0.3); // fringe bottom
+    s+=px(W-172,225,69,1,C.rugD,0.3); // fringe bottom
 
     // ---- CEILING ----
     s+=px(80,0,250,3,'#2a2a3a');s+=px(80,3,250,0.5,C.steelD,0.3);
@@ -1360,7 +1473,7 @@
       s+=`<defs><linearGradient id="floorLight" x1="0" y1="0" x2="0" y2="1">
         <stop offset="0%" stop-color="${sunMoonCol}" stop-opacity="0.04"/><stop offset="100%" stop-color="${sunMoonCol}" stop-opacity="0"/>
       </linearGradient></defs>`;
-      s+=`<polygon points="${winX-5},${82} ${winX+winW+5},${82} ${winX+winW+50},${200} ${winX-30},${200}" fill="url(#floorLight)"/>`;
+      s+=`<polygon points="${winX-5},${82} ${winX+winW+5},${82} ${winX+winW+50},${240} ${winX-30},${240}" fill="url(#floorLight)"/>`;
     }
     // Subtle monitor ambient (no overlays)
     s+=`<ellipse cx="200" cy="90" rx="180" ry="15" fill="#4080ff" opacity="0.012"/>`;
@@ -1375,21 +1488,23 @@
     // ---- BOOKSHELF ----
     s+=`<g transform="translate(${winX+winW+8},14)">${bookshelf()}</g>`;
 
-    // ---- GLASS CONF ROOM ----
-    s+=`<g filter="url(#furnitureShadow)" transform="translate(${W-70},15)">${glassRoom(60,68)}</g>`;
+    // ---- GLASS CORNER OFFICE (BERKEN_BOT) ----
+    s+=`<g filter="url(#furnitureShadow)" transform="translate(${W-80},10)">${glassRoom(70,75)}</g>`;
 
     // ---- COFFEE STATION (back wall, left side) ----
     s+=`<g filter="url(#dropShadow)" transform="translate(6,16)">${coffeeStation()}</g>`;
 
     // ---- PING PONG (lounge) ----
-    s+=`<g filter="url(#furnitureShadow)" transform="translate(${W-160},130)">${pingPong()}</g>`;
+    s+=`<g filter="url(#furnitureShadow)" transform="translate(${W-160},190)">${pingPong()}</g>`;
 
     // ---- PLANTS ----
     s+=`<g transform="translate(48,50)">${bigPlant('fiddle')}</g>`;
-    s+=`<g transform="translate(${W-85},56)">${bigPlant('monstera')}</g>`;
+    s+=`<g transform="translate(${W-90},56)">${bigPlant('monstera')}</g>`;
     s+=`<g transform="translate(${W/2+30},54)">${bigPlant('snake')}</g>`;
     s+=`<g transform="translate(${W/2-50},54)">${bigPlant('fiddle')}</g>`;
-    s+=`<g transform="translate(160,120)">${bigPlant('monstera')}</g>`;
+    s+=`<g transform="translate(40,130)">${bigPlant('monstera')}</g>`;
+    s+=`<g transform="translate(360,130)">${bigPlant('snake')}</g>`;
+    s+=`<g transform="translate(120,190)">${bigPlant('fiddle')}</g>`;
 
     // ---- SERVER RACK (RELAY's domain) ----
     const rackX=W-220;
@@ -1402,11 +1517,14 @@
 
     // ---- AGENT WORKSTATIONS (more spread out for taller scene) ----
     const stations = [
-      {x:65,  y:80},   // FORGE - front left
-      {x:185, y:80},   // ANVIL - front center
-      {x:305, y:80},   // SCOUT - front right
-      {x:100, y:135},  // RELAY - back row left
-      {x:250, y:135},  // PULSE - back row right
+      {x:455, y:52},   // BERKEN_BOT - corner office (inside glass room)
+      {x:55,  y:90},   // FORGE - front row left
+      {x:165, y:90},   // ANVIL - front row center
+      {x:280, y:90},   // SCOUT - front row right
+      {x:55,  y:150},  // CREATIVE - mid row left
+      {x:165, y:150},  // CRON - mid row center
+      {x:280, y:150},  // SENTINEL - mid row right
+      {x:165, y:205},  // FLOAT - back row center (flex desk)
     ];
 
     AGENTS.forEach((ag,i)=>{
@@ -1434,22 +1552,19 @@
     // ---- WALKING PEOPLE removed per request ----
 
     // ---- 32-BIT AMBIENT DETAILS ----
-    // Sneakers (with shadow)
+    // Sneakers (near lounge)
     s+=`<g filter="url(#dropShadow)">`;
-    s+=`<rect x="${W-128}" y="143" width="4" height="2" rx="0.5" fill="#e04040"/>`;
-    s+=`<rect x="${W-123}" y="143" width="4" height="2" rx="0.5" fill="#2878b0"/>`;
+    s+=`<rect x="${W-128}" y="215" width="4" height="2" rx="0.5" fill="#e04040"/>`;
+    s+=`<rect x="${W-123}" y="215" width="4" height="2" rx="0.5" fill="#2878b0"/>`;
     s+=`</g>`;
-    // Pizza box
+    // Pizza box (on conference room area)
     s+=`<g filter="url(#dropShadow)">`;
     s+=`<rect x="${W-52}" y="52" width="8" height="6" rx="0.5" fill="url(#woodGrad)"/>`;
     s+=`<rect x="${W-51}" y="53" width="6" height="4" rx="0.3" fill="#e04040" opacity="0.25"/>`;
     s+=`</g>`;
-    // Post-it (with slight shadow)
-    s+=`<rect x="192" y="66" width="4" height="3" rx="0.3" fill="#fff0a0" filter="url(#dropShadow)"/>`;
-    // Skateboard
-    s+=`<g filter="url(#dropShadow)"><rect x="4" y="72" width="2" height="8" rx="1" fill="#e04040"/>`;
-    s+=`<circle cx="5" cy="73.5" r="0.8" fill="#f0c830"/><circle cx="5" cy="79" r="0.8" fill="#f0c830"/></g>`;
-    // Drone removed per request
+    // Skateboard (near back)
+    s+=`<g filter="url(#dropShadow)"><rect x="4" y="250" width="2" height="8" rx="1" fill="#e04040"/>`;
+    s+=`<circle cx="5" cy="251.5" r="0.8" fill="#f0c830"/><circle cx="5" cy="257" r="0.8" fill="#f0c830"/></g>`;
 
     return {svg:s, width:W, height:H};
   }
