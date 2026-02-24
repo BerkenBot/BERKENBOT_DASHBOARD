@@ -1259,6 +1259,37 @@
 
   function buildOffice(){
     const W=600, H=280;
+    
+    // ======== LAYOUT SYSTEM ========
+    const DEFAULT_LAYOUT = {
+      berkenBot: {x:455, y:52},
+      forge: {x:55, y:90},
+      anvil: {x:165, y:90},
+      scout: {x:280, y:90},
+      creative: {x:55, y:150},
+      cron: {x:165, y:150},
+      sentinel: {x:280, y:150},
+      float: {x:165, y:205},
+      whiteboard: {x: W*0.28+8, y:8},
+      bookshelf: {x: null, y:14}, // computed after window position known
+      glassRoom: {x: W-80, y:10},
+      coffeeStation: {x:6, y:16},
+      serverRacks: {x: W-220, y:38},
+      neonSign: {x:14, y:16},
+      neonSmall: {x:14, y:25},
+      pingPong: {x: W-160, y:190},
+      plant1: {x:48, y:50},
+      plant2: {x:W-90, y:56},
+      plant3: {x:W/2+30, y:54},
+      plant4: {x:W/2-50, y:54},
+      plantMid1: {x:40, y:130},
+      plantMid2: {x:360, y:130},
+      plantBack: {x:120, y:190},
+    };
+    
+    // Load overrides from editor
+    const L = Object.assign({}, DEFAULT_LAYOUT, window.__officeLayout || {});
+    
     let s='';
 
     // ---- 32-BIT DEFS: gradients, filters, patterns ----
@@ -1341,14 +1372,14 @@
     // Lights
     for(let lx=45;lx<W;lx+=60)s+=pendant(lx);
     // Neon signs
-    s+=`<g class="neon-sign" filter="url(#neonGlow)" transform="translate(14,16)">${neonSign('BERKENBOT','#a8a0ff')}</g>`;
-    s+=`<g class="neon-sign-2" filter="url(#neonGlow)" transform="translate(14,25)">${neonSmall('LABS  ·  BUILD  SHIP  REPEAT','#ff80b0')}</g>`;
-    s+=`<ellipse cx="60" cy="22" rx="70" ry="18" fill="#a8a0ff" opacity="0.12" filter="url(#neonWide)"/>`;
-    s+=`<ellipse cx="60" cy="22" rx="40" ry="10" fill="#c8c0ff" opacity="0.08"/>`;
-    s+=`<ellipse cx="80" cy="30" rx="70" ry="12" fill="#ff80b0" opacity="0.08" filter="url(#neonWide)"/>`;
-    s+=`<ellipse cx="80" cy="30" rx="40" ry="8" fill="#ffa0c0" opacity="0.06"/>`;
-    s+=`<ellipse cx="60" cy="82" rx="50" ry="8" fill="#a8a0ff" opacity="0.04"/>`;
-    s+=`<ellipse cx="80" cy="84" rx="50" ry="6" fill="#ff80b0" opacity="0.03"/>`;
+    s+=`<g data-drag="neonSign" class="neon-sign" filter="url(#neonGlow)" transform="translate(${L.neonSign.x},${L.neonSign.y})">${neonSign('BERKENBOT','#a8a0ff')}</g>`;
+    s+=`<g data-drag="neonSmall" class="neon-sign-2" filter="url(#neonGlow)" transform="translate(${L.neonSmall.x},${L.neonSmall.y})">${neonSmall('LABS  ·  BUILD  SHIP  REPEAT','#ff80b0')}</g>`;
+    s+=`<ellipse cx="${L.neonSign.x+46}" cy="${L.neonSign.y+6}" rx="70" ry="18" fill="#a8a0ff" opacity="0.12" filter="url(#neonWide)"/>`;
+    s+=`<ellipse cx="${L.neonSign.x+46}" cy="${L.neonSign.y+6}" rx="40" ry="10" fill="#c8c0ff" opacity="0.08"/>`;
+    s+=`<ellipse cx="${L.neonSmall.x+66}" cy="${L.neonSmall.y+5}" rx="70" ry="12" fill="#ff80b0" opacity="0.08" filter="url(#neonWide)"/>`;
+    s+=`<ellipse cx="${L.neonSmall.x+66}" cy="${L.neonSmall.y+5}" rx="40" ry="8" fill="#ffa0c0" opacity="0.06"/>`;
+    s+=`<ellipse cx="${L.neonSign.x+46}" cy="82" rx="50" ry="8" fill="#a8a0ff" opacity="0.04"/>`;
+    s+=`<ellipse cx="${L.neonSmall.x+66}" cy="84" rx="50" ry="6" fill="#ff80b0" opacity="0.03"/>`;
 
     // ---- TIME-OF-DAY LIGHTING (CST) ----
     const now=new Date();
@@ -1576,79 +1607,138 @@
 
     // ---- CLOCK ----
     s+=wallClock(winX-12, 12);
+    
+    // Compute bookshelf position (after window is known)
+    if(L.bookshelf.x === null) L.bookshelf.x = winX+winW+8;
+    
     // ---- WHITEBOARD ----
     const projItems = (_projectsData && _projectsData.items) || [];
-    s+=`<g transform="translate(${W*0.28+8},8)">${whiteboard(projItems)}</g>`;
+    s+=`<g data-drag="whiteboard" transform="translate(${L.whiteboard.x},${L.whiteboard.y})">${whiteboard(projItems)}</g>`;
     // ---- BOOKSHELF ----
-    s+=`<g transform="translate(${winX+winW+8},14)">${bookshelf()}</g>`;
+    s+=`<g data-drag="bookshelf" transform="translate(${L.bookshelf.x},${L.bookshelf.y})">${bookshelf()}</g>`;
     // ---- GLASS CORNER OFFICE ----
-    s+=`<g filter="url(#furnitureShadow)" transform="translate(${W-80},10)">${glassRoom(70,75)}</g>`;
+    s+=`<g data-drag="glassRoom" filter="url(#furnitureShadow)" transform="translate(${L.glassRoom.x},${L.glassRoom.y})">${glassRoom(70,75)}</g>`;
     // ---- COFFEE STATION ----
-    s+=`<g filter="url(#dropShadow)" transform="translate(6,16)">${coffeeStation()}</g>`;
+    s+=`<g data-drag="coffeeStation" filter="url(#dropShadow)" transform="translate(${L.coffeeStation.x},${L.coffeeStation.y})">${coffeeStation()}</g>`;
     // ---- SERVER RACK ----
-    const rackX=W-220;
-    s+=`<g filter="url(#furnitureShadow)">`;
-    s+=`<g transform="translate(${rackX},38)" class="server-blink">${serverRack()}</g>`;
-    s+=`<g transform="translate(${rackX+20},38)">${serverRack()}</g>`;
-    s+=`<g transform="translate(${rackX+40},38)">${serverRack()}</g>`;
+    s+=`<g data-drag="serverRacks" filter="url(#furnitureShadow)" transform="translate(${L.serverRacks.x},${L.serverRacks.y})">`;
+    s+=`<g transform="translate(0,0)" class="server-blink">${serverRack()}</g>`;
+    s+=`<g transform="translate(20,0)">${serverRack()}</g>`;
+    s+=`<g transform="translate(40,0)">${serverRack()}</g>`;
+    s+=px(-2,-2,64,2,C.steelD,0.4);
     s+=`</g>`;
-    s+=px(rackX-2,36,64,2,C.steelD,0.4);
     // Wall-level plants
-    s+=`<g transform="translate(48,50)">${bigPlant('fiddle')}</g>`;
-    s+=`<g transform="translate(${W-90},56)">${bigPlant('monstera')}</g>`;
-    s+=`<g transform="translate(${W/2+30},54)">${bigPlant('snake')}</g>`;
-    s+=`<g transform="translate(${W/2-50},54)">${bigPlant('fiddle')}</g>`;
+    s+=`<g data-drag="plant1" transform="translate(${L.plant1.x},${L.plant1.y})">${bigPlant('fiddle')}</g>`;
+    s+=`<g data-drag="plant2" transform="translate(${L.plant2.x},${L.plant2.y})">${bigPlant('monstera')}</g>`;
+    s+=`<g data-drag="plant3" transform="translate(${L.plant3.x},${L.plant3.y})">${bigPlant('snake')}</g>`;
+    s+=`<g data-drag="plant4" transform="translate(${L.plant4.x},${L.plant4.y})">${bigPlant('fiddle')}</g>`;
     // Pizza box near glass office
     s+=`<g filter="url(#dropShadow)">`;
     s+=`<rect x="${W-52}" y="52" width="8" height="6" rx="0.5" fill="url(#woodGrad)"/>`;
     s+=`<rect x="${W-51}" y="53" width="6" height="4" rx="0.3" fill="#e04040" opacity="0.25"/>`;
     s+=`</g>`;
     // BERKEN_BOT workstation (inside glass office, same depth as wall)
-    const bb=AGENTS[0], bbs={x:455,y:52};
-    s+=`<g filter="url(#furnitureShadow)" transform="translate(${bbs.x},${bbs.y})">${desk(44)}</g>`;
-    s+=`<g filter="url(#monitorGlow)" transform="translate(${bbs.x+7},${bbs.y-14})">${dualMon(bb.status==='green',bb.screen,0)}</g>`;
-    s+=`<g transform="translate(${bbs.x+36},${bbs.y-3})">${deskStuff(bb.stuff)}</g>`;
-    s+=`<g id="agent-0" transform="translate(${bbs.x+10},${bbs.y+2})">${seatedAgent(bb, 0)}</g>`;
-    s+=txt16(bbs.x+22,bbs.y+32,bb.name,3.5,'#e8f0ff');
-    s+=txt16(bbs.x+22,bbs.y+37,bb.role,2.2,'#90a0b0');
+    const bb=AGENTS[0];
+    s+=`<g data-drag="berkenBot" transform="translate(${L.berkenBot.x},${L.berkenBot.y})">`;
+    s+=`<g filter="url(#furnitureShadow)">${desk(44)}</g>`;
+    s+=`<g filter="url(#monitorGlow)" transform="translate(7,-14)">${dualMon(bb.status==='green',bb.screen,0)}</g>`;
+    s+=`<g transform="translate(36,-3)">${deskStuff(bb.stuff)}</g>`;
+    s+=`<g id="agent-0" transform="translate(10,2)">${seatedAgent(bb, 0)}</g>`;
+    s+=txt16(22,32,bb.name,3.5,'#e8f0ff');
+    s+=txt16(22,37,bb.role,2.2,'#90a0b0');
     const bbLines=(_agentLocData&&_agentLocData.agents&&_agentLocData.agents[bb.name])||0;
-    s+=locBadge(bbs.x+22,bbs.y-22,bbLines);
-    s+=projectTags(bb.projects,bbs.x-2,bbs.y+39,50);
+    s+=locBadge(22,-22,bbLines);
+    s+=projectTags(bb.projects,-2,39,50);
+    s+=`</g>`;
     s+=`</g>`; // END DEPTH 0
 
     // == DEPTH 1: FRONT ROW (y~90) ==
     s+=`<g id="office-depth-1">`;
-    [1,2,3].forEach(i=>{
-      const ag=AGENTS[i], bx=[0,55,165,280][i], by=90;
-      s+=`<g filter="url(#furnitureShadow)" transform="translate(${bx},${by})">${desk(44)}</g>`;
-      s+=`<g filter="url(#monitorGlow)" transform="translate(${bx+7},${by-14})">${dualMon(ag.status==='green',ag.screen,i)}</g>`;
-      s+=`<g transform="translate(${bx+36},${by-3})">${deskStuff(ag.stuff)}</g>`;
-      s+=`<g id="agent-${i}" transform="translate(${bx+10},${by+2})">${seatedAgent(ag, i)}</g>`;
-      s+=txt16(bx+22,by+32,ag.name,3.5,'#e8f0ff');
-      s+=txt16(bx+22,by+37,ag.role,2.2,'#90a0b0');
-      const agLines=(_agentLocData&&_agentLocData.agents&&_agentLocData.agents[ag.name])||0;
-      s+=locBadge(bx+22,by-22,agLines);
-      s+=projectTags(ag.projects,bx-2,by+39,50);
-    });
+    // FORGE (agent 1)
+    const forge=AGENTS[1];
+    s+=`<g data-drag="forge" transform="translate(${L.forge.x},${L.forge.y})">`;
+    s+=`<g filter="url(#furnitureShadow)">${desk(44)}</g>`;
+    s+=`<g filter="url(#monitorGlow)" transform="translate(7,-14)">${dualMon(forge.status==='green',forge.screen,1)}</g>`;
+    s+=`<g transform="translate(36,-3)">${deskStuff(forge.stuff)}</g>`;
+    s+=`<g id="agent-1" transform="translate(10,2)">${seatedAgent(forge, 1)}</g>`;
+    s+=txt16(22,32,forge.name,3.5,'#e8f0ff');
+    s+=txt16(22,37,forge.role,2.2,'#90a0b0');
+    const forgeLines=(_agentLocData&&_agentLocData.agents&&_agentLocData.agents[forge.name])||0;
+    s+=locBadge(22,-22,forgeLines);
+    s+=projectTags(forge.projects,-2,39,50);
+    s+=`</g>`;
+    // ANVIL (agent 2)
+    const anvil=AGENTS[2];
+    s+=`<g data-drag="anvil" transform="translate(${L.anvil.x},${L.anvil.y})">`;
+    s+=`<g filter="url(#furnitureShadow)">${desk(44)}</g>`;
+    s+=`<g filter="url(#monitorGlow)" transform="translate(7,-14)">${dualMon(anvil.status==='green',anvil.screen,2)}</g>`;
+    s+=`<g transform="translate(36,-3)">${deskStuff(anvil.stuff)}</g>`;
+    s+=`<g id="agent-2" transform="translate(10,2)">${seatedAgent(anvil, 2)}</g>`;
+    s+=txt16(22,32,anvil.name,3.5,'#e8f0ff');
+    s+=txt16(22,37,anvil.role,2.2,'#90a0b0');
+    const anvilLines=(_agentLocData&&_agentLocData.agents&&_agentLocData.agents[anvil.name])||0;
+    s+=locBadge(22,-22,anvilLines);
+    s+=projectTags(anvil.projects,-2,39,50);
+    s+=`</g>`;
+    // SCOUT (agent 3)
+    const scout=AGENTS[3];
+    s+=`<g data-drag="scout" transform="translate(${L.scout.x},${L.scout.y})">`;
+    s+=`<g filter="url(#furnitureShadow)">${desk(44)}</g>`;
+    s+=`<g filter="url(#monitorGlow)" transform="translate(7,-14)">${dualMon(scout.status==='green',scout.screen,3)}</g>`;
+    s+=`<g transform="translate(36,-3)">${deskStuff(scout.stuff)}</g>`;
+    s+=`<g id="agent-3" transform="translate(10,2)">${seatedAgent(scout, 3)}</g>`;
+    s+=txt16(22,32,scout.name,3.5,'#e8f0ff');
+    s+=txt16(22,37,scout.role,2.2,'#90a0b0');
+    const scoutLines=(_agentLocData&&_agentLocData.agents&&_agentLocData.agents[scout.name])||0;
+    s+=locBadge(22,-22,scoutLines);
+    s+=projectTags(scout.projects,-2,39,50);
+    s+=`</g>`;
     s+=`</g>`; // END DEPTH 1
 
     // == DEPTH 2: MID ROW (y~150) ==
     s+=`<g id="office-depth-2">`;
     // Mid-row plants
-    s+=`<g transform="translate(40,130)">${bigPlant('monstera')}</g>`;
-    s+=`<g transform="translate(360,130)">${bigPlant('snake')}</g>`;
-    [4,5,6].forEach(i=>{
-      const ag=AGENTS[i], bx=[0,0,0,0,55,165,280][i], by=150;
-      s+=`<g filter="url(#furnitureShadow)" transform="translate(${bx},${by})">${desk(44)}</g>`;
-      s+=`<g filter="url(#monitorGlow)" transform="translate(${bx+7},${by-14})">${dualMon(ag.status==='green',ag.screen,i)}</g>`;
-      s+=`<g transform="translate(${bx+36},${by-3})">${deskStuff(ag.stuff)}</g>`;
-      s+=`<g id="agent-${i}" transform="translate(${bx+10},${by+2})">${seatedAgent(ag, i)}</g>`;
-      s+=txt16(bx+22,by+32,ag.name,3.5,'#e8f0ff');
-      s+=txt16(bx+22,by+37,ag.role,2.2,'#90a0b0');
-      const agLines=(_agentLocData&&_agentLocData.agents&&_agentLocData.agents[ag.name])||0;
-      s+=locBadge(bx+22,by-22,agLines);
-      s+=projectTags(ag.projects,bx-2,by+39,50);
-    });
+    s+=`<g data-drag="plantMid1" transform="translate(${L.plantMid1.x},${L.plantMid1.y})">${bigPlant('monstera')}</g>`;
+    s+=`<g data-drag="plantMid2" transform="translate(${L.plantMid2.x},${L.plantMid2.y})">${bigPlant('snake')}</g>`;
+    // CREATIVE (agent 4)
+    const creative=AGENTS[4];
+    s+=`<g data-drag="creative" transform="translate(${L.creative.x},${L.creative.y})">`;
+    s+=`<g filter="url(#furnitureShadow)">${desk(44)}</g>`;
+    s+=`<g filter="url(#monitorGlow)" transform="translate(7,-14)">${dualMon(creative.status==='green',creative.screen,4)}</g>`;
+    s+=`<g transform="translate(36,-3)">${deskStuff(creative.stuff)}</g>`;
+    s+=`<g id="agent-4" transform="translate(10,2)">${seatedAgent(creative, 4)}</g>`;
+    s+=txt16(22,32,creative.name,3.5,'#e8f0ff');
+    s+=txt16(22,37,creative.role,2.2,'#90a0b0');
+    const creativeLines=(_agentLocData&&_agentLocData.agents&&_agentLocData.agents[creative.name])||0;
+    s+=locBadge(22,-22,creativeLines);
+    s+=projectTags(creative.projects,-2,39,50);
+    s+=`</g>`;
+    // CRON (agent 5)
+    const cron=AGENTS[5];
+    s+=`<g data-drag="cron" transform="translate(${L.cron.x},${L.cron.y})">`;
+    s+=`<g filter="url(#furnitureShadow)">${desk(44)}</g>`;
+    s+=`<g filter="url(#monitorGlow)" transform="translate(7,-14)">${dualMon(cron.status==='green',cron.screen,5)}</g>`;
+    s+=`<g transform="translate(36,-3)">${deskStuff(cron.stuff)}</g>`;
+    s+=`<g id="agent-5" transform="translate(10,2)">${seatedAgent(cron, 5)}</g>`;
+    s+=txt16(22,32,cron.name,3.5,'#e8f0ff');
+    s+=txt16(22,37,cron.role,2.2,'#90a0b0');
+    const cronLines=(_agentLocData&&_agentLocData.agents&&_agentLocData.agents[cron.name])||0;
+    s+=locBadge(22,-22,cronLines);
+    s+=projectTags(cron.projects,-2,39,50);
+    s+=`</g>`;
+    // SENTINEL (agent 6)
+    const sentinel=AGENTS[6];
+    s+=`<g data-drag="sentinel" transform="translate(${L.sentinel.x},${L.sentinel.y})">`;
+    s+=`<g filter="url(#furnitureShadow)">${desk(44)}</g>`;
+    s+=`<g filter="url(#monitorGlow)" transform="translate(7,-14)">${dualMon(sentinel.status==='green',sentinel.screen,6)}</g>`;
+    s+=`<g transform="translate(36,-3)">${deskStuff(sentinel.stuff)}</g>`;
+    s+=`<g id="agent-6" transform="translate(10,2)">${seatedAgent(sentinel, 6)}</g>`;
+    s+=txt16(22,32,sentinel.name,3.5,'#e8f0ff');
+    s+=txt16(22,37,sentinel.role,2.2,'#90a0b0');
+    const sentinelLines=(_agentLocData&&_agentLocData.agents&&_agentLocData.agents[sentinel.name])||0;
+    s+=locBadge(22,-22,sentinelLines);
+    s+=projectTags(sentinel.projects,-2,39,50);
+    s+=`</g>`;
     s+=`</g>`; // END DEPTH 2
 
     // == DEPTH 3: BACK ROW + LOUNGE (y~190-210, nearest — moves most) ==
@@ -1662,20 +1752,22 @@
     }
     s+=px(W-172,225,69,1,C.rugD,0.3);
     // Ping pong
-    s+=`<g filter="url(#furnitureShadow)" transform="translate(${W-160},190)">${pingPong()}</g>`;
+    s+=`<g data-drag="pingPong" filter="url(#furnitureShadow)" transform="translate(${L.pingPong.x},${L.pingPong.y})">${pingPong()}</g>`;
     // Back plant
-    s+=`<g transform="translate(120,190)">${bigPlant('fiddle')}</g>`;
+    s+=`<g data-drag="plantBack" transform="translate(${L.plantBack.x},${L.plantBack.y})">${bigPlant('fiddle')}</g>`;
     // FLOAT workstation
-    const fl=AGENTS[7], flx=165, fly=205;
-    s+=`<g filter="url(#furnitureShadow)" transform="translate(${flx},${fly})">${desk(44)}</g>`;
-    s+=`<g filter="url(#monitorGlow)" transform="translate(${flx+7},${fly-14})">${dualMon(fl.status==='green',fl.screen,7)}</g>`;
-    s+=`<g transform="translate(${flx+36},${fly-3})">${deskStuff(fl.stuff)}</g>`;
-    s+=`<g id="agent-7" transform="translate(${flx+10},${fly+2})">${seatedAgent(fl, 7)}</g>`;
-    s+=txt16(flx+22,fly+32,fl.name,3.5,'#e8f0ff');
-    s+=txt16(flx+22,fly+37,fl.role,2.2,'#90a0b0');
+    const fl=AGENTS[7];
+    s+=`<g data-drag="float" transform="translate(${L.float.x},${L.float.y})">`;
+    s+=`<g filter="url(#furnitureShadow)">${desk(44)}</g>`;
+    s+=`<g filter="url(#monitorGlow)" transform="translate(7,-14)">${dualMon(fl.status==='green',fl.screen,7)}</g>`;
+    s+=`<g transform="translate(36,-3)">${deskStuff(fl.stuff)}</g>`;
+    s+=`<g id="agent-7" transform="translate(10,2)">${seatedAgent(fl, 7)}</g>`;
+    s+=txt16(22,32,fl.name,3.5,'#e8f0ff');
+    s+=txt16(22,37,fl.role,2.2,'#90a0b0');
     const flLines=(_agentLocData&&_agentLocData.agents&&_agentLocData.agents[fl.name])||0;
-    s+=locBadge(flx+22,fly-22,flLines);
-    s+=projectTags(fl.projects,flx-2,fly+39,50);
+    s+=locBadge(22,-22,flLines);
+    s+=projectTags(fl.projects,-2,39,50);
+    s+=`</g>`;
     // Ambient details
     s+=`<g filter="url(#dropShadow)">`;
     s+=`<rect x="${W-128}" y="215" width="4" height="2" rx="0.5" fill="#e04040"/>`;
@@ -1711,6 +1803,16 @@
     const svgEl=document.getElementById('officeSvg');
     let oScale=1, oTx=0, oTy=0, lastDist=0, lastMid={x:0,y:0};
     let dragging=false, dsx=0, dsy=0;
+    
+    // Expose state for editor
+    window.__officeState = {
+      get oScale() { return oScale; },
+      get oTx() { return oTx; },
+      get oTy() { return oTy; },
+      svgEl,
+      wrap,
+      rebuild: () => { loadAndInit(); }
+    };
 
     function clampTransform(){
       const maxTx=0, maxTy=0;
