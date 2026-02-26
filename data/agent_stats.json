@@ -1,13 +1,13 @@
 {
-  "date": "2026-02-23",
+  "date": "2026-02-26",
   "agents": {
-    "BERKEN_BOT": 32,
-    "FORGE": 0,
-    "ANVIL": 0,
-    "SCOUT": 0,
-    "CREATIVE": 32,
-    "CRON": 32,
-    "SENTINEL": 32,
-    "FLOAT": 0
+    "BERKEN_BOT": 4137,
+    "R2-D2": 1241,
+    "R4-P17": 1241,
+    "ADA": 0,
+    "IVE": 591,
+    "SPOCK": 591,
+    "K-2SO": 591,
+    "MAVIC": 0
   }
 }

@@ -46,3 +46,29 @@ code { background: #1c274c; padding: 1px 5px; border-radius: 5px; }
 .office-section h2 { font-size: 18px; }
 .agent-office-wrap { overflow-x: auto; padding: 16px 0 8px; display: flex; justify-content: center; }
 .agent-office-wrap svg { border-radius: 8px; border: 2px solid #243052; background: #0e1a38; }
+
+/* Agent Activity Section */
+.agent-activity-section { background: #0a0f24 !important; border: 1px solid #243052; }
+.activity-summary { margin-bottom: 16px; padding: 12px; background: #151f3d; border: 1px solid #2a3864; border-radius: 8px; font-size: 14px; color: #b8c8f0; }
+.summary-bar { display: flex; gap: 16px; flex-wrap: wrap; }
+.agent-activity-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 14px; }
+.agent-card { background: #0f1834; border: 1px solid #243052; border-radius: 8px; padding: 14px; font-family: 'Consolas', 'Monaco', monospace; }
+.agent-card .card-header { display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 8px; margin-bottom: 12px; border-bottom: 1px solid #1c2744; padding-bottom: 8px; }
+.agent-card .agent-name { font-weight: 700; font-size: 15px; color: #eaf0ff; }
+.agent-card .agent-role { font-size: 11px; color: #7a8fb5; grid-column: 1; }
+.agent-card .agent-status { font-size: 18px; grid-column: 3; grid-row: 1; }
+.agent-card .card-body { display: flex; flex-direction: column; gap: 10px; }
+.agent-card .current-task { font-size: 12px; color: #9ab0e8; font-style: italic; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.agent-card .metrics-section { background: #0b1320; border: 1px solid #1a2742; border-radius: 6px; padding: 8px; }
+.agent-card .metric-label { font-size: 12px; color: #b8c8f0; margin-bottom: 6px; }
+.agent-card .metric-label b { color: #eaf0ff; font-family: 'Consolas', 'Monaco', monospace; }
+.agent-card .cost { color: #ffd979; font-weight: 600; }
+.agent-card .sparkline-wrap { display: flex; justify-content: center; }
+.agent-card .recent-section { font-size: 11px; color: #8fa5d0; }
+.agent-card .section-title { font-weight: 600; margin-bottom: 4px; color: #a9b8e8; }
+.agent-card .commit-line { margin: 2px 0; color: #7a8fb5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.agent-card .repo { color: #5fa8ff; font-weight: 600; }
+
+@media (max-width: 768px) {
+  .agent-activity-grid { grid-template-columns: 1fr; }
+}

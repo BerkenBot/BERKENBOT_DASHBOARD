@@ -38,7 +38,7 @@
       "name": "BERKENBOT_DASHBOARD",
       "status": "green",
       "progress": 63,
-      "lastUpdate": "2026-02-23 07:44",
+      "lastUpdate": "2026-02-26 16:06",
       "owner": "BerkenBot",
       "nextAction": "Auto-ingest multi-repo status and trend charts",
       "subprocesses": [
@@ -58,7 +58,7 @@
           "name": "Auto data pipeline",
           "status": "yellow",
           "progress": 55,
-          "note": "repo=justinberken/BERKENBOT_DASHBOARD | last_commit=2026-02-23 07:44 | open_issues=unknown(auth required)"
+          "note": "repo=justinberken/BERKENBOT_DASHBOARD | last_commit=2026-02-26 16:06 | open_issues=unknown(auth required)"
         },
         {
           "name": "Pages deployment",
@@ -72,7 +72,7 @@
       "name": "scalara",
       "status": "yellow",
       "progress": 28,
-      "lastUpdate": "2026-02-21 08:41",
+      "lastUpdate": "2026-02-26 13:40",
       "owner": "BerkenBot",
       "nextAction": "Create execution issue backlog for Phase 0-2",
       "subprocesses": [
@@ -140,7 +140,7 @@
       "name": "DATA_AUDIT",
       "status": "yellow",
       "progress": 32,
-      "lastUpdate": "2026-02-22 13:09",
+      "lastUpdate": "2026-02-26 16:32",
       "owner": "BerkenBot",
       "nextAction": "Refactor clunky control panel into real app workflow",
       "subprocesses": [
@@ -208,7 +208,7 @@
       "name": "TV_PHOTO_GALLERY",
       "status": "red",
       "progress": 6,
-      "lastUpdate": "2026-02-18 18:40",
+      "lastUpdate": "2026-02-26 05:12",
       "owner": "BerkenBot",
       "nextAction": "Bootstrap project scaffold and MVP scope",
       "subprocesses": [

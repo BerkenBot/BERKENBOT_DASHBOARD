@@ -535,9 +535,119 @@ async function renderDashboard() {
       series: benchSeries
     });
 
+    // --- Agent Activity Metrics ---
+    try {
+      const agentMetrics = await load('data/agent_metrics.json');
+      renderAgentActivity(agentMetrics);
+    } catch(e) {
+      console.warn('Agent metrics not available:', e);
+    }
+
   } catch(e){
     console.error('Dashboard refresh error:', e);
   }
+}
+
+// Format numbers with K/M suffixes
+function fmtNum(n) {
+  if (n >= 1000000) return (n/1000000).toFixed(1) + 'M';
+  if (n >= 1000) return (n/1000).toFixed(1) + 'K';
+  return n.toString();
+}
+
+// Generate inline SVG sparkline
+function sparkline(data, color, width=120, height=16) {
+  const max = Math.max(...data, 1);
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(svgNS, 'svg');
+  svg.setAttribute('width', width);
+  svg.setAttribute('height', height);
+  svg.style.display = 'inline-block';
+  svg.style.verticalAlign = 'middle';
+  
+  const barWidth = width / data.length;
+  data.forEach((val, i) => {
+    const barHeight = (val / max) * height;
+    const rect = document.createElementNS(svgNS, 'rect');
+    rect.setAttribute('x', i * barWidth);
+    rect.setAttribute('y', height - barHeight);
+    rect.setAttribute('width', Math.max(1, barWidth - 1));
+    rect.setAttribute('height', barHeight);
+    rect.setAttribute('fill', color);
+    rect.setAttribute('opacity', '0.8');
+    svg.appendChild(rect);
+  });
+  
+  return svg.outerHTML;
+}
+
+// Render agent activity section
+function renderAgentActivity(metrics) {
+  const summaryEl = document.getElementById('agentActivitySummary');
+  const gridEl = document.getElementById('agentActivity');
+  
+  if (!summaryEl || !gridEl) return;
+  
+  const t = metrics.totals;
+  summaryEl.innerHTML = `
+    <div class="summary-bar">
+      Today: <b>${fmtNum(t.loc_today)}</b> LOC | 
+      <b>${t.commits_today}</b> commits | 
+      <b>${fmtNum(t.input_tokens)}</b> tokens in | 
+      <b>${fmtNum(t.output_tokens)}</b> out | 
+      <b>$${t.cost_today.toFixed(2)}</b> spent
+    </div>
+  `;
+  
+  gridEl.innerHTML = '';
+  
+  const agentOrder = ['BERKEN_BOT', 'R2-D2', 'R4-P17', 'ADA', 'IVE', 'SPOCK', 'K-2SO', 'MAVIC'];
+  
+  agentOrder.forEach(agentName => {
+    const agent = metrics.agents[agentName];
+    if (!agent) return;
+    
+    const statusDot = {
+      'active': '🟢',
+      'idle': '🟡',
+      'offline': '⚫'
+    }[agent.status] || '⚪';
+    
+    const card = document.createElement('div');
+    card.className = 'agent-card';
+    
+    const locSparkline = sparkline(agent.git.loc_by_hour, '#40f8a0');
+    const tokenSparkline = sparkline(agent.tokens.tokens_by_hour, '#60a8f0');
+    
+    const recentCommits = agent.git.recent_commits.slice(0, 3).map(c => 
+      `<div class="commit-line">${c.time} <span class="repo">${c.repo}</span> — ${c.msg}</div>`
+    ).join('');
+    
+    card.innerHTML = `
+      <div class="card-header">
+        <div class="agent-name">${agent.display_name}</div>
+        <div class="agent-role">${agent.role}</div>
+        <div class="agent-status">${statusDot}</div>
+      </div>
+      <div class="card-body">
+        <div class="current-task">Current: "${agent.current_task}"</div>
+        
+        <div class="metrics-section">
+          <div class="metric-label">LOC Today: <b>${fmtNum(agent.git.loc_today)}</b> (+${fmtNum(agent.git.loc_added)}/-${fmtNum(agent.git.loc_deleted)})</div>
+          <div class="sparkline-wrap">${locSparkline}</div>
+        </div>
+        
+        <div class="metrics-section">
+          <div class="metric-label">Tokens: <b>${fmtNum(agent.tokens.input_today)}</b> in / <b>${fmtNum(agent.tokens.output_today)}</b> out  <span class="cost">$${agent.tokens.cost_today.toFixed(2)}</span></div>
+          <div class="sparkline-wrap">${tokenSparkline}</div>
+        </div>
+        
+        ${recentCommits ? `<div class="recent-section"><div class="section-title">Recent:</div>${recentCommits}</div>` : ''}
+      </div>
+    `;
+    
+    gridEl.appendChild(card);
+  });
 }
 
 // Initial render + auto-refresh every 60s
