@@ -843,7 +843,7 @@
            antenna:true,ears:'fins',detail:'command',accent:'#ffd700'},
     },
     {
-      name:'FORGE', role:'Lead Engineer α',
+      name:'R2-D2', role:'Lead Engineer α',
       projects:['SCALARA','GH_INTEL','LOCAL_TTS','LORA_GEN','C64'],
       status:'green', screen:'code', stuff:'forge',
       // Robot: heavy industrial bot, red chassis, visor eyes, welding sparks
@@ -852,7 +852,7 @@
            antenna:false,ears:'vents',detail:'sparks',accent:'#e74c3c'},
     },
     {
-      name:'ANVIL', role:'Lead Engineer β',
+      name:'R4-P17', role:'Lead Engineer β',
       projects:['SCALARA','GH_INTEL','LOCAL_TTS','LORA_GEN','C64'],
       status:'green', screen:'review', stuff:'anvil',
       // Robot: precise inspector bot, green chassis, dual-lens eyes, scanner
@@ -861,7 +861,7 @@
            antenna:true,ears:'discs',detail:'scanner',accent:'#2ecc71'},
     },
     {
-      name:'SCOUT', role:'Research Analyst',
+      name:'ADA', role:'Research Analyst',
       projects:['LOCAL_TTS','LORA_GEN'],
       status:'green', screen:'research', stuff:'scout',
       // Robot: sleek explorer bot, blue chassis, single large eye, radar dish
@@ -870,7 +870,7 @@
            antenna:true,ears:'none',detail:'radar',accent:'#3498db'},
     },
     {
-      name:'CREATIVE', role:'Creative Director',
+      name:'IVE', role:'Creative Director',
       projects:['MORNING_REPORT','TTS','COMFYUI'],
       status:'green', screen:'creative', stuff:'creative',
       // Robot: artistic bot, coral/salmon chassis, expressive round eyes, palette core
@@ -879,7 +879,7 @@
            antenna:false,ears:'discs',detail:'palette',accent:'#fd79a8'},
     },
     {
-      name:'CRON', role:'Ops Manager',
+      name:'SPOCK', role:'Ops Manager',
       projects:['CRON_JOBS','HEARTBEAT'],
       status:'green', screen:'ops', stuff:'cron',
       // Robot: clockwork bot, teal chassis, LED bar eyes, gears detail
@@ -888,7 +888,7 @@
            antenna:false,ears:'speakers',detail:'gears',accent:'#55efc4'},
     },
     {
-      name:'SENTINEL', role:'Security & Infra',
+      name:'K-2SO', role:'Security & Infra',
       projects:['WATCHDOG','SECURITY','INFRA'],
       status:'green', screen:'monitor', stuff:'sentinel',
       // Robot: armored security bot, dark steel chassis, visor, shield core
@@ -897,7 +897,7 @@
            antenna:false,ears:'vents',detail:'shield',accent:'#ff7675'},
     },
     {
-      name:'FLOAT', role:'Flex Agent',
+      name:'MAVIC', role:'Flex Agent',
       projects:['OVERFLOW'],
       status:'yellow', screen:'research', stuff:'float',
       // Robot: modular/transforming bot, silver chassis, cyclops eye, morph detail

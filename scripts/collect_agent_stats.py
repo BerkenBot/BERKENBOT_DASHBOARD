@@ -3,13 +3,13 @@
 
 Agent → repo mapping (Berken & Co. firm):
   BERKEN_BOT: ALL (orchestrator overview)
-  FORGE: SCALARA, GH_INTEL_V2, LOCAL_TTS, LORA_GEN, C64
-  ANVIL: same as FORGE (reviews, ~30% of FORGE's count)
-  SCOUT: LOCAL_TTS, LORA_GEN
-  CREATIVE: LOCAL_TTS, BERKENBOT_DASHBOARD
-  CRON: BERKENBOT_DASHBOARD
-  SENTINEL: BERKENBOT_DASHBOARD
-  FLOAT: none (flex, gets overflow)
+  R2-D2: SCALARA, GH_INTEL_V2, LOCAL_TTS, LORA_GEN, C64
+  R4-P17: same as FORGE (reviews, ~30% of FORGE's count)
+  ADA: LOCAL_TTS, LORA_GEN
+  IVE: LOCAL_TTS, BERKENBOT_DASHBOARD
+  SPOCK: BERKENBOT_DASHBOARD
+  K-2SO: BERKENBOT_DASHBOARD
+  MAVIC: none (flex, gets overflow)
 """
 from __future__ import annotations
 import json, subprocess, os
@@ -22,13 +22,13 @@ OUT = ROOT / "data" / "agent_stats.json"
 
 AGENT_REPOS = {
     "BERKEN_BOT": ["scalara", "_GH_INTELLIGENCE_V2", "los_tts", "LORA_GEN", "C64", "DATA_AUDIT", "BERKENBOT_DASHBOARD"],
-    "FORGE": ["scalara", "_GH_INTELLIGENCE_V2", "los_tts", "LORA_GEN", "C64"],
-    "ANVIL": ["scalara", "_GH_INTELLIGENCE_V2", "los_tts", "LORA_GEN", "C64"],
-    "SCOUT": ["los_tts", "LORA_GEN"],
-    "CREATIVE": ["los_tts", "BERKENBOT_DASHBOARD"],
-    "CRON": ["BERKENBOT_DASHBOARD"],
-    "SENTINEL": ["BERKENBOT_DASHBOARD"],
-    "FLOAT": [],
+    "R2-D2": ["scalara", "_GH_INTELLIGENCE_V2", "los_tts", "LORA_GEN", "C64"],
+    "R4-P17": ["scalara", "_GH_INTELLIGENCE_V2", "los_tts", "LORA_GEN", "C64"],
+    "ADA": ["los_tts", "LORA_GEN"],
+    "IVE": ["los_tts", "BERKENBOT_DASHBOARD"],
+    "SPOCK": ["BERKENBOT_DASHBOARD"],
+    "K-2SO": ["BERKENBOT_DASHBOARD"],
+    "MAVIC": [],
 }
 
 def git_lines_today(repo_path: Path) -> int:
@@ -66,8 +66,8 @@ def main():
             repo_path = WS / repo
             total += git_lines_today(repo_path)
         # ANVIL gets ~30% of FORGE's count (reviewing, not writing)
-        if agent == "ANVIL" and "FORGE" in stats:
-            total = max(total, int(stats["FORGE"] * 0.3))
+        if agent == "R4-P17" and "R2-D2" in stats:
+            total = max(total, int(stats["R2-D2"] * 0.3))
         stats[agent] = total
 
     today = datetime.now().strftime("%Y-%m-%d")
