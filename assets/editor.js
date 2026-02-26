@@ -8,195 +8,125 @@
   let editMode = false;
   let currentLayout = null;
   let dragTarget = null;
-  let dragStartMouse = null;
-  let dragStartPos = null;
+  let dragStartSVG = null;   // SVG-space start point
+  let dragStartPos = null;   // original translate of the element
 
   // ======== INIT ========
   function init() {
-    // Load saved layout from localStorage
     const saved = localStorage.getItem('officeLayout');
     if (saved) {
-      try {
-        window.__officeLayout = JSON.parse(saved);
-      } catch (e) {
-        console.error('Failed to load saved layout:', e);
-      }
+      try { window.__officeLayout = JSON.parse(saved); } catch (e) {}
     }
-
-    // Wait for office to be ready
-    if (!document.getElementById('officeSvg')) {
-      setTimeout(init, 100);
-      return;
-    }
-
+    if (!document.getElementById('officeSvg')) { setTimeout(init, 200); return; }
     createToggleButton();
+  }
+
+  // Convert client coords to SVG viewBox coords
+  function clientToSVG(clientX, clientY) {
+    const svg = document.getElementById('officeSvg');
+    if (!svg) return { x: 0, y: 0 };
+    const pt = svg.createSVGPoint();
+    pt.x = clientX; pt.y = clientY;
+    const ctm = svg.getScreenCTM();
+    if (!ctm) return { x: 0, y: 0 };
+    const svgPt = pt.matrixTransform(ctm.inverse());
+    return { x: svgPt.x, y: svgPt.y };
   }
 
   // ======== TOGGLE BUTTON ========
   function createToggleButton() {
-    const container = document.querySelector('.office-section');
+    const container = document.querySelector('.office-section') || document.getElementById('agentOffice');
     if (!container) return;
-
     const btn = document.createElement('button');
     btn.id = 'layoutEditorToggle';
-    btn.innerHTML = '✏️ Edit';
+    btn.innerHTML = '✏️ Edit Layout';
     btn.title = 'Toggle layout editor';
     Object.assign(btn.style, {
-      position: 'absolute',
-      top: '16px',
-      right: '16px',
-      padding: '8px 16px',
-      background: '#0a0f24',
-      border: '2px solid #243052',
-      borderRadius: '4px',
-      color: '#b8c8f0',
-      fontFamily: "'Press Start 2P', monospace",
-      fontSize: '10px',
-      cursor: 'pointer',
-      zIndex: '1000',
-      transition: 'all 0.2s',
+      position: 'absolute', top: '8px', right: '8px',
+      padding: '6px 12px', background: '#0a0f24', border: '2px solid #243052',
+      borderRadius: '4px', color: '#b8c8f0',
+      fontFamily: "'Press Start 2P', monospace", fontSize: '9px',
+      cursor: 'pointer', zIndex: '1000',
     });
-
-    btn.addEventListener('mouseenter', () => {
-      btn.style.background = '#243052';
-      btn.style.borderColor = '#3a4872';
-    });
-    btn.addEventListener('mouseleave', () => {
-      btn.style.background = '#0a0f24';
-      btn.style.borderColor = '#243052';
-    });
-
     btn.addEventListener('click', () => {
       editMode = !editMode;
-      btn.innerHTML = editMode ? '❌ Exit' : '✏️ Edit';
-      if (editMode) {
-        enterEditMode();
-      } else {
-        exitEditMode();
-      }
+      btn.innerHTML = editMode ? '🔓 Editing...' : '✏️ Edit Layout';
+      btn.style.borderColor = editMode ? '#40f8a0' : '#243052';
+      if (editMode) enterEditMode(); else exitEditMode(false);
     });
-
     container.style.position = 'relative';
     container.appendChild(btn);
   }
 
   // ======== EDIT MODE ========
   function enterEditMode() {
-    // Clone current layout
     currentLayout = extractCurrentLayout();
-
-    // Create toolbar
     createToolbar();
 
-    // Add drag handlers
-    setupDragHandlers();
-
-    // Add hover styles
     const style = document.createElement('style');
-    style.id = 'editorHoverStyle';
+    style.id = 'editorStyle';
     style.textContent = `
-      [data-drag] {
-        outline: 2px dashed transparent;
-        outline-offset: 2px;
-        transition: outline 0.2s;
-        cursor: move !important;
-      }
-      [data-drag]:hover {
-        outline-color: #60a8f0;
-      }
-      [data-drag].dragging {
-        outline-color: #40f8a0;
-        opacity: 0.7;
-      }
+      [data-drag] { cursor: move !important; }
+      [data-drag]:hover > :first-child { outline: 1.5px dashed #60a8f0; outline-offset: 2px; }
+      [data-drag].dragging { opacity: 0.75; }
+      [data-drag].dragging > :first-child { outline: 2px solid #40f8a0; outline-offset: 2px; }
     `;
     document.head.appendChild(style);
-
-    // Disable zoom/pan during drag
-    const wrap = document.getElementById('officeZoomWrap');
-    if (wrap) {
-      wrap.__originalPointerEvents = wrap.style.pointerEvents;
-      wrap.style.pointerEvents = 'none';
-    }
+    setupDragHandlers();
   }
 
-  function exitEditMode() {
-    // Remove toolbar
+  function exitEditMode(save) {
     const toolbar = document.getElementById('layoutEditorToolbar');
     if (toolbar) toolbar.remove();
-
-    // Remove hover styles
-    const style = document.getElementById('editorHoverStyle');
+    const style = document.getElementById('editorStyle');
     if (style) style.remove();
-
-    // Remove drag handlers
+    hideDragTooltip();
     removeDragHandlers();
-
-    // Re-enable zoom/pan
-    const wrap = document.getElementById('officeZoomWrap');
-    if (wrap && wrap.__originalPointerEvents !== undefined) {
-      wrap.style.pointerEvents = wrap.__originalPointerEvents;
+    if (save && currentLayout) {
+      localStorage.setItem('officeLayout', JSON.stringify(currentLayout));
+      window.__officeLayout = currentLayout;
     }
-
+    const btn = document.getElementById('layoutEditorToggle');
+    if (btn) { btn.innerHTML = '✏️ Edit Layout'; btn.style.borderColor = '#243052'; }
+    editMode = false;
     currentLayout = null;
   }
 
   // ======== TOOLBAR ========
   function createToolbar() {
+    const old = document.getElementById('layoutEditorToolbar');
+    if (old) old.remove();
+
     const toolbar = document.createElement('div');
     toolbar.id = 'layoutEditorToolbar';
     Object.assign(toolbar.style, {
-      position: 'fixed',
-      top: '50%',
-      right: '16px',
-      transform: 'translateY(-50%)',
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '8px',
-      padding: '12px',
-      background: '#0a0f24',
-      border: '2px solid #243052',
-      borderRadius: '8px',
-      zIndex: '1001',
-      boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+      position: 'fixed', top: '50%', right: '12px', transform: 'translateY(-50%)',
+      display: 'flex', flexDirection: 'column', gap: '6px', padding: '10px',
+      background: '#0a0f24ee', border: '2px solid #243052', borderRadius: '8px',
+      zIndex: '1001', boxShadow: '0 4px 16px rgba(0,0,0,0.5)',
     });
 
     const buttons = [
-      { icon: '✅', label: 'Set', title: 'Save and exit', action: actionSet },
-      { icon: '💾', label: 'Save Profile', title: 'Save as named profile', action: actionSaveProfile },
-      { icon: '📂', label: 'Load Profile', title: 'Load a saved profile', action: actionLoadProfile },
-      { icon: '📤', label: 'Export', title: 'Download as JSON', action: actionExport },
-      { icon: '📥', label: 'Import', title: 'Load from JSON file', action: actionImport },
-      { icon: '🔄', label: 'Reset', title: 'Revert to default', action: actionReset },
-      { icon: '❌', label: 'Cancel', title: 'Discard changes', action: actionCancel },
+      { icon: '✅', label: 'Set', action: () => { exitEditMode(true); rebuild(); } },
+      { icon: '💾', label: 'Save', action: actionSaveProfile },
+      { icon: '📂', label: 'Load', action: actionLoadProfile },
+      { icon: '📤', label: 'Export', action: actionExport },
+      { icon: '📥', label: 'Import', action: actionImport },
+      { icon: '🔄', label: 'Reset', action: actionReset },
+      { icon: '❌', label: 'Cancel', action: () => { exitEditMode(false); rebuild(); } },
     ];
 
-    buttons.forEach(({ icon, label, title, action }) => {
+    buttons.forEach(({ icon, label, action }) => {
       const btn = document.createElement('button');
-      btn.innerHTML = `${icon} <span style="font-size:8px;margin-left:4px">${label}</span>`;
-      btn.title = title;
+      btn.textContent = `${icon} ${label}`;
       Object.assign(btn.style, {
-        padding: '10px 12px',
-        background: '#0a0f24',
-        border: '2px solid #243052',
-        borderRadius: '4px',
-        color: '#b8c8f0',
-        fontFamily: "'Press Start 2P', monospace",
-        fontSize: '10px',
-        cursor: 'pointer',
-        transition: 'all 0.2s',
-        whiteSpace: 'nowrap',
-        textAlign: 'left',
+        padding: '8px 10px', background: '#0a0f24', border: '1.5px solid #243052',
+        borderRadius: '4px', color: '#b8c8f0',
+        fontFamily: "'Press Start 2P', monospace", fontSize: '8px',
+        cursor: 'pointer', textAlign: 'left', whiteSpace: 'nowrap',
       });
-
-      btn.addEventListener('mouseenter', () => {
-        btn.style.background = '#243052';
-        btn.style.borderColor = '#3a4872';
-      });
-      btn.addEventListener('mouseleave', () => {
-        btn.style.background = '#0a0f24';
-        btn.style.borderColor = '#243052';
-      });
-
+      btn.addEventListener('mouseenter', () => { btn.style.background = '#1a2548'; });
+      btn.addEventListener('mouseleave', () => { btn.style.background = '#0a0f24'; });
       btn.addEventListener('click', action);
       toolbar.appendChild(btn);
     });
@@ -205,26 +135,45 @@
   }
 
   // ======== DRAG HANDLERS ========
+  let boundDown, boundMove, boundUp;
+
   function setupDragHandlers() {
     const svg = document.getElementById('officeSvg');
     if (!svg) return;
-
-    svg.addEventListener('mousedown', onDragStart);
-    document.addEventListener('mousemove', onDragMove);
-    document.addEventListener('mouseup', onDragEnd);
+    boundDown = onDragStart.bind(null);
+    boundMove = onDragMove.bind(null);
+    boundUp = onDragEnd.bind(null);
+    // Use capture phase to intercept before zoom/pan handlers
+    svg.addEventListener('mousedown', boundDown, true);
+    svg.addEventListener('touchstart', boundDown, { capture: true, passive: false });
+    window.addEventListener('mousemove', boundMove, true);
+    window.addEventListener('touchmove', boundMove, { capture: true, passive: false });
+    window.addEventListener('mouseup', boundUp, true);
+    window.addEventListener('touchend', boundUp, true);
   }
 
   function removeDragHandlers() {
     const svg = document.getElementById('officeSvg');
     if (!svg) return;
+    svg.removeEventListener('mousedown', boundDown, true);
+    svg.removeEventListener('touchstart', boundDown, true);
+    window.removeEventListener('mousemove', boundMove, true);
+    window.removeEventListener('touchmove', boundMove, true);
+    window.removeEventListener('mouseup', boundUp, true);
+    window.removeEventListener('touchend', boundUp, true);
+  }
 
-    svg.removeEventListener('mousedown', onDragStart);
-    document.removeEventListener('mousemove', onDragMove);
-    document.removeEventListener('mouseup', onDragEnd);
+  function getXY(e) {
+    if (e.touches && e.touches.length) return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    return { x: e.clientX, y: e.clientY };
   }
 
   function onDragStart(e) {
-    const target = e.target.closest('[data-drag]');
+    if (!editMode) return;
+    const xy = getXY(e);
+    const el = document.elementFromPoint(xy.x, xy.y);
+    if (!el) return;
+    const target = el.closest('[data-drag]');
     if (!target) return;
 
     e.preventDefault();
@@ -232,206 +181,126 @@
 
     dragTarget = target;
     dragTarget.classList.add('dragging');
-    dragStartMouse = { x: e.clientX, y: e.clientY };
 
-    // Extract current transform
+    dragStartSVG = clientToSVG(xy.x, xy.y);
+
     const transform = dragTarget.getAttribute('transform') || '';
-    const match = transform.match(/translate\(([^,]+),([^)]+)\)/);
-    if (match) {
-      dragStartPos = { x: parseFloat(match[1]), y: parseFloat(match[2]) };
-    } else {
-      dragStartPos = { x: 0, y: 0 };
-    }
+    const match = transform.match(/translate\(\s*([^,\s]+)[,\s]+([^)\s]+)\s*\)/);
+    dragStartPos = match
+      ? { x: parseFloat(match[1]), y: parseFloat(match[2]) }
+      : { x: 0, y: 0 };
 
-    // Show tooltip
-    showDragTooltip(dragStartPos.x, dragStartPos.y);
+    showDragTooltip(dragTarget.getAttribute('data-drag'), dragStartPos.x, dragStartPos.y);
   }
 
   function onDragMove(e) {
-    if (!dragTarget || !dragStartMouse) return;
-
+    if (!dragTarget) return;
     e.preventDefault();
+    e.stopPropagation();
 
-    // Convert screen pixels to SVG coordinates
-    const state = window.__officeState || {};
-    const svg = document.getElementById('officeSvg');
-    const wrap = document.getElementById('officeZoomWrap');
-    if (!svg || !wrap) return;
+    const xy = getXY(e);
+    const svgPt = clientToSVG(xy.x, xy.y);
+    const dx = svgPt.x - dragStartSVG.x;
+    const dy = svgPt.y - dragStartSVG.y;
 
-    // Calculate SVG coordinate delta
-    const viewBox = svg.viewBox.baseVal;
-    const wrapRect = wrap.getBoundingClientRect();
-    const scale = state.oScale || 1;
-    
-    // Screen pixel delta
-    const dx = e.clientX - dragStartMouse.x;
-    const dy = e.clientY - dragStartMouse.y;
+    const newX = Math.round(dragStartPos.x + dx);
+    const newY = Math.round(dragStartPos.y + dy);
 
-    // Convert to SVG space
-    const svgDx = (dx / wrapRect.width) * viewBox.width / scale;
-    const svgDy = (dy / wrapRect.height) * viewBox.height / scale;
+    dragTarget.setAttribute('transform', `translate(${newX},${newY})`);
 
-    const newX = dragStartPos.x + svgDx;
-    const newY = dragStartPos.y + svgDy;
-
-    // Update transform
-    const otherTransforms = (dragTarget.getAttribute('transform') || '')
-      .replace(/translate\([^)]+\)/, '')
-      .trim();
-    dragTarget.setAttribute(
-      'transform',
-      `translate(${newX.toFixed(1)},${newY.toFixed(1)}) ${otherTransforms}`.trim()
-    );
-
-    // Update tooltip
-    showDragTooltip(newX, newY);
-
-    // Update currentLayout
     const key = dragTarget.getAttribute('data-drag');
-    if (key && currentLayout[key]) {
-      currentLayout[key].x = Math.round(newX);
-      currentLayout[key].y = Math.round(newY);
+    if (key && currentLayout) {
+      currentLayout[key] = { x: newX, y: newY };
     }
+
+    showDragTooltip(key, newX, newY);
   }
 
   function onDragEnd(e) {
     if (!dragTarget) return;
-
+    e.stopPropagation();
     dragTarget.classList.remove('dragging');
     dragTarget = null;
-    dragStartMouse = null;
+    dragStartSVG = null;
     dragStartPos = null;
-
-    // Hide tooltip
     hideDragTooltip();
   }
 
   // ======== TOOLTIP ========
   let tooltip = null;
 
-  function showDragTooltip(x, y) {
+  function showDragTooltip(name, x, y) {
     if (!tooltip) {
       tooltip = document.createElement('div');
       tooltip.id = 'dragTooltip';
       Object.assign(tooltip.style, {
-        position: 'fixed',
-        top: '10px',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        padding: '8px 16px',
-        background: '#0a0f24',
-        border: '2px solid #40f8a0',
-        borderRadius: '4px',
-        color: '#40f8a0',
-        fontFamily: "'Press Start 2P', monospace",
-        fontSize: '10px',
-        zIndex: '1002',
-        pointerEvents: 'none',
+        position: 'fixed', top: '10px', left: '50%', transform: 'translateX(-50%)',
+        padding: '6px 14px', background: '#0a0f24', border: '2px solid #40f8a0',
+        borderRadius: '4px', color: '#40f8a0',
+        fontFamily: "'Press Start 2P', monospace", fontSize: '9px',
+        zIndex: '1002', pointerEvents: 'none',
       });
       document.body.appendChild(tooltip);
     }
-    tooltip.textContent = `x: ${Math.round(x)}, y: ${Math.round(y)}`;
+    tooltip.textContent = `${name}  x:${x}  y:${y}`;
     tooltip.style.display = 'block';
   }
 
   function hideDragTooltip() {
-    if (tooltip) {
-      tooltip.style.display = 'none';
-    }
+    if (tooltip) tooltip.style.display = 'none';
+  }
+
+  // ======== REBUILD HELPER ========
+  function rebuild() {
+    const st = window.__officeState;
+    if (st && st.rebuild) st.rebuild();
   }
 
   // ======== ACTIONS ========
-  function actionSet() {
-    // Save current layout to localStorage
-    localStorage.setItem('officeLayout', JSON.stringify(currentLayout));
-    window.__officeLayout = currentLayout;
-    
-    // Exit edit mode
-    editMode = false;
-    document.getElementById('layoutEditorToggle').innerHTML = '✏️ Edit';
-    exitEditMode();
-    
-    // Rebuild office
-    if (window.__officeState && window.__officeState.rebuild) {
-      window.__officeState.rebuild();
-    }
-  }
-
   function actionSaveProfile() {
     const name = prompt('Profile name:');
     if (!name) return;
-
     const profiles = JSON.parse(localStorage.getItem('officeProfiles') || '{}');
-    profiles[name] = currentLayout;
+    profiles[name] = { ...currentLayout };
     localStorage.setItem('officeProfiles', JSON.stringify(profiles));
-
-    alert(`Profile "${name}" saved!`);
+    alert(`Profile "${name}" saved.`);
   }
 
   function actionLoadProfile() {
     const profiles = JSON.parse(localStorage.getItem('officeProfiles') || '{}');
     const names = Object.keys(profiles);
-
-    if (names.length === 0) {
-      alert('No saved profiles found.');
-      return;
-    }
-
-    const name = prompt(`Choose profile:\n${names.join('\n')}`);
+    if (!names.length) { alert('No profiles saved yet.'); return; }
+    const name = prompt('Load profile:\n' + names.join('\n'));
     if (!name || !profiles[name]) return;
-
-    currentLayout = profiles[name];
-    window.__officeLayout = currentLayout;
-
-    // Exit edit mode
-    editMode = false;
-    document.getElementById('layoutEditorToggle').innerHTML = '✏️ Edit';
-    exitEditMode();
-
-    // Rebuild
-    if (window.__officeState && window.__officeState.rebuild) {
-      window.__officeState.rebuild();
-    }
+    window.__officeLayout = profiles[name];
+    localStorage.setItem('officeLayout', JSON.stringify(profiles[name]));
+    exitEditMode(false);
+    rebuild();
   }
 
   function actionExport() {
     const json = JSON.stringify(currentLayout, null, 2);
     const blob = new Blob([json], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `office-layout-${Date.now()}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
+    const a = document.createElement('a'); a.href = url;
+    a.download = `office-layout-${new Date().toISOString().slice(0,10)}.json`;
+    a.click(); URL.revokeObjectURL(url);
   }
 
   function actionImport() {
     const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'application/json';
-    input.addEventListener('change', (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
-
+    input.type = 'file'; input.accept = '.json';
+    input.addEventListener('change', e => {
+      const file = e.target.files[0]; if (!file) return;
       const reader = new FileReader();
-      reader.onload = (ev) => {
+      reader.onload = ev => {
         try {
           const layout = JSON.parse(ev.target.result);
-          currentLayout = layout;
           window.__officeLayout = layout;
-
-          // Exit edit mode
-          editMode = false;
-          document.getElementById('layoutEditorToggle').innerHTML = '✏️ Edit';
-          exitEditMode();
-
-          // Rebuild
-          if (window.__officeState && window.__officeState.rebuild) {
-            window.__officeState.rebuild();
-          }
-        } catch (err) {
-          alert('Failed to parse JSON: ' + err.message);
-        }
+          localStorage.setItem('officeLayout', JSON.stringify(layout));
+          exitEditMode(false);
+          rebuild();
+        } catch (err) { alert('Invalid JSON: ' + err.message); }
       };
       reader.readAsText(file);
     });
@@ -440,61 +309,25 @@
 
   function actionReset() {
     if (!confirm('Reset to default layout?')) return;
-
-    currentLayout = {};
     window.__officeLayout = {};
     localStorage.removeItem('officeLayout');
-
-    // Exit edit mode
-    editMode = false;
-    document.getElementById('layoutEditorToggle').innerHTML = '✏️ Edit';
-    exitEditMode();
-
-    // Rebuild
-    if (window.__officeState && window.__officeState.rebuild) {
-      window.__officeState.rebuild();
-    }
-  }
-
-  function actionCancel() {
-    if (!confirm('Discard changes?')) return;
-
-    // Exit edit mode without saving
-    editMode = false;
-    document.getElementById('layoutEditorToggle').innerHTML = '✏️ Edit';
-    exitEditMode();
-
-    // Rebuild to restore previous state
-    if (window.__officeState && window.__officeState.rebuild) {
-      window.__officeState.rebuild();
-    }
+    exitEditMode(false);
+    rebuild();
   }
 
   // ======== HELPERS ========
   function extractCurrentLayout() {
     const layout = {};
-    const draggables = document.querySelectorAll('[data-drag]');
-
-    draggables.forEach((el) => {
+    document.querySelectorAll('[data-drag]').forEach(el => {
       const key = el.getAttribute('data-drag');
-      const transform = el.getAttribute('transform') || '';
-      const match = transform.match(/translate\(([^,]+),([^)]+)\)/);
-
-      if (match) {
-        layout[key] = {
-          x: Math.round(parseFloat(match[1])),
-          y: Math.round(parseFloat(match[2])),
-        };
-      }
+      const t = el.getAttribute('transform') || '';
+      const m = t.match(/translate\(\s*([^,\s]+)[,\s]+([^)\s]+)\s*\)/);
+      if (m) layout[key] = { x: Math.round(parseFloat(m[1])), y: Math.round(parseFloat(m[2])) };
     });
-
     return layout;
   }
 
   // ======== START ========
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
 })();
