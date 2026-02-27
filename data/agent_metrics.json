@@ -1,110 +1,36 @@
 {
-  "generated": "2026-02-26T16:32:59.799369",
-  "date": "2026-02-26",
+  "generated": "2026-02-27T13:53:05.251461",
+  "date": "2026-02-27",
   "agents": {
     "BERKEN_BOT": {
       "display_name": "BERKEN_BOT",
       "role": "Orchestrator",
       "status": "active",
-      "last_active": "23:09",
-      "current_task": "Phase 5: Drop Grid vs Direct Mount mode",
+      "last_active": "13:31",
+      "current_task": "chore: refresh dashboard data",
       "git": {
-        "loc_today": 5096,
-        "loc_added": 4077,
-        "loc_deleted": 1019,
-        "commits_today": 46,
+        "loc_today": 68,
+        "loc_added": 34,
+        "loc_deleted": 34,
+        "commits_today": 34,
         "loc_by_hour": [
           4,
+          6,
           4,
+          4,
+          6,
           6,
           4,
           4,
           4,
           4,
-          1243,
-          4,
-          4,
-          2837,
-          4,
-          4,
+          6,
+          6,
           6,
           4,
-          6,
           0,
           0,
           0,
-          0,
-          0,
-          0,
-          0,
-          954
-        ],
-        "recent_commits": [
-          {
-            "hash": "66b4c334",
-            "time": "23:09",
-            "msg": "Phase 5: Drop Grid vs Direct Mount mode",
-            "loc": 176,
-            "repo": "STARFIELD"
-          },
-          {
-            "hash": "095b7882",
-            "time": "23:09",
-            "msg": "Phase 9: Add PDF, CSV, and PNG export functionality",
-            "loc": 546,
-            "repo": "STARFIELD"
-          },
-          {
-            "hash": "367c372e",
-            "time": "23:08",
-            "msg": "Phase 7: SKU-aware panel schedule with pack calculation and ",
-            "loc": 232,
-            "repo": "STARFIELD"
-          },
-          {
-            "hash": "ab498935",
-            "time": "15:46",
-            "msg": "chore: refresh dashboard data",
-            "loc": 2,
-            "repo": "BERKENBOT_DASHBOARD"
-          },
-          {
-            "hash": "ed79eb65",
-            "time": "15:28",
-            "msg": "chore: refresh dashboard data",
-            "loc": 2,
-            "repo": "BERKENBOT_DASHBOARD"
-          }
-        ],
-        "active_repos": [
-          "scalara",
-          "DATA_AUDIT",
-          "BERKENBOT_DASHBOARD",
-          "STARFIELD"
-        ]
-      },
-      "tokens": {
-        "input_today": 124077940,
-        "output_today": 571564,
-        "cost_today": 107.0,
-        "tokens_by_hour": [
-          626779,
-          2925089,
-          4026376,
-          4288758,
-          6676844,
-          14844592,
-          4639320,
-          1551062,
-          2585716,
-          7180512,
-          5694263,
-          4564444,
-          4495289,
-          14067159,
-          4274181,
-          32781364,
-          9427756,
           0,
           0,
           0,
@@ -113,20 +39,91 @@
           0,
           0
         ],
-        "model": "claude-sonnet-4-5"
+        "recent_commits": [
+          {
+            "hash": "e5b390c8",
+            "time": "13:31",
+            "msg": "chore: refresh dashboard data",
+            "loc": 2,
+            "repo": "BERKENBOT_DASHBOARD"
+          },
+          {
+            "hash": "e654a7c3",
+            "time": "13:14",
+            "msg": "chore: refresh dashboard data",
+            "loc": 2,
+            "repo": "BERKENBOT_DASHBOARD"
+          },
+          {
+            "hash": "ef44efa0",
+            "time": "12:52",
+            "msg": "chore: refresh dashboard data",
+            "loc": 2,
+            "repo": "BERKENBOT_DASHBOARD"
+          },
+          {
+            "hash": "0c53c54c",
+            "time": "12:29",
+            "msg": "chore: refresh dashboard data",
+            "loc": 2,
+            "repo": "BERKENBOT_DASHBOARD"
+          },
+          {
+            "hash": "3afe6826",
+            "time": "12:12",
+            "msg": "chore: refresh dashboard data",
+            "loc": 2,
+            "repo": "BERKENBOT_DASHBOARD"
+          }
+        ],
+        "active_repos": [
+          "BERKENBOT_DASHBOARD"
+        ]
+      },
+      "tokens": {
+        "input_today": 94146657,
+        "output_today": 730150,
+        "cost_today": 79.17,
+        "tokens_by_hour": [
+          14604357,
+          10889355,
+          2294351,
+          1465106,
+          1770395,
+          2456724,
+          4006196,
+          3463571,
+          6218543,
+          12547923,
+          4723521,
+          3621361,
+          4394113,
+          22421291,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "model": "claude-opus-4-6"
       }
     },
     "R2-D2": {
       "display_name": "R2-D2",
       "role": "FORGE \u00b7 Lead Engineer \u03b1",
-      "status": "idle",
-      "last_active": "07:40",
-      "current_task": "feat(mapmatch): smarter pair generation with difficulty-awar",
+      "status": "offline",
+      "last_active": "\u2014",
+      "current_task": "\u2014",
       "git": {
-        "loc_today": 1241,
-        "loc_added": 718,
-        "loc_deleted": 523,
-        "commits_today": 3,
+        "loc_today": 0,
+        "loc_added": 0,
+        "loc_deleted": 0,
+        "commits_today": 0,
         "loc_by_hour": [
           0,
           0,
@@ -135,7 +132,7 @@
           0,
           0,
           0,
-          1241,
+          0,
           0,
           0,
           0,
@@ -153,32 +150,8 @@
           0,
           0
         ],
-        "recent_commits": [
-          {
-            "hash": "a6103dec",
-            "time": "07:40",
-            "msg": "feat(mapmatch): smarter pair generation with difficulty-awar",
-            "loc": 205,
-            "repo": "scalara"
-          },
-          {
-            "hash": "d5369e28",
-            "time": "07:39",
-            "msg": "feat(mapmatch): streak system with recordStreak/getCurrentSt",
-            "loc": 365,
-            "repo": "scalara"
-          },
-          {
-            "hash": "73b8e4e8",
-            "time": "07:37",
-            "msg": "feat(mapmatch): daily challenge mode with seeded PRNG, strea",
-            "loc": 671,
-            "repo": "scalara"
-          }
-        ],
-        "active_repos": [
-          "scalara"
-        ]
+        "recent_commits": [],
+        "active_repos": []
       },
       "tokens": {
         "input_today": 0,
@@ -216,14 +189,14 @@
     "R4-P17": {
       "display_name": "R4-P17",
       "role": "ANVIL \u00b7 Code Review \u03b2",
-      "status": "idle",
-      "last_active": "07:40",
-      "current_task": "feat(mapmatch): smarter pair generation with difficulty-awar",
+      "status": "offline",
+      "last_active": "\u2014",
+      "current_task": "\u2014",
       "git": {
-        "loc_today": 1241,
-        "loc_added": 718,
-        "loc_deleted": 523,
-        "commits_today": 3,
+        "loc_today": 0,
+        "loc_added": 0,
+        "loc_deleted": 0,
+        "commits_today": 0,
         "loc_by_hour": [
           0,
           0,
@@ -232,7 +205,7 @@
           0,
           0,
           0,
-          1241,
+          0,
           0,
           0,
           0,
@@ -250,32 +223,8 @@
           0,
           0
         ],
-        "recent_commits": [
-          {
-            "hash": "a6103dec",
-            "time": "07:40",
-            "msg": "feat(mapmatch): smarter pair generation with difficulty-awar",
-            "loc": 205,
-            "repo": "scalara"
-          },
-          {
-            "hash": "d5369e28",
-            "time": "07:39",
-            "msg": "feat(mapmatch): streak system with recordStreak/getCurrentSt",
-            "loc": 365,
-            "repo": "scalara"
-          },
-          {
-            "hash": "73b8e4e8",
-            "time": "07:37",
-            "msg": "feat(mapmatch): daily challenge mode with seeded PRNG, strea",
-            "loc": 671,
-            "repo": "scalara"
-          }
-        ],
-        "active_repos": [
-          "scalara"
-        ]
+        "recent_commits": [],
+        "active_repos": []
       },
       "tokens": {
         "input_today": 0,
@@ -387,30 +336,30 @@
       "display_name": "IVE",
       "role": "CREATIVE \u00b7 Designer \u03b4",
       "status": "active",
-      "last_active": "15:46",
+      "last_active": "13:31",
       "current_task": "chore: refresh dashboard data",
       "git": {
-        "loc_today": 591,
-        "loc_added": 212,
-        "loc_deleted": 379,
-        "commits_today": 36,
+        "loc_today": 68,
+        "loc_added": 34,
+        "loc_deleted": 34,
+        "commits_today": 34,
         "loc_by_hour": [
           4,
+          6,
           4,
+          4,
+          6,
           6,
           4,
           4,
           4,
           4,
-          2,
-          4,
-          4,
-          527,
-          4,
-          4,
+          6,
+          6,
           6,
           4,
-          6,
+          0,
+          0,
           0,
           0,
           0,
@@ -422,36 +371,36 @@
         ],
         "recent_commits": [
           {
-            "hash": "ab498935",
-            "time": "15:46",
+            "hash": "e5b390c8",
+            "time": "13:31",
             "msg": "chore: refresh dashboard data",
             "loc": 2,
             "repo": "BERKENBOT_DASHBOARD"
           },
           {
-            "hash": "ed79eb65",
-            "time": "15:28",
+            "hash": "e654a7c3",
+            "time": "13:14",
             "msg": "chore: refresh dashboard data",
             "loc": 2,
             "repo": "BERKENBOT_DASHBOARD"
           },
           {
-            "hash": "8b0d2915",
-            "time": "15:12",
+            "hash": "ef44efa0",
+            "time": "12:52",
             "msg": "chore: refresh dashboard data",
             "loc": 2,
             "repo": "BERKENBOT_DASHBOARD"
           },
           {
-            "hash": "02e89e4d",
-            "time": "14:45",
+            "hash": "0c53c54c",
+            "time": "12:29",
             "msg": "chore: refresh dashboard data",
             "loc": 2,
             "repo": "BERKENBOT_DASHBOARD"
           },
           {
-            "hash": "276cebc9",
-            "time": "14:17",
+            "hash": "3afe6826",
+            "time": "12:12",
             "msg": "chore: refresh dashboard data",
             "loc": 2,
             "repo": "BERKENBOT_DASHBOARD"
@@ -498,30 +447,30 @@
       "display_name": "SPOCK",
       "role": "CRON \u00b7 Operations \u03b5",
       "status": "active",
-      "last_active": "15:46",
+      "last_active": "13:31",
       "current_task": "chore: refresh dashboard data",
       "git": {
-        "loc_today": 591,
-        "loc_added": 212,
-        "loc_deleted": 379,
-        "commits_today": 36,
+        "loc_today": 68,
+        "loc_added": 34,
+        "loc_deleted": 34,
+        "commits_today": 34,
         "loc_by_hour": [
           4,
+          6,
           4,
+          4,
+          6,
           6,
           4,
           4,
           4,
           4,
-          2,
-          4,
-          4,
-          527,
-          4,
-          4,
+          6,
+          6,
           6,
           4,
-          6,
+          0,
+          0,
           0,
           0,
           0,
@@ -533,36 +482,36 @@
         ],
         "recent_commits": [
           {
-            "hash": "ab498935",
-            "time": "15:46",
+            "hash": "e5b390c8",
+            "time": "13:31",
             "msg": "chore: refresh dashboard data",
             "loc": 2,
             "repo": "BERKENBOT_DASHBOARD"
           },
           {
-            "hash": "ed79eb65",
-            "time": "15:28",
+            "hash": "e654a7c3",
+            "time": "13:14",
             "msg": "chore: refresh dashboard data",
             "loc": 2,
             "repo": "BERKENBOT_DASHBOARD"
           },
           {
-            "hash": "8b0d2915",
-            "time": "15:12",
+            "hash": "ef44efa0",
+            "time": "12:52",
             "msg": "chore: refresh dashboard data",
             "loc": 2,
             "repo": "BERKENBOT_DASHBOARD"
           },
           {
-            "hash": "02e89e4d",
-            "time": "14:45",
+            "hash": "0c53c54c",
+            "time": "12:29",
             "msg": "chore: refresh dashboard data",
             "loc": 2,
             "repo": "BERKENBOT_DASHBOARD"
           },
           {
-            "hash": "276cebc9",
-            "time": "14:17",
+            "hash": "3afe6826",
+            "time": "12:12",
             "msg": "chore: refresh dashboard data",
             "loc": 2,
             "repo": "BERKENBOT_DASHBOARD"
@@ -609,30 +558,30 @@
       "display_name": "K-2SO",
       "role": "SENTINEL \u00b7 Security \u03b6",
       "status": "active",
-      "last_active": "15:46",
+      "last_active": "13:31",
       "current_task": "chore: refresh dashboard data",
       "git": {
-        "loc_today": 591,
-        "loc_added": 212,
-        "loc_deleted": 379,
-        "commits_today": 36,
+        "loc_today": 68,
+        "loc_added": 34,
+        "loc_deleted": 34,
+        "commits_today": 34,
         "loc_by_hour": [
           4,
+          6,
           4,
+          4,
+          6,
           6,
           4,
           4,
           4,
           4,
-          2,
-          4,
-          4,
-          527,
-          4,
-          4,
+          6,
+          6,
           6,
           4,
-          6,
+          0,
+          0,
           0,
           0,
           0,
@@ -644,36 +593,36 @@
         ],
         "recent_commits": [
           {
-            "hash": "ab498935",
-            "time": "15:46",
+            "hash": "e5b390c8",
+            "time": "13:31",
             "msg": "chore: refresh dashboard data",
             "loc": 2,
             "repo": "BERKENBOT_DASHBOARD"
           },
           {
-            "hash": "ed79eb65",
-            "time": "15:28",
+            "hash": "e654a7c3",
+            "time": "13:14",
             "msg": "chore: refresh dashboard data",
             "loc": 2,
             "repo": "BERKENBOT_DASHBOARD"
           },
           {
-            "hash": "8b0d2915",
-            "time": "15:12",
+            "hash": "ef44efa0",
+            "time": "12:52",
             "msg": "chore: refresh dashboard data",
             "loc": 2,
             "repo": "BERKENBOT_DASHBOARD"
           },
           {
-            "hash": "02e89e4d",
-            "time": "14:45",
+            "hash": "0c53c54c",
+            "time": "12:29",
             "msg": "chore: refresh dashboard data",
             "loc": 2,
             "repo": "BERKENBOT_DASHBOARD"
           },
           {
-            "hash": "276cebc9",
-            "time": "14:17",
+            "hash": "3afe6826",
+            "time": "12:12",
             "msg": "chore: refresh dashboard data",
             "loc": 2,
             "repo": "BERKENBOT_DASHBOARD"
@@ -791,10 +740,10 @@
     }
   },
   "totals": {
-    "loc_today": 9351,
-    "commits_today": 160,
-    "input_tokens": 124077940,
-    "output_tokens": 571564,
-    "cost_today": 107.0
+    "loc_today": 272,
+    "commits_today": 136,
+    "input_tokens": 94146657,
+    "output_tokens": 730150,
+    "cost_today": 79.17
   }
 }
