@@ -69,6 +69,13 @@ code { background: #1c274c; padding: 1px 5px; border-radius: 5px; }
 .agent-card .commit-line { margin: 2px 0; color: #7a8fb5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .agent-card .repo { color: #5fa8ff; font-weight: 600; }
 
+/* Timeframe Selector */
+.timeframe-selector { display: flex; gap: 8px; margin-top: 12px; padding-top: 12px; border-top: 1px solid #2a3864; }
+.timeframe-btn { background: #1a2545; border: 1px solid #2a3864; color: #b8c8f0; padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: Inter, system-ui, Arial, sans-serif; }
+.timeframe-btn:hover { background: #243052; border-color: #3a5080; color: #eaf0ff; }
+.timeframe-btn.active { background: #5fa8ff; border-color: #7cbfff; color: #0b1020; }
+
 @media (max-width: 768px) {
   .agent-activity-grid { grid-template-columns: 1fr; }
+  .timeframe-selector { flex-wrap: wrap; }
 }

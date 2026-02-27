@@ -548,6 +548,9 @@ async function renderDashboard() {
   }
 }
 
+// Global state for selected timeframe
+let selectedTimeframe = 'daily';
+
 // Format numbers with K/M suffixes
 function fmtNum(n) {
   if (n >= 1000000) return (n/1000000).toFixed(1) + 'M';
@@ -588,6 +591,23 @@ function renderAgentActivity(metrics) {
   
   if (!summaryEl || !gridEl) return;
   
+  // Timeframe selector
+  const timeframeLabels = {
+    'hourly': 'Hourly',
+    'daily': 'Daily',
+    'weekly': 'Weekly',
+    'monthly': 'Monthly',
+    'all_time': 'All Time'
+  };
+  
+  const timeframeSelector = `
+    <div class="timeframe-selector">
+      ${Object.entries(timeframeLabels).map(([key, label]) => 
+        `<button class="timeframe-btn ${key === selectedTimeframe ? 'active' : ''}" data-timeframe="${key}">${label}</button>`
+      ).join('')}
+    </div>
+  `;
+  
   const t = metrics.totals;
   summaryEl.innerHTML = `
     <div class="summary-bar">
@@ -597,7 +617,16 @@ function renderAgentActivity(metrics) {
       <b>${fmtNum(t.output_tokens)}</b> out | 
       <b>$${t.cost_today.toFixed(2)}</b> spent
     </div>
+    ${timeframeSelector}
   `;
+  
+  // Add event listeners to timeframe buttons
+  document.querySelectorAll('.timeframe-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      selectedTimeframe = e.target.dataset.timeframe;
+      renderAgentActivity(metrics);
+    });
+  });
   
   gridEl.innerHTML = '';
   
@@ -623,6 +652,12 @@ function renderAgentActivity(metrics) {
       `<div class="commit-line">${c.time} <span class="repo">${c.repo}</span> — ${c.msg}</div>`
     ).join('');
     
+    // Get metrics for selected timeframe
+    const tfMetrics = agent.tokens[selectedTimeframe] || agent.tokens.daily;
+    const inputTokens = tfMetrics.input || 0;
+    const outputTokens = tfMetrics.output || 0;
+    const cost = tfMetrics.cost || 0;
+    
     card.innerHTML = `
       <div class="card-header">
         <div class="agent-name">${agent.display_name}</div>
@@ -638,7 +673,7 @@ function renderAgentActivity(metrics) {
         </div>
         
         <div class="metrics-section">
-          <div class="metric-label">Tokens: <b>${fmtNum(agent.tokens.input_today)}</b> in / <b>${fmtNum(agent.tokens.output_today)}</b> out  <span class="cost">$${agent.tokens.cost_today.toFixed(2)}</span></div>
+          <div class="metric-label">Tokens (${timeframeLabels[selectedTimeframe]}): <b>${fmtNum(inputTokens)}</b> in / <b>${fmtNum(outputTokens)}</b> out  <span class="cost">$${cost.toFixed(2)}</span></div>
           <div class="sparkline-wrap">${tokenSparkline}</div>
         </div>
         

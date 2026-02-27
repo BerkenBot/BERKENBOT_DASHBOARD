@@ -39,7 +39,7 @@ AGENT_SESSIONS = {
         "topics": [],  # orchestrator sees all
         "cron_labels": [],
         "is_orchestrator": True,
-        "agent_dirs": ["main"],
+        "agent_dirs": ["main", "claude-code", "codex"],
     },
     "R2-D2": {  # FORGE - lead engineer
         "topics": [1885, 1226, 2217],
@@ -267,8 +267,14 @@ def collect_git_metrics(agent: str, today_start: datetime, today_end: datetime) 
     }
 
 
-def parse_session_jsonl(jsonl_path: Path, today_start_ms: int, today_end_ms: int) -> Dict[str, Any]:
-    """Parse a session JSONL file for token usage today."""
+def parse_session_jsonl(jsonl_path: Path, start_ms: int = None, end_ms: int = None) -> Dict[str, Any]:
+    """Parse a session JSONL file for token usage within a time window.
+    
+    Args:
+        jsonl_path: Path to JSONL file
+        start_ms: Start timestamp in ms (None = all time)
+        end_ms: End timestamp in ms (None = all time)
+    """
     input_tokens = 0
     output_tokens = 0
     cost = 0.0
@@ -308,7 +314,10 @@ def parse_session_jsonl(jsonl_path: Path, today_start_ms: int, today_end_ms: int
                     except:
                         continue
                 
-                if not timestamp or timestamp < today_start_ms or timestamp >= today_end_ms:
+                # Filter by time window if specified
+                if start_ms is not None and timestamp < start_ms:
+                    continue
+                if end_ms is not None and timestamp >= end_ms:
                     continue
                 
                 usage = msg.get("usage")
@@ -364,10 +373,26 @@ def map_session_to_agent(jsonl_path: Path) -> str:
     return "BERKEN_BOT"
 
 
-def collect_token_metrics(today_start: datetime, today_end: datetime) -> Dict[str, Dict[str, Any]]:
-    """Collect token metrics from all session JSONL files."""
+def collect_token_metrics(now_cst: datetime) -> Dict[str, Dict[str, Any]]:
+    """Collect token metrics from all session JSONL files across multiple timeframes."""
+    
+    # Calculate time windows
+    hour_start = now_cst.replace(minute=0, second=0, microsecond=0)
+    hour_end = hour_start + timedelta(hours=1)
+    
+    today_start = now_cst.replace(hour=0, minute=0, second=0, microsecond=0)
+    today_end = today_start + timedelta(days=1)
+    
+    week_start = today_start - timedelta(days=6)  # last 7 days
+    month_start = today_start - timedelta(days=29)  # last 30 days
+    
+    # Convert to milliseconds
+    hour_start_ms = int(hour_start.timestamp() * 1000)
+    hour_end_ms = int(hour_end.timestamp() * 1000)
     today_start_ms = int(today_start.timestamp() * 1000)
     today_end_ms = int(today_end.timestamp() * 1000)
+    week_start_ms = int(week_start.timestamp() * 1000)
+    month_start_ms = int(month_start.timestamp() * 1000)
     
     agent_metrics = {agent: {
         "input_today": 0,
@@ -375,28 +400,64 @@ def collect_token_metrics(today_start: datetime, today_end: datetime) -> Dict[st
         "cost_today": 0.0,
         "tokens_by_hour": [0] * 24,
         "model": "claude-opus-4-6",
+        "hourly": {"input": 0, "output": 0, "cost": 0.0},
+        "daily": {"input": 0, "output": 0, "cost": 0.0},
+        "weekly": {"input": 0, "output": 0, "cost": 0.0},
+        "monthly": {"input": 0, "output": 0, "cost": 0.0},
+        "all_time": {"input": 0, "output": 0, "cost": 0.0},
     } for agent in AGENT_REPOS.keys()}
     
-    # Find all session JSONL files
-    session_files = list(OPENCLAW_ROOT.glob("agents/*/sessions/*.jsonl"))
+    # Find all session JSONL files (including deleted ones)
+    session_files = []
+    session_files.extend(OPENCLAW_ROOT.glob("agents/*/sessions/*.jsonl"))
+    session_files.extend(OPENCLAW_ROOT.glob("agents/*/sessions/*.jsonl.deleted.*"))
     
-    print(f"Found {len(session_files)} session files", file=sys.stderr)
+    print(f"Found {len(session_files)} session files (including deleted)", file=sys.stderr)
     
     for jsonl_path in session_files:
         agent = map_session_to_agent(jsonl_path)
-        metrics = parse_session_jsonl(jsonl_path, today_start_ms, today_end_ms)
         
-        if metrics["input"] > 0 or metrics["output"] > 0:
-            agent_metrics[agent]["input_today"] += metrics["input"]
-            agent_metrics[agent]["output_today"] += metrics["output"]
-            agent_metrics[agent]["cost_today"] += metrics["cost"]
-            
-            for hour, val in enumerate(metrics["by_hour"]):
-                agent_metrics[agent]["tokens_by_hour"][hour] += val
-            
-            # Update model if we found one
-            if metrics["model"] != "unknown":
-                agent_metrics[agent]["model"] = metrics["model"]
+        # Parse for each timeframe
+        hourly = parse_session_jsonl(jsonl_path, hour_start_ms, hour_end_ms)
+        daily = parse_session_jsonl(jsonl_path, today_start_ms, today_end_ms)
+        weekly = parse_session_jsonl(jsonl_path, week_start_ms, None)
+        monthly = parse_session_jsonl(jsonl_path, month_start_ms, None)
+        all_time = parse_session_jsonl(jsonl_path, None, None)
+        
+        # Aggregate hourly
+        agent_metrics[agent]["hourly"]["input"] += hourly["input"]
+        agent_metrics[agent]["hourly"]["output"] += hourly["output"]
+        agent_metrics[agent]["hourly"]["cost"] += hourly["cost"]
+        
+        # Aggregate daily (backward compat)
+        agent_metrics[agent]["input_today"] += daily["input"]
+        agent_metrics[agent]["output_today"] += daily["output"]
+        agent_metrics[agent]["cost_today"] += daily["cost"]
+        agent_metrics[agent]["daily"]["input"] += daily["input"]
+        agent_metrics[agent]["daily"]["output"] += daily["output"]
+        agent_metrics[agent]["daily"]["cost"] += daily["cost"]
+        
+        for hour, val in enumerate(daily["by_hour"]):
+            agent_metrics[agent]["tokens_by_hour"][hour] += val
+        
+        # Aggregate weekly
+        agent_metrics[agent]["weekly"]["input"] += weekly["input"]
+        agent_metrics[agent]["weekly"]["output"] += weekly["output"]
+        agent_metrics[agent]["weekly"]["cost"] += weekly["cost"]
+        
+        # Aggregate monthly
+        agent_metrics[agent]["monthly"]["input"] += monthly["input"]
+        agent_metrics[agent]["monthly"]["output"] += monthly["output"]
+        agent_metrics[agent]["monthly"]["cost"] += monthly["cost"]
+        
+        # Aggregate all_time
+        agent_metrics[agent]["all_time"]["input"] += all_time["input"]
+        agent_metrics[agent]["all_time"]["output"] += all_time["output"]
+        agent_metrics[agent]["all_time"]["cost"] += all_time["cost"]
+        
+        # Update model if we found one
+        if daily["model"] != "unknown":
+            agent_metrics[agent]["model"] = daily["model"]
     
     return agent_metrics
 
@@ -446,7 +507,7 @@ def main():
     
     # Collect token metrics
     print("Collecting token metrics...", file=sys.stderr)
-    token_metrics_by_agent = collect_token_metrics(today_start, today_end)
+    token_metrics_by_agent = collect_token_metrics(now_cst)
     
     # Build output
     agents_data = {}
@@ -490,6 +551,31 @@ def main():
                 "cost_today": round(token_m["cost_today"], 2),
                 "tokens_by_hour": token_m["tokens_by_hour"],
                 "model": token_m["model"],
+                "hourly": {
+                    "input": token_m["hourly"]["input"],
+                    "output": token_m["hourly"]["output"],
+                    "cost": round(token_m["hourly"]["cost"], 2),
+                },
+                "daily": {
+                    "input": token_m["daily"]["input"],
+                    "output": token_m["daily"]["output"],
+                    "cost": round(token_m["daily"]["cost"], 2),
+                },
+                "weekly": {
+                    "input": token_m["weekly"]["input"],
+                    "output": token_m["weekly"]["output"],
+                    "cost": round(token_m["weekly"]["cost"], 2),
+                },
+                "monthly": {
+                    "input": token_m["monthly"]["input"],
+                    "output": token_m["monthly"]["output"],
+                    "cost": round(token_m["monthly"]["cost"], 2),
+                },
+                "all_time": {
+                    "input": token_m["all_time"]["input"],
+                    "output": token_m["all_time"]["output"],
+                    "cost": round(token_m["all_time"]["cost"], 2),
+                },
             },
         }
         

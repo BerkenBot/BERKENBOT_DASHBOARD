@@ -1,18 +1,18 @@
 {
-  "generated": "2026-02-27T13:53:05.251461",
+  "generated": "2026-02-27T14:21:07.168996",
   "date": "2026-02-27",
   "agents": {
     "BERKEN_BOT": {
       "display_name": "BERKEN_BOT",
       "role": "Orchestrator",
       "status": "active",
-      "last_active": "13:31",
+      "last_active": "14:08",
       "current_task": "chore: refresh dashboard data",
       "git": {
-        "loc_today": 68,
-        "loc_added": 34,
-        "loc_deleted": 34,
-        "commits_today": 34,
+        "loc_today": 1077,
+        "loc_added": 536,
+        "loc_deleted": 541,
+        "commits_today": 37,
         "loc_by_hour": [
           4,
           6,
@@ -21,14 +21,14 @@
           6,
           6,
           4,
-          4,
+          1009,
           4,
           4,
           6,
           6,
           6,
-          4,
-          0,
+          6,
+          2,
           0,
           0,
           0,
@@ -40,6 +40,20 @@
           0
         ],
         "recent_commits": [
+          {
+            "hash": "5818371d",
+            "time": "14:08",
+            "msg": "chore: refresh dashboard data",
+            "loc": 2,
+            "repo": "BERKENBOT_DASHBOARD"
+          },
+          {
+            "hash": "74d71e70",
+            "time": "13:53",
+            "msg": "chore: refresh dashboard data",
+            "loc": 2,
+            "repo": "BERKENBOT_DASHBOARD"
+          },
           {
             "hash": "e5b390c8",
             "time": "13:31",
@@ -60,20 +74,6 @@
             "msg": "chore: refresh dashboard data",
             "loc": 2,
             "repo": "BERKENBOT_DASHBOARD"
-          },
-          {
-            "hash": "0c53c54c",
-            "time": "12:29",
-            "msg": "chore: refresh dashboard data",
-            "loc": 2,
-            "repo": "BERKENBOT_DASHBOARD"
-          },
-          {
-            "hash": "3afe6826",
-            "time": "12:12",
-            "msg": "chore: refresh dashboard data",
-            "loc": 2,
-            "repo": "BERKENBOT_DASHBOARD"
           }
         ],
         "active_repos": [
@@ -81,25 +81,25 @@
         ]
       },
       "tokens": {
-        "input_today": 94146657,
-        "output_today": 730150,
-        "cost_today": 79.17,
+        "input_today": 248460157,
+        "output_today": 3841915,
+        "cost_today": 200.54,
         "tokens_by_hour": [
           14604357,
-          10889355,
-          2294351,
-          1465106,
-          1770395,
-          2456724,
-          4006196,
-          3463571,
-          6218543,
-          12547923,
-          4723521,
-          3621361,
-          4394113,
-          22421291,
-          0,
+          25994412,
+          24640469,
+          7877402,
+          10392821,
+          11316253,
+          16616926,
+          11823766,
+          13122446,
+          25437349,
+          19259942,
+          18095277,
+          15523635,
+          26542600,
+          11054417,
           0,
           0,
           0,
@@ -110,13 +110,38 @@
           0,
           0
         ],
-        "model": "claude-opus-4-6"
+        "model": "claude-sonnet-4-5",
+        "hourly": {
+          "input": 10873743,
+          "output": 180674,
+          "cost": 8.84
+        },
+        "daily": {
+          "input": 248460157,
+          "output": 3841915,
+          "cost": 200.54
+        },
+        "weekly": {
+          "input": 991279706,
+          "output": 8667998,
+          "cost": 781.39
+        },
+        "monthly": {
+          "input": 1757190819,
+          "output": 10966938,
+          "cost": 1321.36
+        },
+        "all_time": {
+          "input": 1757190819,
+          "output": 10966938,
+          "cost": 1321.36
+        }
       }
     },
     "R2-D2": {
       "display_name": "R2-D2",
       "role": "FORGE \u00b7 Lead Engineer \u03b1",
-      "status": "offline",
+      "status": "idle",
       "last_active": "\u2014",
       "current_task": "\u2014",
       "git": {
@@ -154,12 +179,12 @@
         "active_repos": []
       },
       "tokens": {
-        "input_today": 0,
-        "output_today": 0,
-        "cost_today": 0.0,
+        "input_today": 19955611,
+        "output_today": 843355,
+        "cost_today": 39.4,
         "tokens_by_hour": [
-          0,
-          0,
+          20702257,
+          96709,
           0,
           0,
           0,
@@ -183,7 +208,32 @@
           0,
           0
         ],
-        "model": "claude-opus-4-6"
+        "model": "claude-opus-4-6",
+        "hourly": {
+          "input": 0,
+          "output": 0,
+          "cost": 0.0
+        },
+        "daily": {
+          "input": 19955611,
+          "output": 843355,
+          "cost": 39.4
+        },
+        "weekly": {
+          "input": 154880540,
+          "output": 3708346,
+          "cost": 185.39
+        },
+        "monthly": {
+          "input": 154880540,
+          "output": 3708346,
+          "cost": 185.39
+        },
+        "all_time": {
+          "input": 154880540,
+          "output": 3708346,
+          "cost": 185.39
+        }
       }
     },
     "R4-P17": {
@@ -256,7 +306,32 @@
           0,
           0
         ],
-        "model": "claude-opus-4-6"
+        "model": "claude-opus-4-6",
+        "hourly": {
+          "input": 0,
+          "output": 0,
+          "cost": 0.0
+        },
+        "daily": {
+          "input": 0,
+          "output": 0,
+          "cost": 0.0
+        },
+        "weekly": {
+          "input": 0,
+          "output": 0,
+          "cost": 0.0
+        },
+        "monthly": {
+          "input": 10,
+          "output": 63,
+          "cost": 0.04
+        },
+        "all_time": {
+          "input": 10,
+          "output": 63,
+          "cost": 0.04
+        }
       }
     },
     "ADA": {
@@ -329,20 +404,45 @@
           0,
           0
         ],
-        "model": "claude-opus-4-6"
+        "model": "claude-opus-4-6",
+        "hourly": {
+          "input": 0,
+          "output": 0,
+          "cost": 0.0
+        },
+        "daily": {
+          "input": 0,
+          "output": 0,
+          "cost": 0.0
+        },
+        "weekly": {
+          "input": 7839290,
+          "output": 137563,
+          "cost": 1.73
+        },
+        "monthly": {
+          "input": 7839290,
+          "output": 137563,
+          "cost": 1.73
+        },
+        "all_time": {
+          "input": 7839290,
+          "output": 137563,
+          "cost": 1.73
+        }
       }
     },
     "IVE": {
       "display_name": "IVE",
       "role": "CREATIVE \u00b7 Designer \u03b4",
       "status": "active",
-      "last_active": "13:31",
+      "last_active": "14:08",
       "current_task": "chore: refresh dashboard data",
       "git": {
-        "loc_today": 68,
-        "loc_added": 34,
-        "loc_deleted": 34,
-        "commits_today": 34,
+        "loc_today": 1077,
+        "loc_added": 536,
+        "loc_deleted": 541,
+        "commits_today": 37,
         "loc_by_hour": [
           4,
           6,
@@ -351,14 +451,14 @@
           6,
           6,
           4,
-          4,
+          1009,
           4,
           4,
           6,
           6,
           6,
-          4,
-          0,
+          6,
+          2,
           0,
           0,
           0,
@@ -370,6 +470,20 @@
           0
         ],
         "recent_commits": [
+          {
+            "hash": "5818371d",
+            "time": "14:08",
+            "msg": "chore: refresh dashboard data",
+            "loc": 2,
+            "repo": "BERKENBOT_DASHBOARD"
+          },
+          {
+            "hash": "74d71e70",
+            "time": "13:53",
+            "msg": "chore: refresh dashboard data",
+            "loc": 2,
+            "repo": "BERKENBOT_DASHBOARD"
+          },
           {
             "hash": "e5b390c8",
             "time": "13:31",
@@ -387,20 +501,6 @@
           {
             "hash": "ef44efa0",
             "time": "12:52",
-            "msg": "chore: refresh dashboard data",
-            "loc": 2,
-            "repo": "BERKENBOT_DASHBOARD"
-          },
-          {
-            "hash": "0c53c54c",
-            "time": "12:29",
-            "msg": "chore: refresh dashboard data",
-            "loc": 2,
-            "repo": "BERKENBOT_DASHBOARD"
-          },
-          {
-            "hash": "3afe6826",
-            "time": "12:12",
             "msg": "chore: refresh dashboard data",
             "loc": 2,
             "repo": "BERKENBOT_DASHBOARD"
@@ -440,20 +540,45 @@
           0,
           0
         ],
-        "model": "claude-opus-4-6"
+        "model": "claude-opus-4-6",
+        "hourly": {
+          "input": 0,
+          "output": 0,
+          "cost": 0.0
+        },
+        "daily": {
+          "input": 0,
+          "output": 0,
+          "cost": 0.0
+        },
+        "weekly": {
+          "input": 44099105,
+          "output": 1186706,
+          "cost": 43.93
+        },
+        "monthly": {
+          "input": 44099105,
+          "output": 1186706,
+          "cost": 43.93
+        },
+        "all_time": {
+          "input": 44099105,
+          "output": 1186706,
+          "cost": 43.93
+        }
       }
     },
     "SPOCK": {
       "display_name": "SPOCK",
       "role": "CRON \u00b7 Operations \u03b5",
       "status": "active",
-      "last_active": "13:31",
+      "last_active": "14:08",
       "current_task": "chore: refresh dashboard data",
       "git": {
-        "loc_today": 68,
-        "loc_added": 34,
-        "loc_deleted": 34,
-        "commits_today": 34,
+        "loc_today": 1077,
+        "loc_added": 536,
+        "loc_deleted": 541,
+        "commits_today": 37,
         "loc_by_hour": [
           4,
           6,
@@ -462,14 +587,14 @@
           6,
           6,
           4,
-          4,
+          1009,
           4,
           4,
           6,
           6,
           6,
-          4,
-          0,
+          6,
+          2,
           0,
           0,
           0,
@@ -481,6 +606,20 @@
           0
         ],
         "recent_commits": [
+          {
+            "hash": "5818371d",
+            "time": "14:08",
+            "msg": "chore: refresh dashboard data",
+            "loc": 2,
+            "repo": "BERKENBOT_DASHBOARD"
+          },
+          {
+            "hash": "74d71e70",
+            "time": "13:53",
+            "msg": "chore: refresh dashboard data",
+            "loc": 2,
+            "repo": "BERKENBOT_DASHBOARD"
+          },
           {
             "hash": "e5b390c8",
             "time": "13:31",
@@ -498,20 +637,6 @@
           {
             "hash": "ef44efa0",
             "time": "12:52",
-            "msg": "chore: refresh dashboard data",
-            "loc": 2,
-            "repo": "BERKENBOT_DASHBOARD"
-          },
-          {
-            "hash": "0c53c54c",
-            "time": "12:29",
-            "msg": "chore: refresh dashboard data",
-            "loc": 2,
-            "repo": "BERKENBOT_DASHBOARD"
-          },
-          {
-            "hash": "3afe6826",
-            "time": "12:12",
             "msg": "chore: refresh dashboard data",
             "loc": 2,
             "repo": "BERKENBOT_DASHBOARD"
@@ -551,20 +676,45 @@
           0,
           0
         ],
-        "model": "claude-opus-4-6"
+        "model": "claude-opus-4-6",
+        "hourly": {
+          "input": 0,
+          "output": 0,
+          "cost": 0.0
+        },
+        "daily": {
+          "input": 0,
+          "output": 0,
+          "cost": 0.0
+        },
+        "weekly": {
+          "input": 0,
+          "output": 0,
+          "cost": 0.0
+        },
+        "monthly": {
+          "input": 0,
+          "output": 0,
+          "cost": 0.0
+        },
+        "all_time": {
+          "input": 0,
+          "output": 0,
+          "cost": 0.0
+        }
       }
     },
     "K-2SO": {
       "display_name": "K-2SO",
       "role": "SENTINEL \u00b7 Security \u03b6",
       "status": "active",
-      "last_active": "13:31",
+      "last_active": "14:08",
       "current_task": "chore: refresh dashboard data",
       "git": {
-        "loc_today": 68,
-        "loc_added": 34,
-        "loc_deleted": 34,
-        "commits_today": 34,
+        "loc_today": 1077,
+        "loc_added": 536,
+        "loc_deleted": 541,
+        "commits_today": 37,
         "loc_by_hour": [
           4,
           6,
@@ -573,14 +723,14 @@
           6,
           6,
           4,
-          4,
+          1009,
           4,
           4,
           6,
           6,
           6,
-          4,
-          0,
+          6,
+          2,
           0,
           0,
           0,
@@ -592,6 +742,20 @@
           0
         ],
         "recent_commits": [
+          {
+            "hash": "5818371d",
+            "time": "14:08",
+            "msg": "chore: refresh dashboard data",
+            "loc": 2,
+            "repo": "BERKENBOT_DASHBOARD"
+          },
+          {
+            "hash": "74d71e70",
+            "time": "13:53",
+            "msg": "chore: refresh dashboard data",
+            "loc": 2,
+            "repo": "BERKENBOT_DASHBOARD"
+          },
           {
             "hash": "e5b390c8",
             "time": "13:31",
@@ -609,20 +773,6 @@
           {
             "hash": "ef44efa0",
             "time": "12:52",
-            "msg": "chore: refresh dashboard data",
-            "loc": 2,
-            "repo": "BERKENBOT_DASHBOARD"
-          },
-          {
-            "hash": "0c53c54c",
-            "time": "12:29",
-            "msg": "chore: refresh dashboard data",
-            "loc": 2,
-            "repo": "BERKENBOT_DASHBOARD"
-          },
-          {
-            "hash": "3afe6826",
-            "time": "12:12",
             "msg": "chore: refresh dashboard data",
             "loc": 2,
             "repo": "BERKENBOT_DASHBOARD"
@@ -662,7 +812,32 @@
           0,
           0
         ],
-        "model": "claude-opus-4-6"
+        "model": "claude-opus-4-6",
+        "hourly": {
+          "input": 0,
+          "output": 0,
+          "cost": 0.0
+        },
+        "daily": {
+          "input": 0,
+          "output": 0,
+          "cost": 0.0
+        },
+        "weekly": {
+          "input": 5399060,
+          "output": 121220,
+          "cost": 2.33
+        },
+        "monthly": {
+          "input": 5399060,
+          "output": 121220,
+          "cost": 2.33
+        },
+        "all_time": {
+          "input": 5399060,
+          "output": 121220,
+          "cost": 2.33
+        }
       }
     },
     "MAVIC": {
@@ -735,15 +910,40 @@
           0,
           0
         ],
-        "model": "claude-opus-4-6"
+        "model": "claude-opus-4-6",
+        "hourly": {
+          "input": 0,
+          "output": 0,
+          "cost": 0.0
+        },
+        "daily": {
+          "input": 0,
+          "output": 0,
+          "cost": 0.0
+        },
+        "weekly": {
+          "input": 0,
+          "output": 0,
+          "cost": 0.0
+        },
+        "monthly": {
+          "input": 0,
+          "output": 0,
+          "cost": 0.0
+        },
+        "all_time": {
+          "input": 0,
+          "output": 0,
+          "cost": 0.0
+        }
       }
     }
   },
   "totals": {
-    "loc_today": 272,
-    "commits_today": 136,
-    "input_tokens": 94146657,
-    "output_tokens": 730150,
-    "cost_today": 79.17
+    "loc_today": 4308,
+    "commits_today": 148,
+    "input_tokens": 268415768,
+    "output_tokens": 4685270,
+    "cost_today": 239.95
   }
 }
