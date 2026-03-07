@@ -837,78 +837,81 @@
       name:'BERKEN_BOT', role:'Orchestrator',
       projects:['ALL_PROJECTS'],
       status:'green', screen:'orchestrate', stuff:'boss',
-      // Robot: gold/chrome executive bot, tall regal head, holographic dual-eye, command core
+      type:'mainframe',
       bot:{body:'#b8860b',bodyHi:'#daa520',bodyShd:'#8b6914',
            head:'tall',eyeColor:'#ffd700',eyeStyle:'holo',
            antenna:true,ears:'fins',detail:'command',accent:'#ffd700'},
     },
     {
-      name:'R2-D2', role:'Lead Engineer α',
+      name:'R2-D2', role:'Lead Engineer \u03b1',
       projects:['SCALARA','GH_INTEL','LOCAL_TTS','LORA_GEN','C64'],
       status:'green', screen:'code', stuff:'forge',
-      // Robot: heavy industrial bot, red chassis, visor eyes, welding sparks
-      bot:{body:'#c0392b',bodyHi:'#e74c3c',bodyShd:'#922b21',
-           head:'square',eyeColor:'#f39c12',eyeStyle:'visor',
-           antenna:false,ears:'vents',detail:'sparks',accent:'#e74c3c'},
+      type:'astromech',
+      astromech:{body:'#f0f0f0',bodyHi:'#ffffff',bodyShd:'#c0c0c8',
+                 dome:'#c8c8d0',domeHi:'#e0e0e8',
+                 panel1:'#4878c0',panel2:'#3868b0',panel3:'#5888d0',
+                 eye:'#cc2020',eyeHi:'#ff4040',accent:'#4878c0',
+                 legColor:'#d8d8e0',legHi:'#e8e8f0',legShd:'#a0a0a8'},
     },
     {
-      name:'R4-P17', role:'Lead Engineer β',
+      name:'R4-P17', role:'Lead Engineer \u03b2',
       projects:['SCALARA','GH_INTEL','LOCAL_TTS','LORA_GEN','C64'],
       status:'green', screen:'review', stuff:'anvil',
-      // Robot: precise inspector bot, green chassis, dual-lens eyes, scanner
-      bot:{body:'#27ae60',bodyHi:'#2ecc71',bodyShd:'#1e8449',
-           head:'round',eyeColor:'#2ecc71',eyeStyle:'lenses',
-           antenna:true,ears:'discs',detail:'scanner',accent:'#2ecc71'},
+      type:'astromech',
+      astromech:{body:'#f0f0f0',bodyHi:'#ffffff',bodyShd:'#c0c0c8',
+                 dome:'#8b2020',domeHi:'#a83030',
+                 panel1:'#7a1818',panel2:'#681414',panel3:'#8c2222',
+                 eye:'#2070d0',eyeHi:'#40a0ff',accent:'#8b2020',
+                 legColor:'#d8d8e0',legHi:'#e8e8f0',legShd:'#a0a0a8',
+                 splitDome:true},
     },
     {
       name:'ADA', role:'Research Analyst',
       projects:['LOCAL_TTS','LORA_GEN'],
       status:'green', screen:'research', stuff:'scout',
-      // Robot: sleek explorer bot, blue chassis, single large eye, radar dish
-      bot:{body:'#2980b9',bodyHi:'#3498db',bodyShd:'#1a5276',
-           head:'dome',eyeColor:'#00d2ff',eyeStyle:'cyclops',
-           antenna:true,ears:'none',detail:'radar',accent:'#3498db'},
+      type:'human',
+      human:{hair:'#1a1a20',shirt:'#2a1a30',pants:'#2a1a30',
+             acc:{glasses:false,updo:true,victorian:true,shoeCol:'#1a1a20'}},
     },
     {
       name:'IVE', role:'Creative Director',
       projects:['MORNING_REPORT','TTS','COMFYUI'],
       status:'green', screen:'creative', stuff:'creative',
-      // Robot: artistic bot, coral/salmon chassis, expressive round eyes, palette core
-      bot:{body:'#e17055',bodyHi:'#fab1a0',bodyShd:'#c0392b',
-           head:'round',eyeColor:'#fd79a8',eyeStyle:'lenses',
-           antenna:false,ears:'discs',detail:'palette',accent:'#fd79a8'},
+      type:'human',
+      human:{hair:'#b0a890',shirt:'#1a1a1a',pants:'#2d3436',
+             acc:{buzzcut:true,glasses:true,glassCol:'#888',turtleneck:true,
+                  watch:true,shoeCol:'#e0e0e0'}},
     },
     {
       name:'SPOCK', role:'Ops Manager',
       projects:['CRON_JOBS','HEARTBEAT'],
       status:'green', screen:'ops', stuff:'cron',
-      // Robot: clockwork bot, teal chassis, LED bar eyes, gears detail
-      bot:{body:'#00b894',bodyHi:'#55efc4',bodyShd:'#00896a',
-           head:'box',eyeColor:'#55efc4',eyeStyle:'ledbar',
-           antenna:false,ears:'speakers',detail:'gears',accent:'#55efc4'},
+      type:'human',
+      human:{hair:'#0a0a10',shirt:'#2050a0',pants:'#1a1a20',
+             acc:{pointedEars:true,bowlCut:true,starfleet:true,shoeCol:'#1a1a1a'}},
     },
     {
       name:'K-2SO', role:'Security & Infra',
       projects:['WATCHDOG','SECURITY','INFRA'],
       status:'green', screen:'monitor', stuff:'sentinel',
-      // Robot: armored security bot, dark steel chassis, visor, shield core
+      type:'robot',
       bot:{body:'#2d3436',bodyHi:'#636e72',bodyShd:'#1a1a2e',
-           head:'square',eyeColor:'#ff7675',eyeStyle:'visor',
-           antenna:false,ears:'vents',detail:'shield',accent:'#ff7675'},
+           head:'k2so',eyeColor:'#f0f0a0',eyeStyle:'k2so',
+           antenna:false,ears:'none',detail:'imperial',accent:'#f0f0a0'},
     },
     {
       name:'MAVIC', role:'Flex Agent',
       projects:['OVERFLOW'],
       status:'yellow', screen:'research', stuff:'float',
-      // Robot: modular/transforming bot, silver chassis, cyclops eye, morph detail
-      bot:{body:'#636e72',bodyHi:'#b2bec3',bodyShd:'#2d3436',
-           head:'dome',eyeColor:'#74b9ff',eyeStyle:'cyclops',
-           antenna:true,ears:'none',detail:'morph',accent:'#74b9ff'},
+      type:'drone',
+      drone:{body:'#484850',bodyHi:'#686870',bodyShd:'#2a2a30',
+             arm:'#404048',rotor:'#808088',camera:'#1a1a20',
+             led:'#30e890',accent:'#74b9ff'},
     },
   ];
 
-  /* ---- ROBOT SEATED AGENT ---- */
-  function seatedAgent(ag, i){
+  /* ---- ROBOT SEATED AGENT (K-2SO, fallback) ---- */
+  function seatedRobot(ag, i){
     let s='';
     const b=ag.bot, status=ag.status;
     const metal='#484858', metalHi='#686878', metalDk='#2a2a3a';
@@ -973,6 +976,14 @@
       s+=px(hx+2,hy-1,hw-4,1,b.bodyHi);
       // Crown ridge
       s+=px(hx+3,hy-2,hw-6,1,b.accent);s+=px(hx+3,hy-2,hw-6,1,'#fff',0.2);
+    } else if(b.head==='k2so'){
+      // K-2SO: small narrow head on long neck, angular
+      s+=px16(hx+2,hy,hw-4,hh-2,metalHi,'#3a3e42','#1e2024');
+      s+=px(hx+3,hy+1,hw-6,hh-4,'#2d3436');
+      // Angular jaw
+      s+=`<polygon points="${hx+3},${hy+hh-3} ${hx+hw/2},${hy+hh} ${hx+hw-3},${hy+hh-3}" fill="#2d3436"/>`;
+      // Forehead ridge
+      s+=px(hx+3,hy,hw-6,1,'#4a4e52');
     }
 
     // ---- EARS / SIDE MODULES ----
@@ -1048,6 +1059,18 @@
         }
       }
       if(eyeActive) s+=`<rect x="${hx+2}" y="${eyeY}" width="${hw-4}" height="3" fill="${b.eyeColor}" opacity="0.06" filter="url(#ledGlow)"/>`;
+    } else if(b.eyeStyle==='k2so'){
+      // K-2SO: two small round yellow eyes, wide-set
+      s+=`<circle cx="${hx+4}" cy="${eyeY+2}" r="1.8" fill="#181820"/>`;
+      s+=`<circle cx="${hx+hw-4}" cy="${eyeY+2}" r="1.8" fill="#181820"/>`;
+      if(eyeActive){
+        s+=`<circle cx="${hx+4}" cy="${eyeY+2}" r="1.2" fill="${b.eyeColor}"/>`;
+        s+=`<circle cx="${hx+4}" cy="${eyeY+1.5}" r="0.5" fill="#fff" opacity="0.4"/>`;
+        s+=`<circle cx="${hx+hw-4}" cy="${eyeY+2}" r="1.2" fill="${b.eyeColor}"/>`;
+        s+=`<circle cx="${hx+hw-4}" cy="${eyeY+1.5}" r="0.5" fill="#fff" opacity="0.4"/>`;
+        s+=`<circle cx="${hx+4}" cy="${eyeY+2}" r="3" fill="${b.eyeColor}" opacity="0.06"/>`;
+        s+=`<circle cx="${hx+hw-4}" cy="${eyeY+2}" r="3" fill="${b.eyeColor}" opacity="0.06"/>`;
+      }
     } else if(b.eyeStyle==='holo'){
       // Holographic visor band
       s+=px(hx+2,eyeY,hw-4,3,metalDk);
@@ -1106,6 +1129,17 @@
       // Heartbeat display on chest
       s+=px(10,-10,8,3,metalDk);
       s+=`<path d="M10,-9 L12,-9 L13,-10.5 L14,-7.5 L15,-10 L16,-9 L18,-9" stroke="${b.accent}" stroke-width="0.6" fill="none" class="heartbeat-line"/>`;
+    } else if(b.detail==='imperial'){
+      // K-2SO Imperial cog insignia
+      s+=`<circle cx="14" cy="-9" r="2.5" fill="${metalDk}"/>`;
+      s+=`<circle cx="14" cy="-9" r="2" fill="#3a3e42"/>`;
+      // Simplified cog
+      for(let sp=0;sp<6;sp++){
+        const ang=sp*Math.PI/3;
+        const sx=14+Math.cos(ang)*1.8, sy=-9+Math.sin(ang)*1.8;
+        s+=`<circle cx="${sx}" cy="${sy}" r="0.4" fill="#4a4e52"/>`;
+      }
+      s+=`<circle cx="14" cy="-9" r="0.8" fill="#5a5e62"/>`;
     } else if(b.detail==='command'){
       // Command star / orchestrator core
       s+=`<circle cx="14" cy="-9" r="2.5" fill="${metalDk}"/>`;
@@ -1195,6 +1229,322 @@
     s+=`<circle cx="14" cy="${indicY}" r="1" fill="#fff" opacity="0.35"/>`;
     s+=`<circle cx="14" cy="${indicY}" r="5" fill="${lc}" opacity="0.1"/>`;
     if(status==='green') s+=`<circle cx="14" cy="${indicY}" r="8" fill="${lc}" opacity="0.04" class="status-pulse"/>`;
+
+    return s;
+  }
+
+  /* ---- DISPATCHER: pick renderer by agent type ---- */
+  function seatedAgent(ag, i){
+    if(ag.type==='astromech') return seatedAstromech(ag, i);
+    if(ag.type==='human') return seatedHuman(ag, i);
+    if(ag.type==='drone') return hoveringDrone(ag, i);
+    // robot + mainframe fallback
+    return seatedRobot(ag, i);
+  }
+
+  /* ---- ASTROMECH DROID (R2-D2, R4-P17) ---- */
+  function seatedAstromech(ag, i){
+    let s='';
+    const a=ag.astromech, status=ag.status;
+    const active=status==='green';
+
+    // ---- CHAIR (behind droid, partially visible) ----
+    s+=px(2,-6,20,8,'#3a3a48');
+    s+=px(2,-6,20,1,'#4a4a58');
+
+    // ---- CENTER LEG (behind body) ----
+    s+=px(11,-2,6,10,a.legColor);
+    s+=px(11,-2,6,1,a.legHi);
+    s+=px(13,8,3,4,a.legShd);
+    s+=px(12,11,5,2,a.legColor);
+
+    // ---- BODY (cylindrical barrel) ----
+    s+=`<rect x="6" y="-14" width="16" height="18" rx="3" fill="${a.body}"/>`;
+    s+=`<rect x="7" y="-13" width="14" height="16" rx="2" fill="${a.bodyHi}" opacity="0.3"/>`;
+    // Blue/red panels
+    s+=`<rect x="8" y="-10" width="12" height="4" rx="1" fill="${a.panel1}"/>`;
+    s+=`<rect x="8" y="-10" width="12" height="1" rx="0.5" fill="${a.panel3}" opacity="0.4"/>`;
+    s+=`<rect x="8" y="-4" width="5" height="3" rx="0.5" fill="${a.panel2}"/>`;
+    s+=`<rect x="15" y="-4" width="5" height="3" rx="0.5" fill="${a.panel2}"/>`;
+    // Vent/detail lines on body
+    for(let v=0;v<3;v++) s+=px(9,-3+v*1,10,0.3,a.bodyShd,0.3);
+    // Utility arms (little nubs)
+    s+=`<rect x="10" y="-1" width="2" height="2" rx="0.5" fill="${a.panel1}"/>`;
+    s+=`<rect x="16" y="-1" width="2" height="2" rx="0.5" fill="${a.panel1}"/>`;
+
+    // ---- DOME HEAD ----
+    if(a.splitDome){
+      // R4-P17 split dome: half dome, half flat panel
+      s+=`<ellipse cx="14" cy="-14" rx="8" ry="6" fill="${a.dome}"/>`;
+      s+=`<rect x="14" y="-20" width="8" height="6" fill="${a.body}"/>`;
+      s+=`<rect x="14" y="-20" width="8" height="1" fill="${a.bodyHi}" opacity="0.2"/>`;
+      s+=`<ellipse cx="14" cy="-14" rx="7" ry="5" fill="${a.domeHi}" opacity="0.15"/>`;
+      // Flat panel details
+      s+=px(15,-19,6,0.5,a.panel1,0.4);
+      s+=px(15,-17,5,0.5,a.panel1,0.3);
+    } else {
+      // R2-D2 full dome
+      s+=`<ellipse cx="14" cy="-14" rx="8" ry="7" fill="${a.dome}"/>`;
+      s+=`<ellipse cx="14" cy="-15" rx="6" ry="5" fill="${a.domeHi}" opacity="0.2"/>`;
+      // Dome panel lines
+      s+=`<ellipse cx="14" cy="-14" rx="7.5" ry="6.5" fill="none" stroke="${a.bodyShd}" stroke-width="0.3" opacity="0.3"/>`;
+    }
+    // Holoprojector (dome top nub)
+    s+=`<rect x="13" y="-21" width="2" height="2" rx="0.5" fill="${a.bodyShd}"/>`;
+    s+=`<rect x="13.3" y="-21" width="1.4" height="1" rx="0.3" fill="${a.bodyHi}" opacity="0.3"/>`;
+
+    // ---- EYE / MAIN SENSOR ----
+    s+=`<circle cx="10" cy="-16" r="2.5" fill="#181820"/>`;
+    if(active){
+      s+=`<circle cx="10" cy="-16" r="1.8" fill="${a.eye}"/>`;
+      s+=`<circle cx="9.5" cy="-16.5" r="0.7" fill="#fff" opacity="0.5"/>`;
+      s+=`<circle cx="10" cy="-16" r="4" fill="${a.eye}" opacity="0.08"/>`;
+    } else {
+      s+=`<circle cx="10" cy="-16" r="1.5" fill="#383848" opacity="0.5"/>`;
+    }
+    // Secondary sensor (smaller)
+    s+=`<circle cx="17" cy="-17" r="1" fill="#181820"/>`;
+    if(active) s+=`<circle cx="17" cy="-17" r="0.6" fill="${a.accent}" opacity="0.6"/>`;
+
+    // ---- SIDE LEGS ----
+    // Left leg
+    s+=px(2,-8,4,14,a.legColor);
+    s+=px(2,-8,4,1,a.legHi);
+    s+=px(2,-8,1,14,a.legHi,0.3);
+    s+=`<rect x="1" y="-6" width="5" height="3" rx="0.5" fill="${a.panel1}"/>`;
+    s+=px(1,6,6,3,a.legColor);
+    s+=px(1,8,6,1,a.legShd);
+    // Right leg
+    s+=px(22,-8,4,14,a.legColor);
+    s+=px(22,-8,4,1,a.legHi);
+    s+=`<rect x="22" y="-6" width="5" height="3" rx="0.5" fill="${a.panel1}"/>`;
+    s+=px(22,6,6,3,a.legColor);
+    s+=px(22,8,6,1,a.legShd);
+
+    // ---- ANKLE DETAILS (foot treads) ----
+    for(let t=0;t<3;t++){
+      s+=px(1,6+t,5,0.4,'#000',0.1);
+      s+=px(22,6+t,5,0.4,'#000',0.1);
+    }
+
+    // ---- STATUS INDICATOR ----
+    const lc=status==='green'?C.neonGreen:status==='yellow'?'#f0d040':'#585868';
+    s+=`<circle cx="14" cy="-25" r="2.5" fill="${lc}" filter="url(#ledGlow)"/>`;
+    s+=`<circle cx="14" cy="-25" r="1" fill="#fff" opacity="0.35"/>`;
+    if(status==='green') s+=`<circle cx="14" cy="-25" r="6" fill="${lc}" opacity="0.05" class="status-pulse"/>`;
+
+    return s;
+  }
+
+  /* ---- HUMAN SEATED AGENT (ADA, IVE, SPOCK) ---- */
+  function seatedHuman(ag, i){
+    let s='';
+    const h=ag.human, status=ag.status;
+    const acc=h.acc||{};
+
+    // ---- CHAIR BACK ----
+    s+=px(2,-10,20,10,C.steelD);
+    s+=px(2,-10,20,1,C.steelL);
+    for(let my=-9;my<-2;my+=2) s+=px(4,my,16,1,'#000',0.06);
+
+    // ---- HAIR ----
+    if(acc.bowlCut){
+      // Spock bowl cut
+      s+=px(7,-2,10,6,h.hair);
+      s+=px(6,0,1,3,h.hair);
+      s+=px(17,0,1,3,h.hair);
+      s+=px(8,-3,8,2,h.hair);
+      // Sharp straight bangs
+      s+=px(7,-1,10,1,h.hair);
+    } else if(acc.updo){
+      // Ada Lovelace updo
+      s+=px(8,-5,8,4,h.hair);
+      s+=px(7,-3,10,5,h.hair);
+      s+=px(6,0,1,3,h.hair);
+      s+=px(17,0,1,3,h.hair);
+      // Bun on top
+      s+=`<ellipse cx="12" cy="-5" rx="3" ry="2.5" fill="${h.hair}"/>`;
+      // Side curls
+      s+=px(6,1,1,4,h.hair);
+      s+=px(17,1,1,4,h.hair);
+    } else if(acc.buzzcut){
+      // Jony Ive close-cropped
+      s+=px(7,-1,10,3,h.hair,0.4);
+    } else {
+      s+=px(7,-2,10,5,h.hair);
+      s+=px(6,0,1,3,h.hair);
+      s+=px(17,0,1,3,h.hair);
+    }
+
+    // ---- HEAD ----
+    const skinCol=acc.vulcanSkin||C.skin;
+    const skinHi=acc.vulcanSkin?'#f0d898':C.skinHi;
+    const skinShd=acc.vulcanSkin?'#c09050':C.skinShd;
+    s+=px(8,1,8,9,skinCol);
+    // Ears
+    if(acc.pointedEars){
+      // Spock pointed ears
+      s+=`<polygon points="7,3 5,1 7,6" fill="${skinCol}"/>`;
+      s+=`<polygon points="17,3 19,1 17,6" fill="${skinCol}"/>`;
+    } else {
+      s+=px(7,3,1,4,skinCol);
+      s+=px(16,3,1,4,skinCol);
+    }
+
+    // ---- EYES ----
+    if(status==='green'){
+      s+=px(10,4,2,2,'#2d3436');s+=px(14,4,2,2,'#2d3436');
+      s+=px(10,4,1,1,'#fff');s+=px(14,4,1,1,'#fff');
+    } else if(status==='yellow'){
+      s+=px(10,5,2,1,'#2d3436');s+=px(14,5,2,1,'#2d3436');
+    } else {
+      s+=px(10,5,2,1,'#636e72');s+=px(14,5,2,1,'#636e72');
+    }
+    // Eyebrows
+    if(acc.pointedEars){
+      // Spock angled eyebrows
+      s+=`<line x1="9" y1="3.5" x2="12" y2="2.5" stroke="${h.hair}" stroke-width="0.8"/>`;
+      s+=`<line x1="13" y1="2.5" x2="16" y2="3.5" stroke="${h.hair}" stroke-width="0.8"/>`;
+    } else {
+      s+=px(9,3,3,1,h.hair,0.6);s+=px(13,3,3,1,h.hair,0.6);
+    }
+
+    // ---- GLASSES (Ive) ----
+    if(acc.glasses){
+      s+=`<circle cx="10.5" cy="5" r="2.2" fill="none" stroke="${acc.glassCol||'#2d3436'}" stroke-width="0.5"/>`;
+      s+=`<circle cx="14.5" cy="5" r="2.2" fill="none" stroke="${acc.glassCol||'#2d3436'}" stroke-width="0.5"/>`;
+      s+=px(12.5,4.8,0.5,0.5,acc.glassCol||'#2d3436');
+    }
+    // Nose
+    s+=px(12,6,1,2,skinShd,0.5);
+    // Mouth
+    if(status==='green') s+=px(11,8,3,1,'#e17055');
+    else s+=px(11,8,2,1,'#b07050');
+
+    // ---- BODY / CLOTHING ----
+    if(acc.victorian){
+      // Ada Lovelace Victorian dress
+      s+=px(6,10,12,12,h.shirt);
+      s+=px(6,10,12,1,'#3a2a40',0.5); // collar
+      // Lace/ruffle detail at neckline
+      s+=px(9,10,6,1,'#e0d0e8',0.3);
+      // Puff sleeves
+      s+=`<ellipse cx="5" cy="12" rx="3" ry="2.5" fill="${h.shirt}"/>`;
+      s+=`<ellipse cx="19" cy="12" rx="3" ry="2.5" fill="${h.shirt}"/>`;
+      // Arms
+      s+=px(3,13,3,8,h.shirt);s+=px(18,13,3,8,h.shirt);
+      // Hands
+      s+=px(3,21,3,2,skinCol);s+=px(18,21,3,2,skinCol);
+      // Dress skirt (extends down)
+      s+=px(5,22,14,8,h.shirt);
+      s+=px(5,22,14,1,'#3a2a40',0.2);
+      // Skirt folds
+      s+=px(8,23,1,6,'#000',0.04);s+=px(12,23,1,6,'#000',0.04);s+=px(15,23,1,6,'#000',0.04);
+      // Shoes
+      s+=px(6,29,5,2,acc.shoeCol||'#1a1a20');
+      s+=px(13,29,5,2,acc.shoeCol||'#1a1a20');
+    } else if(acc.turtleneck){
+      // Jony Ive turtleneck
+      s+=px(6,10,12,12,h.shirt);
+      // Turtleneck collar
+      s+=px(9,9,6,2,h.shirt);
+      s+=px(9,9,6,1,'#2a2a2a',0.3);
+      // Arms
+      s+=px(3,11,3,10,h.shirt);s+=px(18,11,3,10,h.shirt);
+      // Hands
+      s+=px(3,21,3,2,skinCol);s+=px(18,21,3,2,skinCol);
+      // Watch
+      if(acc.watch){s+=px(3,20,3,1,'#2d3436');s+=px(4,19,1,1,'#74b9ff',0.6);}
+      // Pants
+      s+=px(7,22,5,7,h.pants);s+=px(13,22,5,7,h.pants);
+      s+=px(12,22,1,7,'#000',0.05);
+      // Sneakers
+      s+=px(5,29,7,2,acc.shoeCol||'#fff');
+      s+=px(12,29,7,2,acc.shoeCol||'#fff');
+    } else if(acc.starfleet){
+      // Spock Starfleet uniform
+      s+=px(6,10,12,12,'#2050a0');
+      // Division stripe on sleeves
+      s+=px(3,11,3,10,'#2050a0');s+=px(18,11,3,10,'#2050a0');
+      s+=px(3,19,3,1,'#c0a020');s+=px(18,19,3,1,'#c0a020'); // gold cuff
+      // Starfleet delta insignia on chest
+      s+=`<polygon points="13,13 15,13 14,11" fill="#c0a020" opacity="0.8"/>`;
+      s+=`<circle cx="14" cy="12.5" r="0.4" fill="#c0a020"/>`;
+      // Hands
+      s+=px(3,21,3,2,skinCol);s+=px(18,21,3,2,skinCol);
+      // Pants
+      s+=px(7,22,5,7,'#1a1a20');s+=px(13,22,5,7,'#1a1a20');
+      s+=px(12,22,1,7,'#000',0.05);
+      // Boots
+      s+=px(5,28,7,3,'#1a1a1a');
+      s+=px(12,28,7,3,'#1a1a1a');
+    } else {
+      // Generic human clothing
+      s+=px(6,10,12,12,h.shirt);
+      s+=px(3,11,3,10,h.shirt);s+=px(18,11,3,10,h.shirt);
+      s+=px(3,21,3,2,skinCol);s+=px(18,21,3,2,skinCol);
+      s+=px(7,22,5,7,h.pants);s+=px(13,22,5,7,h.pants);
+      s+=px(5,29,7,2,acc.shoeCol||'#fff');
+      s+=px(12,29,7,2,acc.shoeCol||'#fff');
+    }
+
+    // ---- STATUS INDICATOR ----
+    const lc=status==='green'?C.neonGreen:status==='yellow'?'#f0d040':'#585868';
+    const indicY=acc.updo?-9:-5;
+    s+=`<circle cx="12" cy="${indicY}" r="2" fill="${lc}"/>`;
+    s+=`<circle cx="12" cy="${indicY}" r="3.5" fill="${lc}" opacity="0.15"/>`;
+    if(status==='green') s+=`<circle cx="12" cy="${indicY}" r="5" fill="${lc}" opacity="0.06" class="status-pulse"/>`;
+
+    return s;
+  }
+
+  /* ---- HOVERING DRONE (MAVIC) ---- */
+  function hoveringDrone(ag, i){
+    let s='';
+    const d=ag.drone, status=ag.status;
+    const active=status!=='red';
+
+    // Drone hovers above desk level (shifted up)
+    // ---- BODY (compact folded quad) ----
+    s+=`<rect x="8" y="-22" width="12" height="6" rx="2" fill="${d.body}"/>`;
+    s+=`<rect x="9" y="-21" width="10" height="4" rx="1" fill="${d.bodyHi}" opacity="0.2"/>`;
+    // Top surface detail
+    s+=px(10,-21,8,0.5,d.bodyHi,0.3);
+
+    // ---- CAMERA (gimbal underneath) ----
+    s+=`<rect x="12" y="-16" width="4" height="3" rx="1" fill="${d.camera}"/>`;
+    s+=`<circle cx="14" cy="-15" r="1.5" fill="#282830"/>`;
+    s+=`<circle cx="14" cy="-15" r="0.8" fill="#4060a0" opacity="0.6"/>`;
+    if(active) s+=`<circle cx="14" cy="-15" r="0.4" fill="#fff" opacity="0.4"/>`;
+
+    // ---- ARMS + ROTORS ----
+    // Front-left
+    s+=`<rect x="3" y="-21" width="6" height="1.5" rx="0.5" fill="${d.arm}"/>`;
+    s+=`<ellipse cx="3" cy="-20" rx="4" ry="1" fill="${d.rotor}" opacity="${active?0.3:0.15}" class="${active?'rotor-spin':''}"/>`;
+    // Front-right
+    s+=`<rect x="19" y="-21" width="6" height="1.5" rx="0.5" fill="${d.arm}"/>`;
+    s+=`<ellipse cx="25" cy="-20" rx="4" ry="1" fill="${d.rotor}" opacity="${active?0.3:0.15}" class="${active?'rotor-spin':''}"/>`;
+    // Rear-left
+    s+=`<rect x="3" y="-18" width="6" height="1.5" rx="0.5" fill="${d.arm}"/>`;
+    s+=`<ellipse cx="3" cy="-17" rx="4" ry="1" fill="${d.rotor}" opacity="${active?0.3:0.15}" class="${active?'rotor-spin':''}"/>`;
+    // Rear-right
+    s+=`<rect x="19" y="-18" width="6" height="1.5" rx="0.5" fill="${d.arm}"/>`;
+    s+=`<ellipse cx="25" cy="-17" rx="4" ry="1" fill="${d.rotor}" opacity="${active?0.3:0.15}" class="${active?'rotor-spin':''}"/>`;
+
+    // ---- FRONT LEDs ----
+    if(active){
+      s+=`<circle cx="8" cy="-22" r="0.8" fill="${d.led}" class="antenna-pulse"/>`;
+      s+=`<circle cx="20" cy="-22" r="0.8" fill="#e04040" class="antenna-pulse"/>`;
+    }
+
+    // ---- STATUS INDICATOR ----
+    const lc=status==='green'?C.neonGreen:status==='yellow'?'#f0d040':'#585868';
+    s+=`<circle cx="14" cy="-28" r="2.5" fill="${lc}" filter="url(#ledGlow)"/>`;
+    s+=`<circle cx="14" cy="-28" r="1" fill="#fff" opacity="0.35"/>`;
+    if(status==='green') s+=`<circle cx="14" cy="-28" r="6" fill="${lc}" opacity="0.05" class="status-pulse"/>`;
+
+    // Hover shadow on desk
+    s+=`<ellipse cx="14" cy="2" rx="8" ry="2" fill="#000" opacity="0.15"/>`;
 
     return s;
   }
@@ -1637,18 +1987,43 @@
     s+=`<rect x="${W-52}" y="52" width="8" height="6" rx="0.5" fill="url(#woodGrad)"/>`;
     s+=`<rect x="${W-51}" y="53" width="6" height="4" rx="0.3" fill="#e04040" opacity="0.25"/>`;
     s+=`</g>`;
-    // BERKEN_BOT workstation (inside glass office, same depth as wall)
+    // BERKEN_BOT mainframe (integrated with server rack area, no desk)
     const bb=AGENTS[0];
     s+=`<g data-drag="berkenBot" transform="translate(${L.berkenBot.x},${L.berkenBot.y})">`;
-    s+=`<g filter="url(#furnitureShadow)">${desk(44)}</g>`;
-    s+=`<g filter="url(#monitorGlow)" transform="translate(7,-14)">${dualMon(bb.status==='green',bb.screen,0)}</g>`;
-    s+=`<g transform="translate(36,-3)">${deskStuff(bb.stuff)}</g>`;
-    s+=`<g id="agent-0" transform="translate(10,2)">${seatedAgent(bb, 0)}</g>`;
-    s+=txt16(22,32,bb.name,3.5,'#e8f0ff');
-    s+=txt16(22,37,bb.role,2.2,'#90a0b0');
+    // Main server tower (larger than standard racks)
+    s+=`<g filter="url(#furnitureShadow)">`;
+    s+=px16(0,0,24,44,'#404850','#282e32','#181c20');
+    s+=px(1,1,22,42,'#141820');
+    // "BERKEN_BOT" label plate
+    s+=px(3,2,18,4,'#1a2030');
+    s+=txt16(12,5,'BB',3,'#ffd700');
+    // Status display
+    s+=px(3,8,18,8,'#0a0e14');
+    s+=`<text x="12" y="13" fill="#40f8a0" font-family="'Press Start 2P',monospace" font-size="2" text-anchor="middle">${bb.status==='green'?'ONLINE':'STANDBY'}</text>`;
+    s+=`<text x="12" y="15.5" fill="#6080a0" font-family="'Press Start 2P',monospace" font-size="1.5" text-anchor="middle">ORCHESTRATOR</text>`;
+    // Blinking LEDs array
+    for(let u=0;u<5;u++){
+      const uy=18+u*5;
+      s+=px(2,uy,20,0.5,'#404850');
+      s+=px(2,uy+0.5,20,3,'#2a3038');
+      s+=px(2,uy+3.5,20,0.5,'#1a1e24');
+      s+=`<circle cx="5" cy="${uy+2}" r="0.8" fill="${C.serverLed}" filter="url(#ledGlow)" class="led-seq" style="animation-delay:${u*0.2}s"/>`;
+      s+=`<circle cx="8" cy="${uy+2}" r="0.6" fill="${u%2===0?C.serverLedY:'#30e890'}" filter="url(#ledGlow)"/>`;
+      s+=`<circle cx="11" cy="${uy+2}" r="0.6" fill="${C.serverLed}" filter="url(#ledGlow)"/>`;
+      for(let v=0;v<3;v++) s+=px(13,uy+1+v*0.7,6,0.3,C.serverL,0.2);
+    }
+    // Gold accent stripe (matches orchestrator theme)
+    s+=px(1,43,22,1,'#b8860b',0.6);
+    s+=`</g>`;
+    // Status glow
+    const bbLc=bb.status==='green'?C.neonGreen:'#f0d040';
+    s+=`<circle cx="12" cy="-4" r="3" fill="${bbLc}" filter="url(#ledGlow)"/>`;
+    s+=`<circle cx="12" cy="-4" r="1.2" fill="#fff" opacity="0.3"/>`;
+    s+=`<circle cx="12" cy="-4" r="6" fill="${bbLc}" opacity="0.06" class="status-pulse"/>`;
+    s+=txt16(12,50,bb.name,3,'#e8f0ff');
+    s+=txt16(12,54,bb.role,2,'#90a0b0');
     const bbLines=(_agentLocData&&_agentLocData.agents&&_agentLocData.agents[bb.name])||0;
-    s+=locBadge(22,-22,bbLines);
-    s+=projectTags(bb.projects,-2,39,50);
+    s+=locBadge(12,-8,bbLines);
     s+=`</g>`;
     s+=`</g>`; // END DEPTH 0
 
@@ -1952,6 +2327,8 @@
       @keyframes coreGlow{0%,100%{opacity:.5;r:2}50%{opacity:.8;r:2.5}}
       @keyframes scanLine{0%{transform:translateY(0)}100%{transform:translateY(2.5px)}}
       @keyframes steamFloat{0%{opacity:.35;transform:translateY(0)}100%{opacity:0;transform:translateY(-4px)}}
+      @keyframes rotorSpin{0%{opacity:.3;rx:4}25%{opacity:.15;rx:2}50%{opacity:.3;rx:4}75%{opacity:.15;rx:2}100%{opacity:.3;rx:4}}
+      .rotor-spin{animation:rotorSpin 0.3s linear infinite;}
       @keyframes heartbeatDash{0%{stroke-dashoffset:0}100%{stroke-dashoffset:-20}}
       @keyframes walkRight{0%{transform:translateX(0)}100%{transform:translateX(80px)}}
       @keyframes walkLeft{0%{transform:translateX(0)}100%{transform:translateX(-60px)}}
