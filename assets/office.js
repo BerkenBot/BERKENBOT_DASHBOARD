@@ -151,20 +151,51 @@
   }
 
   /* ---- DUAL ULTRAWIDE MONITORS (16-bit + animated content IDs) ---- */
+    /* ---- 16-BIT STANDING DESK ---- */
+  function desk(w){
+    w=w||40;
+    let s='';
+    // Desktop surface (wood grain: highlight, 2 mid tones, shadow)
+    s+=px(0,0,w,1,C.woodHi);
+    s+=px(0,1,w,1,C.woodL);
+    s+=px(0,2,w,1,C.wood);
+    s+=px(0,3,w,1,C.woodD);
+    // Wood grain detail
+    for(let g=4;g<w;g+=7) s+=px(g,1,3,1,C.woodHi,0.15);
+    // Front edge bevel
+    s+=px(0,3,w,0.5,C.woodDk,0.4);
+    // Cable management tray (16-bit)
+    s+=px16(6,4,w-12,1.5,C.steelL,C.steelD,C.steel);
+    // Motorized legs (highlight + body + shadow)
+    s+=px(2,4,1,20,C.steelL,0.4);s+=px(3,4,2,20,C.steel);s+=px(4,4,1,20,C.steelD);
+    s+=px(w-5,4,1,20,C.steelL,0.4);s+=px(w-4,4,2,20,C.steel);s+=px(w-3,4,1,20,C.steelD);
+    // Motor housing
+    s+=px16(2,10,3,3,C.steelHi,C.steelD,'#484858');
+    s+=px16(w-5,10,3,3,C.steelHi,C.steelD,'#484858');
+    // Feet (16-bit)
+    s+=px16(0,24,7,1.5,C.steelHi,C.steelD,C.steel);
+    s+=px16(w-7,24,7,1.5,C.steelHi,C.steelD,C.steel);
+    // Cross brace with highlight
+    s+=px(5,15,w-10,0.5,C.steelL,0.3);
+    s+=px(5,15.5,w-10,1,C.steelD,0.4);
+    return s;
+  }
+
+  /* ---- DUAL ULTRAWIDE MONITORS (16-bit + animated content IDs) ---- */
   function dualMon(on,content,agentIdx){
     let s='';
     // Monitor L (16-bit bezel)
-    s+=px16(0,0,14,11,C.monHi,C.monBezel,C.monitor);
-    s+=px(1,1,12,9,'#080c18');
+    s+=px16(0,0,18,14,C.monHi,C.monBezel,C.monitor);
+    s+=px(1,1,16,12,'#080c18');
     // Monitor R
-    s+=px16(15,0,14,11,C.monHi,C.monBezel,C.monitor);
-    s+=px(16,1,12,9,'#080c18');
+    s+=px16(20,0,18,14,C.monHi,C.monBezel,C.monitor);
+    s+=px(21,1,16,12,'#080c18');
     // Stand (16-bit)
-    s+=px16(13,11,3,2,C.steelL,C.steelD,C.steel);
-    s+=px16(11,13,7,1,C.steelHi,C.steel,C.steelD);
+    s+=px16(17,14,4,2,C.steelL,C.steelD,C.steel);
+    s+=px16(14,16,10,1,C.steelHi,C.steel,C.steelD);
     // Webcam with LED
-    s+=px(13,-1,3,2,'#282830');
-    s+=`<circle cx="14.5" cy="-0.5" r="0.6" fill="${on?'#f04848':'#383838'}" opacity="${on?0.9:0.3}"/>`;
+    s+=px(17,-1,4,2,'#282830');
+    s+=`<circle cx="19" cy="-0.5" r="0.6" fill="${on?'#f04848':'#383838'}" opacity="${on?0.9:0.3}"/>`;
     if(!on)return s;
 
     // Each screen gets a unique animation group
@@ -2033,7 +2064,7 @@
     const forge=AGENTS[1];
     s+=`<g data-drag="forge" transform="translate(${L.forge.x},${L.forge.y})">`;
     s+=`<g filter="url(#furnitureShadow)">${desk(44)}</g>`;
-    s+=`<g filter="url(#monitorGlow)" transform="translate(7,-14)">${dualMon(forge.status==='green',forge.screen,1)}</g>`;
+    s+=`<g filter="url(#monitorGlow)" transform="translate(3,-18)">${dualMon(forge.status==='green',forge.screen,1)}</g>`;
     s+=`<g transform="translate(36,-3)">${deskStuff(forge.stuff)}</g>`;
     s+=`<g id="agent-1" transform="translate(10,2)">${seatedAgent(forge, 1)}</g>`;
     s+=txt16(22,32,forge.name,3.5,'#e8f0ff');
@@ -2046,7 +2077,7 @@
     const anvil=AGENTS[2];
     s+=`<g data-drag="anvil" transform="translate(${L.anvil.x},${L.anvil.y})">`;
     s+=`<g filter="url(#furnitureShadow)">${desk(44)}</g>`;
-    s+=`<g filter="url(#monitorGlow)" transform="translate(7,-14)">${dualMon(anvil.status==='green',anvil.screen,2)}</g>`;
+    s+=`<g filter="url(#monitorGlow)" transform="translate(3,-18)">${dualMon(anvil.status==='green',anvil.screen,2)}</g>`;
     s+=`<g transform="translate(36,-3)">${deskStuff(anvil.stuff)}</g>`;
     s+=`<g id="agent-2" transform="translate(10,2)">${seatedAgent(anvil, 2)}</g>`;
     s+=txt16(22,32,anvil.name,3.5,'#e8f0ff');
@@ -2059,7 +2090,7 @@
     const scout=AGENTS[3];
     s+=`<g data-drag="scout" transform="translate(${L.scout.x},${L.scout.y})">`;
     s+=`<g filter="url(#furnitureShadow)">${desk(44)}</g>`;
-    s+=`<g filter="url(#monitorGlow)" transform="translate(7,-14)">${dualMon(scout.status==='green',scout.screen,3)}</g>`;
+    s+=`<g filter="url(#monitorGlow)" transform="translate(3,-18)">${dualMon(scout.status==='green',scout.screen,3)}</g>`;
     s+=`<g transform="translate(36,-3)">${deskStuff(scout.stuff)}</g>`;
     s+=`<g id="agent-3" transform="translate(10,2)">${seatedAgent(scout, 3)}</g>`;
     s+=txt16(22,32,scout.name,3.5,'#e8f0ff');
@@ -2079,7 +2110,7 @@
     const creative=AGENTS[4];
     s+=`<g data-drag="creative" transform="translate(${L.creative.x},${L.creative.y})">`;
     s+=`<g filter="url(#furnitureShadow)">${desk(44)}</g>`;
-    s+=`<g filter="url(#monitorGlow)" transform="translate(7,-14)">${dualMon(creative.status==='green',creative.screen,4)}</g>`;
+    s+=`<g filter="url(#monitorGlow)" transform="translate(3,-18)">${dualMon(creative.status==='green',creative.screen,4)}</g>`;
     s+=`<g transform="translate(36,-3)">${deskStuff(creative.stuff)}</g>`;
     s+=`<g id="agent-4" transform="translate(10,2)">${seatedAgent(creative, 4)}</g>`;
     s+=txt16(22,32,creative.name,3.5,'#e8f0ff');
@@ -2092,7 +2123,7 @@
     const cron=AGENTS[5];
     s+=`<g data-drag="cron" transform="translate(${L.cron.x},${L.cron.y})">`;
     s+=`<g filter="url(#furnitureShadow)">${desk(44)}</g>`;
-    s+=`<g filter="url(#monitorGlow)" transform="translate(7,-14)">${dualMon(cron.status==='green',cron.screen,5)}</g>`;
+    s+=`<g filter="url(#monitorGlow)" transform="translate(3,-18)">${dualMon(cron.status==='green',cron.screen,5)}</g>`;
     s+=`<g transform="translate(36,-3)">${deskStuff(cron.stuff)}</g>`;
     s+=`<g id="agent-5" transform="translate(10,2)">${seatedAgent(cron, 5)}</g>`;
     s+=txt16(22,32,cron.name,3.5,'#e8f0ff');
@@ -2105,7 +2136,7 @@
     const sentinel=AGENTS[6];
     s+=`<g data-drag="sentinel" transform="translate(${L.sentinel.x},${L.sentinel.y})">`;
     s+=`<g filter="url(#furnitureShadow)">${desk(44)}</g>`;
-    s+=`<g filter="url(#monitorGlow)" transform="translate(7,-14)">${dualMon(sentinel.status==='green',sentinel.screen,6)}</g>`;
+    s+=`<g filter="url(#monitorGlow)" transform="translate(3,-18)">${dualMon(sentinel.status==='green',sentinel.screen,6)}</g>`;
     s+=`<g transform="translate(36,-3)">${deskStuff(sentinel.stuff)}</g>`;
     s+=`<g id="agent-6" transform="translate(10,2)">${seatedAgent(sentinel, 6)}</g>`;
     s+=txt16(22,32,sentinel.name,3.5,'#e8f0ff');
@@ -2134,7 +2165,7 @@
     const fl=AGENTS[7];
     s+=`<g data-drag="float" transform="translate(${L.float.x},${L.float.y})">`;
     s+=`<g filter="url(#furnitureShadow)">${desk(44)}</g>`;
-    s+=`<g filter="url(#monitorGlow)" transform="translate(7,-14)">${dualMon(fl.status==='green',fl.screen,7)}</g>`;
+    s+=`<g filter="url(#monitorGlow)" transform="translate(3,-18)">${dualMon(fl.status==='green',fl.screen,7)}</g>`;
     s+=`<g transform="translate(36,-3)">${deskStuff(fl.stuff)}</g>`;
     s+=`<g id="agent-7" transform="translate(10,2)">${seatedAgent(fl, 7)}</g>`;
     s+=txt16(22,32,fl.name,3.5,'#e8f0ff');
@@ -2311,8 +2342,8 @@
       .agent-office-wrap { overflow: hidden; }
       #agentOffice svg{shape-rendering:geometricPrecision;}
       #parallax-sky,#parallax-bridge,#parallax-water,#parallax-buildings,#office-depth-0,#office-depth-1,#office-depth-2,#office-depth-3{will-change:transform;}
-      @keyframes typing{0%,100%{transform:translateY(0)}15%{transform:translateY(-0.5px)}30%{transform:translateY(0.3px)}50%{transform:translateY(-0.4px)}70%{transform:translateY(0.2px)}85%{transform:translateY(-0.2px)}}
-      @keyframes idle{0%,100%{transform:translateY(0)}50%{transform:translateY(1px)}}
+      @keyframes gentleBreath{0%,100%{transform:translateY(0)}50%{transform:translateY(-0.3px)}}
+      @keyframes idleLean{0%,100%{transform:translateY(0) rotate(0deg)}30%{transform:translateY(0) rotate(0.3deg)}70%{transform:translateY(0) rotate(-0.3deg)}}
       @keyframes neonPulse{0%,100%{opacity:.9}50%{opacity:.5}}
       @keyframes neonPulse2{0%,100%{opacity:.85}30%{opacity:.45}70%{opacity:.7}}
       @keyframes serverBlink{0%,85%{opacity:1}90%{opacity:.5}95%{opacity:.85}100%{opacity:1}}
@@ -2332,7 +2363,7 @@
       @keyframes heartbeatDash{0%{stroke-dashoffset:0}100%{stroke-dashoffset:-20}}
       @keyframes walkRight{0%{transform:translateX(0)}100%{transform:translateX(80px)}}
       @keyframes walkLeft{0%{transform:translateX(0)}100%{transform:translateX(-60px)}}
-      @keyframes headBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-0.5px)}}
+      @keyframes headBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-0.2px)}}
       @keyframes codeScroll{0%{transform:translateY(0)}100%{transform:translateY(-2px)}}
       @keyframes diffFlash{0%,100%{opacity:1}50%{opacity:0.7}}
       @keyframes ciSpin{0%{fill:#f0c830}50%{fill:#40f8a0}100%{fill:#f0c830}}
@@ -2395,9 +2426,10 @@
       .seagull-fly{animation:seagullFly 18s linear infinite}
       .seagull-fly-2{animation:seagullFly2 22s linear infinite 9s}
       ${AGENTS.map((a,i)=>{
-        if(a.status==='green')return`#agent-${i}{animation:typing .6s ease-in-out infinite}`;
-        if(a.status==='yellow')return`#agent-${i}{animation:idle 2.5s ease-in-out infinite}`;
-        return`#agent-${i}{opacity:.35}`;
+        if(a.type==='mainframe')return''; // mainframe has its own LED animations
+        if(a.status==='green')return`#agent-${i}{animation:gentleBreath 6s ease-in-out infinite;animation-delay:${i*0.8}s}`;
+        if(a.status==='yellow')return`#agent-${i}{animation:idleLean 8s ease-in-out infinite;animation-delay:${i*1.2}s}`;
+        return`#agent-${i}{opacity:.4;filter:grayscale(0.5)}`;
       }).join('\n')}
     `;
     document.head.appendChild(style);
