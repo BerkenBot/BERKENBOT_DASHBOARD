@@ -928,7 +928,7 @@
       type:'robot',
       bot:{body:'#2d3436',bodyHi:'#636e72',bodyShd:'#1a1a2e',
            head:'k2so',eyeColor:'#f0f0a0',eyeStyle:'k2so',
-           antenna:false,ears:'none',detail:'imperial',accent:'#f0f0a0'},
+           antenna:false,ears:'none',detail:'rebel',accent:'#f0f0a0'},
     },
     {
       name:'MAVIC', role:'Flex Agent',
@@ -1160,17 +1160,15 @@
       // Heartbeat display on chest
       s+=px(10,-10,8,3,metalDk);
       s+=`<path d="M10,-9 L12,-9 L13,-10.5 L14,-7.5 L15,-10 L16,-9 L18,-9" stroke="${b.accent}" stroke-width="0.6" fill="none" class="heartbeat-line"/>`;
-    } else if(b.detail==='imperial'){
-      // K-2SO Imperial cog insignia
-      s+=`<circle cx="14" cy="-9" r="2.5" fill="${metalDk}"/>`;
-      s+=`<circle cx="14" cy="-9" r="2" fill="#3a3e42"/>`;
-      // Simplified cog
-      for(let sp=0;sp<6;sp++){
-        const ang=sp*Math.PI/3;
-        const sx=14+Math.cos(ang)*1.8, sy=-9+Math.sin(ang)*1.8;
-        s+=`<circle cx="${sx}" cy="${sy}" r="0.4" fill="#4a4e52"/>`;
-      }
-      s+=`<circle cx="14" cy="-9" r="0.8" fill="#5a5e62"/>`;
+    } else if(b.detail==='rebel'){
+      // K-2SO Rebel Alliance starbird emblem
+      s+=`<circle cx="14" cy="-9" r="2.8" fill="${metalDk}"/>`;
+      // Starbird (phoenix shape)
+      s+=`<path d="M14,-12 L14.8,-10 L16.5,-9.5 L15,-8.5 L15.5,-6.5 L14,-7.5 L12.5,-6.5 L13,-8.5 L11.5,-9.5 L13.2,-10 Z" fill="#e84040" opacity="0.85"/>`;
+      // Wing spread
+      s+=`<path d="M14,-11.5 Q16,-10 16.8,-8" stroke="#e84040" stroke-width="0.4" fill="none" opacity="0.6"/>`;
+      s+=`<path d="M14,-11.5 Q12,-10 11.2,-8" stroke="#e84040" stroke-width="0.4" fill="none" opacity="0.6"/>`;
+      s+=`<circle cx="14" cy="-9.5" r="0.5" fill="#ff6060" opacity="0.5"/>`;
     } else if(b.detail==='command'){
       // Command star / orchestrator core
       s+=`<circle cx="14" cy="-9" r="2.5" fill="${metalDk}"/>`;
