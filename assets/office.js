@@ -1649,6 +1649,13 @@
       cron: {x:165, y:150},
       sentinel: {x:280, y:150},
       float: {x:165, y:205},
+      forgeAgent: {x:65, y:92},
+      anvilAgent: {x:175, y:92},
+      scoutAgent: {x:290, y:92},
+      creativeAgent: {x:65, y:152},
+      cronAgent: {x:175, y:152},
+      sentinelAgent: {x:290, y:152},
+      floatAgent: {x:175, y:207},
       whiteboard: {x: W*0.28+8, y:8},
       bookshelf: {x: null, y:14}, // computed after window position known
       glassRoom: {x: W-80, y:10},
@@ -2062,41 +2069,41 @@
     const forge=AGENTS[1];
     s+=`<g data-drag="forge" transform="translate(${L.forge.x},${L.forge.y})">`;
     s+=`<g filter="url(#furnitureShadow)">${desk(44)}</g>`;
-    s+=`<g filter="url(#monitorGlow)" transform="translate(3,-18)">${dualMon(forge.status==='green',forge.screen,1)}</g>`;
+    s+=`<g filter="url(#monitorGlow)" transform="translate(-2,-26) scale(1.5)">${dualMon(forge.status==='green',forge.screen,1)}</g>`;
     s+=`<g transform="translate(36,-3)">${deskStuff(forge.stuff)}</g>`;
-    s+=`<g id="agent-1" transform="translate(10,2)">${seatedAgent(forge, 1)}</g>`;
     s+=txt16(22,32,forge.name,3.5,'#e8f0ff');
     s+=txt16(22,37,forge.role,2.2,'#90a0b0');
     const forgeLines=(_agentLocData&&_agentLocData.agents&&_agentLocData.agents[forge.name])||0;
     s+=locBadge(22,-22,forgeLines);
     s+=projectTags(forge.projects,-2,39,50);
     s+=`</g>`;
+    s+=`<g data-drag="forgeAgent" id="agent-1" transform="translate(${L.forgeAgent.x},${L.forgeAgent.y})">${seatedAgent(forge, 1)}</g>`;
     // ANVIL (agent 2)
     const anvil=AGENTS[2];
     s+=`<g data-drag="anvil" transform="translate(${L.anvil.x},${L.anvil.y})">`;
     s+=`<g filter="url(#furnitureShadow)">${desk(44)}</g>`;
-    s+=`<g filter="url(#monitorGlow)" transform="translate(3,-18)">${dualMon(anvil.status==='green',anvil.screen,2)}</g>`;
+    s+=`<g filter="url(#monitorGlow)" transform="translate(-2,-26) scale(1.5)">${dualMon(anvil.status==='green',anvil.screen,2)}</g>`;
     s+=`<g transform="translate(36,-3)">${deskStuff(anvil.stuff)}</g>`;
-    s+=`<g id="agent-2" transform="translate(10,2)">${seatedAgent(anvil, 2)}</g>`;
     s+=txt16(22,32,anvil.name,3.5,'#e8f0ff');
     s+=txt16(22,37,anvil.role,2.2,'#90a0b0');
     const anvilLines=(_agentLocData&&_agentLocData.agents&&_agentLocData.agents[anvil.name])||0;
     s+=locBadge(22,-22,anvilLines);
     s+=projectTags(anvil.projects,-2,39,50);
     s+=`</g>`;
+    s+=`<g data-drag="anvilAgent" id="agent-2" transform="translate(${L.anvilAgent.x},${L.anvilAgent.y})">${seatedAgent(anvil, 2)}</g>`;
     // SCOUT (agent 3)
     const scout=AGENTS[3];
     s+=`<g data-drag="scout" transform="translate(${L.scout.x},${L.scout.y})">`;
     s+=`<g filter="url(#furnitureShadow)">${desk(44)}</g>`;
-    s+=`<g filter="url(#monitorGlow)" transform="translate(3,-18)">${dualMon(scout.status==='green',scout.screen,3)}</g>`;
+    s+=`<g filter="url(#monitorGlow)" transform="translate(-2,-26) scale(1.5)">${dualMon(scout.status==='green',scout.screen,3)}</g>`;
     s+=`<g transform="translate(36,-3)">${deskStuff(scout.stuff)}</g>`;
-    s+=`<g id="agent-3" transform="translate(10,2)">${seatedAgent(scout, 3)}</g>`;
     s+=txt16(22,32,scout.name,3.5,'#e8f0ff');
     s+=txt16(22,37,scout.role,2.2,'#90a0b0');
     const scoutLines=(_agentLocData&&_agentLocData.agents&&_agentLocData.agents[scout.name])||0;
     s+=locBadge(22,-22,scoutLines);
     s+=projectTags(scout.projects,-2,39,50);
     s+=`</g>`;
+    s+=`<g data-drag="scoutAgent" id="agent-3" transform="translate(${L.scoutAgent.x},${L.scoutAgent.y})">${seatedAgent(scout, 3)}</g>`;
     s+=`</g>`; // END DEPTH 1
 
     // == DEPTH 2: MID ROW (y~150) ==
@@ -2108,41 +2115,41 @@
     const creative=AGENTS[4];
     s+=`<g data-drag="creative" transform="translate(${L.creative.x},${L.creative.y})">`;
     s+=`<g filter="url(#furnitureShadow)">${desk(44)}</g>`;
-    s+=`<g filter="url(#monitorGlow)" transform="translate(3,-18)">${dualMon(creative.status==='green',creative.screen,4)}</g>`;
+    s+=`<g filter="url(#monitorGlow)" transform="translate(-2,-26) scale(1.5)">${dualMon(creative.status==='green',creative.screen,4)}</g>`;
     s+=`<g transform="translate(36,-3)">${deskStuff(creative.stuff)}</g>`;
-    s+=`<g id="agent-4" transform="translate(10,2)">${seatedAgent(creative, 4)}</g>`;
     s+=txt16(22,32,creative.name,3.5,'#e8f0ff');
     s+=txt16(22,37,creative.role,2.2,'#90a0b0');
     const creativeLines=(_agentLocData&&_agentLocData.agents&&_agentLocData.agents[creative.name])||0;
     s+=locBadge(22,-22,creativeLines);
     s+=projectTags(creative.projects,-2,39,50);
     s+=`</g>`;
+    s+=`<g data-drag="creativeAgent" id="agent-4" transform="translate(${L.creativeAgent.x},${L.creativeAgent.y})">${seatedAgent(creative, 4)}</g>`;
     // CRON (agent 5)
     const cron=AGENTS[5];
     s+=`<g data-drag="cron" transform="translate(${L.cron.x},${L.cron.y})">`;
     s+=`<g filter="url(#furnitureShadow)">${desk(44)}</g>`;
-    s+=`<g filter="url(#monitorGlow)" transform="translate(3,-18)">${dualMon(cron.status==='green',cron.screen,5)}</g>`;
+    s+=`<g filter="url(#monitorGlow)" transform="translate(-2,-26) scale(1.5)">${dualMon(cron.status==='green',cron.screen,5)}</g>`;
     s+=`<g transform="translate(36,-3)">${deskStuff(cron.stuff)}</g>`;
-    s+=`<g id="agent-5" transform="translate(10,2)">${seatedAgent(cron, 5)}</g>`;
     s+=txt16(22,32,cron.name,3.5,'#e8f0ff');
     s+=txt16(22,37,cron.role,2.2,'#90a0b0');
     const cronLines=(_agentLocData&&_agentLocData.agents&&_agentLocData.agents[cron.name])||0;
     s+=locBadge(22,-22,cronLines);
     s+=projectTags(cron.projects,-2,39,50);
     s+=`</g>`;
+    s+=`<g data-drag="cronAgent" id="agent-5" transform="translate(${L.cronAgent.x},${L.cronAgent.y})">${seatedAgent(cron, 5)}</g>`;
     // SENTINEL (agent 6)
     const sentinel=AGENTS[6];
     s+=`<g data-drag="sentinel" transform="translate(${L.sentinel.x},${L.sentinel.y})">`;
     s+=`<g filter="url(#furnitureShadow)">${desk(44)}</g>`;
-    s+=`<g filter="url(#monitorGlow)" transform="translate(3,-18)">${dualMon(sentinel.status==='green',sentinel.screen,6)}</g>`;
+    s+=`<g filter="url(#monitorGlow)" transform="translate(-2,-26) scale(1.5)">${dualMon(sentinel.status==='green',sentinel.screen,6)}</g>`;
     s+=`<g transform="translate(36,-3)">${deskStuff(sentinel.stuff)}</g>`;
-    s+=`<g id="agent-6" transform="translate(10,2)">${seatedAgent(sentinel, 6)}</g>`;
     s+=txt16(22,32,sentinel.name,3.5,'#e8f0ff');
     s+=txt16(22,37,sentinel.role,2.2,'#90a0b0');
     const sentinelLines=(_agentLocData&&_agentLocData.agents&&_agentLocData.agents[sentinel.name])||0;
     s+=locBadge(22,-22,sentinelLines);
     s+=projectTags(sentinel.projects,-2,39,50);
     s+=`</g>`;
+    s+=`<g data-drag="sentinelAgent" id="agent-6" transform="translate(${L.sentinelAgent.x},${L.sentinelAgent.y})">${seatedAgent(sentinel, 6)}</g>`;
     s+=`</g>`; // END DEPTH 2
 
     // == DEPTH 3: BACK ROW + LOUNGE (y~190-210, nearest — moves most) ==
@@ -2163,15 +2170,15 @@
     const fl=AGENTS[7];
     s+=`<g data-drag="float" transform="translate(${L.float.x},${L.float.y})">`;
     s+=`<g filter="url(#furnitureShadow)">${desk(44)}</g>`;
-    s+=`<g filter="url(#monitorGlow)" transform="translate(3,-18)">${dualMon(fl.status==='green',fl.screen,7)}</g>`;
+    s+=`<g filter="url(#monitorGlow)" transform="translate(-2,-26) scale(1.5)">${dualMon(fl.status==='green',fl.screen,7)}</g>`;
     s+=`<g transform="translate(36,-3)">${deskStuff(fl.stuff)}</g>`;
-    s+=`<g id="agent-7" transform="translate(10,2)">${seatedAgent(fl, 7)}</g>`;
     s+=txt16(22,32,fl.name,3.5,'#e8f0ff');
     s+=txt16(22,37,fl.role,2.2,'#90a0b0');
     const flLines=(_agentLocData&&_agentLocData.agents&&_agentLocData.agents[fl.name])||0;
     s+=locBadge(22,-22,flLines);
     s+=projectTags(fl.projects,-2,39,50);
     s+=`</g>`;
+    s+=`<g data-drag="floatAgent" id="agent-7" transform="translate(${L.floatAgent.x},${L.floatAgent.y})">${seatedAgent(fl, 7)}</g>`;
     // Ambient details
     s+=`<g filter="url(#dropShadow)">`;
     s+=`<rect x="${W-128}" y="215" width="4" height="2" rx="0.5" fill="#e04040"/>`;
