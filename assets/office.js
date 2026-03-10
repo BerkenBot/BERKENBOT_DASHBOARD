@@ -897,7 +897,7 @@
                  splitDome:true},
     },
     {
-      name:'ADA', role:'Research · LLM Scout',
+      name:'ADA', role:'Research · Model Eval',
       projects:['LLM_RESEARCH','LOCAL_TTS','BENCHMARKS'],
       status:'green', screen:'research', stuff:'scout',
       type:'human',
@@ -905,7 +905,7 @@
              acc:{glasses:false,updo:true,victorian:true,shoeCol:'#1a1a20'}},
     },
     {
-      name:'IVE', role:'Creative · Designer',
+      name:'IVE', role:'Creative · UX Strategy',
       projects:['MORNING_REPORT','TTS','COMFYUI'],
       status:'green', screen:'creative', stuff:'creative',
       type:'human',
@@ -914,7 +914,7 @@
                   watch:true,shoeCol:'#e0e0e0'}},
     },
     {
-      name:'SPOCK', role:'Ops · Reliability',
+      name:'SPOCK', role:'Ops · Cadence Keeper',
       projects:['INFRA_HEALTH','CRON','MONITORING'],
       status:'green', screen:'ops', stuff:'cron',
       type:'human',
@@ -922,7 +922,7 @@
              acc:{pointedEars:true,bowlCut:true,starfleet:true,shoeCol:'#1a1a1a'}},
     },
     {
-      name:'K-2SO', role:'Security · Sentinel',
+      name:'K-2SO', role:'Security · Immune System',
       projects:['SECURITY_AUDIT','SECRETS','NETWORK'],
       status:'green', screen:'monitor', stuff:'sentinel',
       type:'robot',
