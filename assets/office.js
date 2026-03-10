@@ -931,11 +931,11 @@
            antenna:false,ears:'none',detail:'rebel',accent:'#f0f0a0'},
     },
     {
-      name:'MAVIC', role:'Flex · Overflow',
+      name:'MAVIC', role:'Float · Corner Drone',
       projects:['OVERFLOW'],
       status:'yellow', screen:'research', stuff:'float',
       type:'drone',
-      drone:{body:'#484850',bodyHi:'#686870',bodyShd:'#2a2a30',
+      drone:{body:'#a0a4a8',bodyHi:'#c8ccd0',bodyShd:'#686c70',
              arm:'#404048',rotor:'#808088',camera:'#1a1a20',
              led:'#30e890',accent:'#74b9ff'},
     },

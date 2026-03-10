@@ -94,7 +94,7 @@ AGENT_ROLES = {
     "IVE": "Creative · UX Strategy",
     "SPOCK": "Ops · Cadence Keeper",
     "K-2SO": "Security · Immune System",
-    "MAVIC": "Flex · Overflow",
+    "MAVIC": "Float · Corner Drone",
 }
 
 
