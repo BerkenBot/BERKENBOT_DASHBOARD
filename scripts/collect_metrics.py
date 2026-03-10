@@ -88,13 +88,13 @@ AGENT_SESSIONS = {
 # Agent role names
 AGENT_ROLES = {
     "BERKEN_BOT": "Orchestrator",
-    "R2-D2": "FORGE · Lead Engineer α",
-    "R4-P17": "ANVIL · Code Review β",
-    "ADA": "SCOUT · Research γ",
-    "IVE": "CREATIVE · Designer δ",
-    "SPOCK": "CRON · Operations ε",
-    "K-2SO": "SENTINEL · Security ζ",
-    "MAVIC": "FLOAT · Flex η",
+    "R2-D2": "Lead Engineer α · FORGE",
+    "R4-P17": "Lead Engineer β · ANVIL",
+    "ADA": "Research · LLM Scout",
+    "IVE": "Creative · Designer",
+    "SPOCK": "Ops · Reliability",
+    "K-2SO": "Security · Sentinel",
+    "MAVIC": "Flex · Overflow",
 }
 
 

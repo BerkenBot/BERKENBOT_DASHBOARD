@@ -140,7 +140,7 @@
     },
     "R2-D2": {
       "display_name": "R2-D2",
-      "role": "FORGE \u00b7 Lead Engineer \u03b1",
+      "role": "Lead Engineer \u03b1 \u00b7 FORGE",
       "status": "idle",
       "last_active": "\u2014",
       "current_task": "\u2014",
@@ -238,7 +238,7 @@
     },
     "R4-P17": {
       "display_name": "R4-P17",
-      "role": "ANVIL \u00b7 Code Review \u03b2",
+      "role": "Lead Engineer \u03b2 \u00b7 ANVIL",
       "status": "offline",
       "last_active": "\u2014",
       "current_task": "\u2014",
@@ -336,7 +336,7 @@
     },
     "ADA": {
       "display_name": "ADA",
-      "role": "SCOUT \u00b7 Research \u03b3",
+      "role": "Research \u00b7 LLM Scout",
       "status": "offline",
       "last_active": "\u2014",
       "current_task": "\u2014",
@@ -434,7 +434,7 @@
     },
     "IVE": {
       "display_name": "IVE",
-      "role": "CREATIVE \u00b7 Designer \u03b4",
+      "role": "Creative \u00b7 Designer",
       "status": "active",
       "last_active": "14:08",
       "current_task": "chore: refresh dashboard data",
@@ -570,7 +570,7 @@
     },
     "SPOCK": {
       "display_name": "SPOCK",
-      "role": "CRON \u00b7 Operations \u03b5",
+      "role": "Ops \u00b7 Reliability",
       "status": "active",
       "last_active": "14:08",
       "current_task": "chore: refresh dashboard data",
@@ -706,7 +706,7 @@
     },
     "K-2SO": {
       "display_name": "K-2SO",
-      "role": "SENTINEL \u00b7 Security \u03b6",
+      "role": "Security \u00b7 Sentinel",
       "status": "active",
       "last_active": "14:08",
       "current_task": "chore: refresh dashboard data",
@@ -842,7 +842,7 @@
     },
     "MAVIC": {
       "display_name": "MAVIC",
-      "role": "FLOAT \u00b7 Flex \u03b7",
+      "role": "Flex \u00b7 Overflow",
       "status": "offline",
       "last_active": "\u2014",
       "current_task": "\u2014",
