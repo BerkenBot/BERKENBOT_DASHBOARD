@@ -1637,7 +1637,7 @@
   let _projectsData = null;
 
   function buildOffice(){
-    const W=600, H=280;
+    const W=600, H=320;
     
     // ======== LAYOUT SYSTEM ========
     const DEFAULT_LAYOUT = {
@@ -2069,7 +2069,7 @@
     const forge=AGENTS[1];
     s+=`<g data-drag="forge" transform="translate(${L.forge.x},${L.forge.y})">`;
     s+=`<g filter="url(#furnitureShadow)">${desk(44)}</g>`;
-    s+=`<g filter="url(#monitorGlow)" transform="translate(-2,-26) scale(1.5)">${dualMon(forge.status==='green',forge.screen,1)}</g>`;
+    s+=`<g filter="url(#monitorGlow)" transform="translate(-5,-28) scale(1.5)">${dualMon(forge.status==='green',forge.screen,1)}</g>`;
     s+=`<g transform="translate(36,-3)">${deskStuff(forge.stuff)}</g>`;
     s+=txt16(22,32,forge.name,3.5,'#e8f0ff');
     s+=txt16(22,37,forge.role,2.2,'#90a0b0');
@@ -2082,7 +2082,7 @@
     const anvil=AGENTS[2];
     s+=`<g data-drag="anvil" transform="translate(${L.anvil.x},${L.anvil.y})">`;
     s+=`<g filter="url(#furnitureShadow)">${desk(44)}</g>`;
-    s+=`<g filter="url(#monitorGlow)" transform="translate(-2,-26) scale(1.5)">${dualMon(anvil.status==='green',anvil.screen,2)}</g>`;
+    s+=`<g filter="url(#monitorGlow)" transform="translate(-5,-28) scale(1.5)">${dualMon(anvil.status==='green',anvil.screen,2)}</g>`;
     s+=`<g transform="translate(36,-3)">${deskStuff(anvil.stuff)}</g>`;
     s+=txt16(22,32,anvil.name,3.5,'#e8f0ff');
     s+=txt16(22,37,anvil.role,2.2,'#90a0b0');
@@ -2095,7 +2095,7 @@
     const scout=AGENTS[3];
     s+=`<g data-drag="scout" transform="translate(${L.scout.x},${L.scout.y})">`;
     s+=`<g filter="url(#furnitureShadow)">${desk(44)}</g>`;
-    s+=`<g filter="url(#monitorGlow)" transform="translate(-2,-26) scale(1.5)">${dualMon(scout.status==='green',scout.screen,3)}</g>`;
+    s+=`<g filter="url(#monitorGlow)" transform="translate(-5,-28) scale(1.5)">${dualMon(scout.status==='green',scout.screen,3)}</g>`;
     s+=`<g transform="translate(36,-3)">${deskStuff(scout.stuff)}</g>`;
     s+=txt16(22,32,scout.name,3.5,'#e8f0ff');
     s+=txt16(22,37,scout.role,2.2,'#90a0b0');
@@ -2115,7 +2115,7 @@
     const creative=AGENTS[4];
     s+=`<g data-drag="creative" transform="translate(${L.creative.x},${L.creative.y})">`;
     s+=`<g filter="url(#furnitureShadow)">${desk(44)}</g>`;
-    s+=`<g filter="url(#monitorGlow)" transform="translate(-2,-26) scale(1.5)">${dualMon(creative.status==='green',creative.screen,4)}</g>`;
+    s+=`<g filter="url(#monitorGlow)" transform="translate(-5,-28) scale(1.5)">${dualMon(creative.status==='green',creative.screen,4)}</g>`;
     s+=`<g transform="translate(36,-3)">${deskStuff(creative.stuff)}</g>`;
     s+=txt16(22,32,creative.name,3.5,'#e8f0ff');
     s+=txt16(22,37,creative.role,2.2,'#90a0b0');
@@ -2128,7 +2128,7 @@
     const cron=AGENTS[5];
     s+=`<g data-drag="cron" transform="translate(${L.cron.x},${L.cron.y})">`;
     s+=`<g filter="url(#furnitureShadow)">${desk(44)}</g>`;
-    s+=`<g filter="url(#monitorGlow)" transform="translate(-2,-26) scale(1.5)">${dualMon(cron.status==='green',cron.screen,5)}</g>`;
+    s+=`<g filter="url(#monitorGlow)" transform="translate(-5,-28) scale(1.5)">${dualMon(cron.status==='green',cron.screen,5)}</g>`;
     s+=`<g transform="translate(36,-3)">${deskStuff(cron.stuff)}</g>`;
     s+=txt16(22,32,cron.name,3.5,'#e8f0ff');
     s+=txt16(22,37,cron.role,2.2,'#90a0b0');
@@ -2141,7 +2141,7 @@
     const sentinel=AGENTS[6];
     s+=`<g data-drag="sentinel" transform="translate(${L.sentinel.x},${L.sentinel.y})">`;
     s+=`<g filter="url(#furnitureShadow)">${desk(44)}</g>`;
-    s+=`<g filter="url(#monitorGlow)" transform="translate(-2,-26) scale(1.5)">${dualMon(sentinel.status==='green',sentinel.screen,6)}</g>`;
+    s+=`<g filter="url(#monitorGlow)" transform="translate(-5,-28) scale(1.5)">${dualMon(sentinel.status==='green',sentinel.screen,6)}</g>`;
     s+=`<g transform="translate(36,-3)">${deskStuff(sentinel.stuff)}</g>`;
     s+=txt16(22,32,sentinel.name,3.5,'#e8f0ff');
     s+=txt16(22,37,sentinel.role,2.2,'#90a0b0');
@@ -2170,7 +2170,7 @@
     const fl=AGENTS[7];
     s+=`<g data-drag="float" transform="translate(${L.float.x},${L.float.y})">`;
     s+=`<g filter="url(#furnitureShadow)">${desk(44)}</g>`;
-    s+=`<g filter="url(#monitorGlow)" transform="translate(-2,-26) scale(1.5)">${dualMon(fl.status==='green',fl.screen,7)}</g>`;
+    s+=`<g filter="url(#monitorGlow)" transform="translate(-5,-28) scale(1.5)">${dualMon(fl.status==='green',fl.screen,7)}</g>`;
     s+=`<g transform="translate(36,-3)">${deskStuff(fl.stuff)}</g>`;
     s+=txt16(22,32,fl.name,3.5,'#e8f0ff');
     s+=txt16(22,37,fl.role,2.2,'#90a0b0');
